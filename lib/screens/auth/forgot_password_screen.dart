@@ -3,8 +3,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../../res/res.dart';
 import '../../res/validators.dart';
+import '../../widgets/auth_header.dart';
 import '../../widgets/custom_widgets.dart';
-import 'widgets/auth_header.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);

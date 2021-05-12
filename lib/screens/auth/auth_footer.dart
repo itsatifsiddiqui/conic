@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../res/res.dart';
-import '../signup_screen.dart';
+import '../../res/res.dart';
+import 'signup_screen.dart';
 
 class AuthFooter extends StatelessWidget {
   const AuthFooter.login({Key? key, this.isSignup = false}) : super(key: key);

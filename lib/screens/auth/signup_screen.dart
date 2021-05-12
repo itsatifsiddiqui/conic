@@ -3,9 +3,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../../res/res.dart';
 import '../../res/validators.dart';
+import '../../widgets/auth_header.dart';
 import '../../widgets/custom_widgets.dart';
-import 'widgets/auth_footer.dart';
-import 'widgets/auth_header.dart';
+import '../nfc/activate_nfc_screen.dart';
+import 'auth_footer.dart';
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -110,6 +111,6 @@ class _SignupForm extends HookWidget {
     BuildContext context,
   ) {
     FocusScope.of(context).unfocus();
-    debugPrint('Register');
+    Get.offAll<void>(() => const ActivateNfcScreen());
   }
 }

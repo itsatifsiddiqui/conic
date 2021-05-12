@@ -33,9 +33,13 @@ class PrimaryButton extends StatelessWidget {
       highlightElevation: elevation,
       disabledColor: context.adaptive26,
       minWidth: width ?? double.infinity,
-      color: color ?? (isOutline ? Colors.transparent : AppColors.primaryColor),
+      color: color ?? (isOutline ? Colors.transparent : context.primaryColor),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4),
+        side: BorderSide(
+          color: isOutline ? context.primaryColor : Colors.transparent,
+          width: isOutline ? 2 : 0,
+        ),
       ),
       onPressed: enabled ? onTap : null,
       child: child ??
@@ -44,7 +48,11 @@ class PrimaryButton extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                color: !enabled ? context.canvasColor : Colors.white,
+                color: !enabled
+                    ? context.canvasColor
+                    : isOutline
+                        ? context.primaryColor
+                        : Colors.white,
                 letterSpacing: 0.8,
               ),
             ),

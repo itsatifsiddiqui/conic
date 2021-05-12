@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../res/res.dart';
+import '../res/res.dart';
 
 class AuthHeader extends StatelessWidget {
   const AuthHeader({
