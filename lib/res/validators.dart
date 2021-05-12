@@ -1,27 +1,14 @@
 class Validators {
   static String? emptyValidator(String? text) {
     if (text!.isEmpty) {
-      return 'Please Fill in the field';
+      return 'Please fill in the field';
     }
     return null;
   }
 
-  static String? priceValidator(String? text) {
-    if (text!.isEmpty) {
-      return 'Please Fill in the field';
-    }
-
-    try {
-      double.parse(text);
-      return null;
-    } catch (e) {
-      return 'Please enter correct price';
-    }
-  }
-
   static String? emailValidator(String? email) {
     if (email!.isEmpty) {
-      return 'Please Fill in the email';
+      return 'Please fill in the email';
     }
 
     const p =
@@ -30,7 +17,7 @@ class Validators {
     final regExp = RegExp(p);
 
     if (!regExp.hasMatch(email.trim())) {
-      return 'Please Enter Valid Email Address';
+      return 'Please enter valid email address';
     }
     return null;
   }
@@ -48,7 +35,7 @@ class Validators {
 
   static String? descriptionValidator(String description) {
     if (description.isEmpty) {
-      return 'Description Is Required';
+      return 'Description is required';
     }
 
     if (description.length < 5) {

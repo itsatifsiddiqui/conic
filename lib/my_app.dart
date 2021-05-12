@@ -17,6 +17,8 @@ class MyApp extends StatelessWidget {
       builder: () => GetMaterialApp(
         debugShowCheckedModeBanner: false,
         darkTheme: ThemeData(
+          canvasColor: const Color(0xff1F1F1F),
+          scaffoldBackgroundColor: const Color(0xFF1F1F1F),
           primaryColor: AppColors.primaryColor,
           accentColor: AppColors.primaryColor,
           brightness: Brightness.dark,

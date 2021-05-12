@@ -20,6 +20,7 @@ class FilledTextField extends StatelessWidget {
     this.hintText,
     this.suffixIcon,
     this.prefixIcon,
+    this.textInputAction,
   }) : super(key: key);
   final TextEditingController controller;
   final String title;
@@ -35,7 +36,7 @@ class FilledTextField extends StatelessWidget {
   final String? hintText;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
-
+  final TextInputAction? textInputAction;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -68,9 +69,10 @@ class FilledTextField extends StatelessWidget {
                     onSubmitAction!();
                   }
                 },
-                textInputAction: nextNode == null
-                    ? TextInputAction.done
-                    : TextInputAction.next,
+                textInputAction: textInputAction ??
+                    (nextNode == null
+                        ? TextInputAction.done
+                        : TextInputAction.next),
                 decoration: InputDecoration(
                     fillColor: context.adaptive8,
                     filled: true,

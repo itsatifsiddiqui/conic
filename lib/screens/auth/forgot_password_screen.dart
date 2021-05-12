@@ -20,7 +20,7 @@ class ForgotPasswordScreen extends StatelessWidget {
             const AuthHeader(
               title: 'Reset Password',
               subtitle:
-                  'Please Enter Your Email To Get Password Reset Instructions.',
+                  'Please enter your email to get password reset instructions.',
             ).pOnly(right: 0.2.sw),
             0.05.sh.heightBox,
             const _ForgotPasswordForm(),
@@ -39,6 +39,7 @@ class _ForgotPasswordForm extends HookWidget {
     final emailController = useTextEditingController();
     final _formKey = GlobalObjectKey<FormState>(context);
     final formState = useState<bool>(true);
+
     return Form(
       onChanged: () {
         formState.value = !formState.value;
@@ -53,15 +54,33 @@ class _ForgotPasswordForm extends HookWidget {
             title: 'Email',
             hintText: 'Please enter your email',
             prefixIcon: const Icon(Icons.email_outlined),
+            onSubmitAction: () => resetPassword(
+              emailController.text.trim(),
+              _formKey,
+              context,
+            ),
           ),
           32.heightBox,
           PrimaryButton(
-            text: 'Send Password Reset Email',
+            text: 'Send password reset email',
             enabled: _formKey.currentState?.validate() ?? false,
-            onTap: () {},
+            onTap: () => resetPassword(
+              emailController.text.trim(),
+              _formKey,
+              context,
+            ),
           )
         ],
       ),
     );
+  }
+
+  void resetPassword(
+    String email,
+    GlobalObjectKey<FormState> formKey,
+    BuildContext context,
+  ) {
+    FocusScope.of(context).unfocus();
+    debugPrint('Register');
   }
 }

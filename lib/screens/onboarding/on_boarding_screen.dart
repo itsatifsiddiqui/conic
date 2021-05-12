@@ -32,13 +32,13 @@ class OnboardingScreen extends StatelessWidget {
                       'Tap your nfc chip to back of your phone to make it conic.',
                 ),
                 _OnBoardItem(
-                  heading: 'Conic Focused',
+                  heading: 'Conic focused',
                   image: Images.onBoarding2,
                   text:
                       'Mark an account as focused to only share specific account directly.',
                 ),
                 _OnBoardItem(
-                  heading: 'Create Personal Cards',
+                  heading: 'Create personal cards',
                   image: Images.onBoarding3,
                   text:
                       'Create multiple cards to share only the information you want to share based on different situations.',

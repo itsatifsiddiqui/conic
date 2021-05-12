@@ -8,7 +8,7 @@
 
 // import 'platform_dialogue.dart';
 
-double kBorderRadius = 8;
+double kBorderRadius = 6;
 // const String kSupportMail = 'appsupport@draughtguardian.com';
 
 // Widget kImagePlaceHolder(_, __) {

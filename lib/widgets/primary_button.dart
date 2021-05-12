@@ -44,7 +44,7 @@ class PrimaryButton extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                color: !enabled ? context.canvasColor : context.adaptive,
+                color: !enabled ? context.canvasColor : Colors.white,
                 letterSpacing: 0.8,
               ),
             ),

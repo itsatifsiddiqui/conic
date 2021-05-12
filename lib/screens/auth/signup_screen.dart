@@ -20,7 +20,7 @@ class SignupScreen extends StatelessWidget {
           children: [
             const AuthHeader(
               title: 'Sign up',
-              subtitle: 'Please Create Your Account',
+              subtitle: 'Please create your account',
             ),
             0.05.sh.heightBox,
             const _SignupForm(),
@@ -57,6 +57,7 @@ class _SignupForm extends HookWidget {
             hintText: 'Please enter your name',
             prefixIcon: const Icon(Icons.person_outline_rounded),
             validator: Validators.emptyValidator,
+            textInputAction: TextInputAction.next,
           ),
           16.heightBox,
           FilledTextField(
@@ -65,6 +66,7 @@ class _SignupForm extends HookWidget {
             hintText: 'Please enter your email',
             prefixIcon: const Icon(Icons.email_outlined),
             validator: Validators.emailValidator,
+            textInputAction: TextInputAction.next,
           ),
           16.heightBox,
           FilledTextField(
@@ -73,15 +75,41 @@ class _SignupForm extends HookWidget {
             hintText: 'Please enter your password',
             prefixIcon: const Icon(Icons.lock_outline_rounded),
             validator: Validators.passwordValidator,
+            textInputAction: TextInputAction.done,
+            obscureText: true,
+            onSubmitAction: () => register(
+              nameController.text.trim(),
+              emailController.text.trim(),
+              passwordController.text.trim(),
+              _formKey,
+              context,
+            ),
           ),
           32.heightBox,
           PrimaryButton(
             text: 'Sign up',
             enabled: _formKey.currentState?.validate() ?? false,
-            onTap: () {},
+            onTap: () => register(
+              nameController.text.trim(),
+              emailController.text.trim(),
+              passwordController.text.trim(),
+              _formKey,
+              context,
+            ),
           )
         ],
       ),
     );
+  }
+
+  void register(
+    String name,
+    String email,
+    String password,
+    GlobalObjectKey<FormState> formKey,
+    BuildContext context,
+  ) {
+    FocusScope.of(context).unfocus();
+    debugPrint('Register');
   }
 }
