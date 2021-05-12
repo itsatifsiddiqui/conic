@@ -19,6 +19,7 @@ class FilledTextField extends StatelessWidget {
     this.helperText,
     this.hintText,
     this.suffixIcon,
+    this.prefixIcon,
   }) : super(key: key);
   final TextEditingController controller;
   final String title;
@@ -33,22 +34,25 @@ class FilledTextField extends StatelessWidget {
   final String? helperText;
   final String? hintText;
   final Widget? suffixIcon;
+  final Widget? prefixIcon;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        title.text.semiBold.color(context.adaptive60).make().pOnly(left: 8),
+        title.text.medium.color(context.adaptive60).make().pOnly(left: 8),
         8.heightBox,
         Material(
           shape: Vx.withRounded(kBorderRadius),
-          shadowColor: context.adaptive12,
+          shadowColor: context.shadow,
           elevation: 1,
           child: IgnorePointer(
             ignoring: disabled,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(kBorderRadius),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(4),
+              ),
               child: TextFormField(
                 initialValue: initialText,
                 keyboardType: keyboardType,
@@ -68,15 +72,16 @@ class FilledTextField extends StatelessWidget {
                     ? TextInputAction.done
                     : TextInputAction.next,
                 decoration: InputDecoration(
-                  fillColor: context.isDarkMode ? Colors.black12 : Colors.white,
-                  filled: true,
-                  border: InputBorder.none,
-                  hintText: hintText,
-                  errorStyle: TextStyle(color: Colors.redAccent.shade400),
-                  helperText: helperText,
-                  helperStyle: TextStyle(color: context.adaptive54),
-                  suffixIcon: suffixIcon,
-                ),
+                    fillColor: context.adaptive8,
+                    filled: true,
+                    border: InputBorder.none,
+                    hintText: hintText,
+                    errorStyle: TextStyle(color: Colors.redAccent.shade400),
+                    hintStyle: const TextStyle(fontSize: 14),
+                    helperText: helperText,
+                    helperStyle: TextStyle(color: context.adaptive54),
+                    suffixIcon: suffixIcon,
+                    prefixIcon: prefixIcon),
               ),
             ),
           ),

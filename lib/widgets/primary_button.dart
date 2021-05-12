@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../res/constants.dart';
 import '../res/res.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -16,7 +15,7 @@ class PrimaryButton extends StatelessWidget {
     this.child,
     this.color,
   }) : super(key: key);
-  
+
   final bool enabled;
   final bool isOutline;
   final String text;
@@ -32,15 +31,11 @@ class PrimaryButton extends StatelessWidget {
     return MaterialButton(
       elevation: elevation,
       highlightElevation: elevation,
-      disabledColor: Colors.black54,
+      disabledColor: context.adaptive26,
       minWidth: width ?? double.infinity,
       color: color ?? (isOutline ? Colors.transparent : AppColors.primaryColor),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(kBorderRadius),
-        // side: BorderSide(
-        //   color: color ?? (!enabled ? Colors.black54 : Colors.transparent),
-        //   width: enabled ? 1.5 : 0,
-        // ),
+        borderRadius: BorderRadius.circular(4),
       ),
       onPressed: enabled ? onTap : null,
       child: child ??
@@ -49,7 +44,7 @@ class PrimaryButton extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                color: !enabled ? context.canvasColor : Colors.white,
+                color: !enabled ? context.canvasColor : context.adaptive,
                 letterSpacing: 0.8,
               ),
             ),

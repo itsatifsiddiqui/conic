@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../res/res.dart';
+import '../onboarding/on_boarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -9,6 +12,12 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    Timer(1.seconds, () => Get.offAll<void>(() => const OnboardingScreen()));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
