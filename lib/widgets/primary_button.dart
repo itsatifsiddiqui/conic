@@ -7,7 +7,7 @@ class PrimaryButton extends StatelessWidget {
     Key? key,
     this.enabled = true,
     this.isOutline = false,
-    required this.text,
+    this.text,
     required this.onTap,
     this.elevation = 0,
     this.verticalPadding = 16,
@@ -18,7 +18,7 @@ class PrimaryButton extends StatelessWidget {
 
   final bool enabled;
   final bool isOutline;
-  final String text;
+  final String? text;
   final GestureTapCallback onTap;
   final double elevation;
   final double? width;
@@ -46,7 +46,7 @@ class PrimaryButton extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(vertical: verticalPadding),
             child: Text(
-              text,
+              text ?? '',
               style: TextStyle(
                 color: !enabled
                     ? context.canvasColor

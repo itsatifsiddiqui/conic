@@ -22,6 +22,17 @@ class Validators {
     return null;
   }
 
+  static String? usernameValidator(String? username) {
+    if (username!.isEmpty) {
+      return 'Please fill in the username';
+    }
+
+    if (username.length < 6) {
+      return 'username must be atleast 6 chrachters.';
+    }
+    return null;
+  }
+
   static String? passwordValidator(String? password) {
     if (password!.isEmpty) {
       return 'Please fill in the password';

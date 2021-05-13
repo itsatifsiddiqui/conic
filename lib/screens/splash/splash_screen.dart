@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:conic/screens/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../res/res.dart';
@@ -14,7 +15,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Timer(1.seconds, () => Get.offAll<void>(() => const OnboardingScreen()));
+    Timer(1.seconds, () => Get.offAll<void>(() => const LoginScreen()));
     super.initState();
   }
 

@@ -1,3 +1,5 @@
+import 'package:conic/screens/profile/username_setup_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -40,8 +42,12 @@ class _LoginForm extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final emailController = useTextEditingController();
-    final passwordController = useTextEditingController();
+    final emailController = useTextEditingController(
+      text: kDebugMode ? 'atif@gmail.com' : '',
+    );
+    final passwordController = useTextEditingController(
+      text: kDebugMode ? '123456' : '',
+    );
     final _formKey = GlobalObjectKey<FormState>(context);
     final formState = useState<bool>(true);
     return Form(
@@ -109,6 +115,6 @@ class _LoginForm extends HookWidget {
     BuildContext context,
   ) {
     FocusScope.of(context).unfocus();
-    Get.offAll<void>(() => const ActivateNfcScreen());
+    Get.offAll<void>(() => const UsernameSetupScreen());
   }
 }

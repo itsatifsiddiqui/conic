@@ -1,3 +1,4 @@
+import 'package:conic/screens/profile/username_setup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -111,6 +112,6 @@ class _SignupForm extends HookWidget {
     BuildContext context,
   ) {
     FocusScope.of(context).unfocus();
-    Get.offAll<void>(() => const ActivateNfcScreen());
+    Get.offAll<void>(() => const UsernameSetupScreen());
   }
 }
