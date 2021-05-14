@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../providers/app_user_provider.dart';
+import '../../providers/firestore_provider.dart';
 import '../../res/debouncer.dart';
 import '../../res/res.dart';
 import '../../res/validators.dart';
 import '../../widgets/auth_header.dart';
 import '../../widgets/custom_widgets.dart';
+import '../nfc/activate_nfc_screen.dart';
 
 final userNameCheckerProvider =
     FutureProvider.autoDispose.family<bool, String>((ref, userName) async {
@@ -17,8 +20,9 @@ final userNameCheckerProvider =
   }
   final completer = Completer<bool>();
   ref.watch(debouncerProvider).run(() async {
-    debugPrint('Making Request');
-    await Future.delayed(1.seconds, () => completer.complete(true));
+    completer.complete(
+      await ref.read(firestoreProvider).isUsernameAvailable(userName),
+    );
   });
 
   return completer.future;
@@ -123,6 +127,7 @@ class _UsernameValidationForm extends HookWidget {
     BuildContext context,
   ) {
     FocusScope.of(context).unfocus();
-    debugPrint('Register');
+    context.read(appUserProvider.notifier).updateUsername(username);
+    Get.offAll<void>(() => const ActivateNfcScreen());
   }
 }

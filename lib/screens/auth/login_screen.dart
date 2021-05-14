@@ -101,7 +101,7 @@ class _LoginForm extends HookWidget {
           12.heightBox,
           PrimaryButton(
             text: 'Login',
-            enabled: _formKey.currentState?.validate() ?? false,
+            enabled: _formKey.currentState?.validate() ?? kDebugMode,
             onTap: () => login(
               emailController.text.trim(),
               passwordController.text.trim(),

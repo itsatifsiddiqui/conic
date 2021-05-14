@@ -47,4 +47,20 @@ class FirestoreProvider {
       rethrow;
     }
   }
+
+  Future<bool> isUsernameAvailable(String username) async {
+    try {
+      final docs = await FirebaseFirestore.instance
+          .collection('users')
+          .where('username', isEqualTo: username)
+          .limit(1)
+          .get();
+      if (docs.docs.isEmpty) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
 }

@@ -45,7 +45,7 @@ class AuthProvider extends BaseProvider {
     if (isUserLoggedIn) {
       final appUser = await getCurrentUser();
 
-      if (appUser.username?.isNotEmpty ?? false) {
+      if (appUser.username?.isEmpty ?? true) {
         // ignore: unawaited_futures
         Get.offAll<void>(() => const UsernameSetupScreen());
       } else {
@@ -151,7 +151,6 @@ class AuthProvider extends BaseProvider {
           break;
         case FacebookLoginStatus.error:
           setIdle();
-          print(result.error);
           break;
       }
     } catch (e) {

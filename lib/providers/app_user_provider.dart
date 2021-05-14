@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -6,12 +7,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../models/app_user.dart';
 import '../res/extension.dart';
+import 'firestore_provider.dart';
 
 final appUserProvider = StateNotifierProvider<AppUserProvider, AppUser?>(
-    (ref) => AppUserProvider());
+  (ref) => AppUserProvider(ref.read),
+);
 
 class AppUserProvider extends StateNotifier<AppUser?> {
-  AppUserProvider() : super(null);
+  AppUserProvider(this._read) : super(null);
+  final Reader _read;
 
   AppUser? get user => state;
 
@@ -49,4 +53,11 @@ class AppUserProvider extends StateNotifier<AppUser?> {
   }
 
   String get userId => state!.userId!;
+
+  void updateUsername(String username, {bool updateFirestore = true}) {
+    state = state!.copyWith(username: username);
+    if (updateFirestore) {
+      _read(firestoreProvider).updateUser();
+    }
+  }
 }

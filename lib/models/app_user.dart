@@ -77,4 +77,5 @@ class AppUser {
         image.hashCode ^
         userId.hashCode;
   }
+
 }
