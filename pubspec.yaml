@@ -24,13 +24,21 @@ dependencies:
   flutter:
     sdk: flutter
   cached_network_image: ^3.0.0
+  cloud_firestore: ^2.1.0
   cupertino_icons: ^1.0.2
+  firebase_auth: ^1.1.4
+  firebase_core: ^1.1.1
+  firebase_storage: ^8.0.6
   flutter_hooks: ^0.16.0
   flutter_screenutil: ^5.0.0+2
   get: ^4.1.4
+  google_sign_in: ^5.0.3
   hooks_riverpod: ^0.14.0+3
   intl: ^0.17.0
+  loading_overlay: ^0.3.0
   velocity_x: ^3.0.0
+  flutter_login_facebook: ^1.0.1
+  sign_in_with_apple: ^3.0.0
 
 dev_dependencies:
   flutter_test:

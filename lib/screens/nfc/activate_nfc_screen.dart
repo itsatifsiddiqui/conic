@@ -1,9 +1,9 @@
-import 'package:conic/screens/tabs_view/tabs_view.dart';
-import 'package:conic/widgets/custom_widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../../res/res.dart';
 import '../../widgets/auth_header.dart';
+import '../../widgets/custom_widgets.dart';
+import '../tabs_view/tabs_view.dart';
 
 class ActivateNfcScreen extends StatelessWidget {
   const ActivateNfcScreen({Key? key}) : super(key: key);

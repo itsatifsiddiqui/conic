@@ -1,37 +1,43 @@
-import 'package:conic/screens/profile/username_setup_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 
+import '../../providers/auth_provider.dart';
 import '../../res/res.dart';
 import '../../res/validators.dart';
 import '../../widgets/auth_header.dart';
 import '../../widgets/custom_widgets.dart';
-import '../nfc/activate_nfc_screen.dart';
 import 'auth_footer.dart';
 import 'forgot_password_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends HookWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const AuthHeader(
-              title: 'Login',
-              subtitle: 'Please login your account',
-            ),
-            0.05.sh.heightBox,
-            const _LoginForm(),
-            0.05.sh.heightBox,
-            const AuthFooter.login(),
-          ],
-        ).p16().scrollVertical(),
+    final isLoading =
+        useProvider(authProvider.select((value) => value.isLoading));
+    return LoadingOverlay(
+      isLoading: isLoading,
+      child: Scaffold(
+        appBar: AppBar(),
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const AuthHeader(
+                title: 'Login',
+                subtitle: 'Please login your account',
+              ),
+              0.05.sh.heightBox,
+              const _LoginForm(),
+              0.05.sh.heightBox,
+              const AuthFooter.login(),
+            ],
+          ).p16().scrollVertical(),
+        ),
       ),
     );
   }
@@ -115,6 +121,6 @@ class _LoginForm extends HookWidget {
     BuildContext context,
   ) {
     FocusScope.of(context).unfocus();
-    Get.offAll<void>(() => const UsernameSetupScreen());
+    context.read(authProvider).loginWithEmailAndPassword(email, password);
   }
 }

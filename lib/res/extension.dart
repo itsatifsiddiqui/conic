@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -16,11 +17,22 @@ extension BuildContextExtended on BuildContext {
   Color get adaptive => theme.dividerColor;
   Color get shadow =>
       theme.brightness == Brightness.dark ? Colors.transparent : Colors.black12;
+  void nextEditableTextFocus() {
+    do {
+      FocusScope.of(this).nextFocus();
+    } while (
+        FocusScope.of(this).focusedChild?.context?.widget is! EditableText);
+  }
 }
 
 extension ExtendedStringExtension<T> on String {
   String get capializeAllFirst =>
       split(' ').map((e) => e.capitalizeFirst).toList().join(' ');
+}
+
+extension ExtendedDocumentSnapshot on DocumentSnapshot<Map> {
+  bool get doesExist => exists && (data()?.isNotEmpty ?? false);
+  bool get doesNotExist => !(exists && (data()?.isNotEmpty ?? false));
 }
 
 // extension ExtendedNumExtension<T> on num {

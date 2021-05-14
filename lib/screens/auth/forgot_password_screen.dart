@@ -1,31 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 
+import '../../providers/auth_provider.dart';
 import '../../res/res.dart';
 import '../../res/validators.dart';
 import '../../widgets/auth_header.dart';
 import '../../widgets/custom_widgets.dart';
 
-class ForgotPasswordScreen extends StatelessWidget {
+class ForgotPasswordScreen extends HookWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const AuthHeader(
-              title: 'Reset Password',
-              subtitle:
-                  'Please enter your email to get password reset instructions.',
-            ).pOnly(right: 0.2.sw),
-            0.05.sh.heightBox,
-            const _ForgotPasswordForm(),
-          ],
-        ).p16().scrollVertical(),
+    final isLoading =
+        useProvider(authProvider.select((value) => value.isLoading));
+    return LoadingOverlay(
+      isLoading: isLoading,
+      child: Scaffold(
+        appBar: AppBar(),
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const AuthHeader(
+                title: 'Reset Password',
+                subtitle:
+                    'Please enter your email to get password reset instructions.',
+              ).pOnly(right: 0.2.sw),
+              0.05.sh.heightBox,
+              const _ForgotPasswordForm(),
+            ],
+          ).p16().scrollVertical(),
+        ),
       ),
     );
   }
@@ -81,6 +89,6 @@ class _ForgotPasswordForm extends HookWidget {
     BuildContext context,
   ) {
     FocusScope.of(context).unfocus();
-    debugPrint('Register');
+    context.read(authProvider).passwordReset(email);
   }
 }

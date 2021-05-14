@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../providers/auth_provider.dart';
 import '../../../res/res.dart';
 
 class DashboardTab extends StatelessWidget {
@@ -14,7 +16,9 @@ class DashboardTab extends StatelessWidget {
             icon: const Icon(
               Icons.help_outline_rounded,
             ),
-            onPressed: () {},
+            onPressed: () {
+              context.read(authProvider).signOut();
+            },
           )
         ],
       ),

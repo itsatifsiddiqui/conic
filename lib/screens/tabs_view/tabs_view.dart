@@ -1,13 +1,13 @@
-import 'package:conic/res/res.dart';
-import 'package:conic/screens/add_account/add_account_screen.dart';
-import 'package:conic/screens/tabs_view/dashboard/dashboard_tab.dart';
-import 'package:conic/screens/tabs_view/my_cards/my_cards_tab.dart';
-import 'package:conic/screens/tabs_view/notifications/notifications_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../res/res.dart';
+import '../add_account/add_account_screen.dart';
+import 'dashboard/dashboard_tab.dart';
 import 'my_accounts/my_accounts_tab.dart';
+import 'my_cards/my_cards_tab.dart';
+import 'notifications/notifications_tab.dart';
 
 final tabsIndexProvider = StateProvider<int>((ref) => 0);
 
