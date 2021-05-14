@@ -54,10 +54,15 @@ class AppUserProvider extends StateNotifier<AppUser?> {
 
   String get userId => state!.userId!;
 
-  void updateUsername(String username, {bool updateFirestore = true}) {
-    state = state!.copyWith(username: username);
-    if (updateFirestore) {
-      _read(firestoreProvider).updateUser();
-    }
+  void updateUsername({
+    required String username,
+    required String link,
+    required String androidLink,
+  }) {
+    state = state!.copyWith(
+      username: username,
+      link: link,
+      androidLink: androidLink,
+    );
   }
 }

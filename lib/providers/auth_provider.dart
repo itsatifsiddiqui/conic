@@ -1,3 +1,5 @@
+import 'package:conic/screens/nfc/activate_nfc_screen.dart';
+import 'package:conic/services/dynamic_link_generator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
@@ -223,6 +225,34 @@ class AuthProvider extends BaseProvider {
       await _read(firestoreProvider).createUser();
       setIdle();
       await navigateBasedOnCondition();
+    } catch (e) {
+      setIdle();
+      showExceptionDialog(e);
+    }
+  }
+
+  Future<void> completeProfileSetup(String username) async {
+    setBusy();
+    try {
+      final link =
+          DynamicLinkGenerator(username: username).generateDynamicLink();
+      final androidLink = DynamicLinkGenerator(
+        username: username,
+        isAndroidLink: true,
+      ).generateDynamicLink();
+
+      final links = await Future.wait([link, androidLink]);
+      debugPrint(links.toString());
+      ref.read(appUserProvider.notifier).updateUsername(
+            username: username,
+            link: links.first,
+            androidLink: links.last,
+          );
+
+      await _read(firestoreProvider).updateUser();
+      setIdle();
+      // ignore: unawaited_futures
+      Get.offAll<void>(() => const ActivateNfcScreen());
     } catch (e) {
       setIdle();
       showExceptionDialog(e);

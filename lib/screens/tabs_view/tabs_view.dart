@@ -1,3 +1,4 @@
+import 'package:conic/screens/nfc/activate_nfc_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -31,7 +32,8 @@ class TabsView extends HookWidget {
       floatingActionButton: FloatingActionButton(
         elevation: 1,
         onPressed: () {
-          Get.to<void>(() => const AddAccountScreen());
+          // Get.to<void>(() => const AddAccountScreen());
+          Get.to<void>(() => const ActivateNfcScreen());
         },
         tooltip: 'Add Account',
         child: const Icon(Icons.add_outlined),

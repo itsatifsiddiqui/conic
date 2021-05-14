@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
@@ -5,10 +8,37 @@ import 'package:get/route_manager.dart';
 import 'res/res.dart';
 import 'screens/splash/splash_screen.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({
     Key? key,
   }) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    initDynamicLinks();
+    super.initState();
+  }
+
+  Future<void> initDynamicLinks() async {
+    FirebaseDynamicLinks.instance.onLink(onSuccess: (dynamicLink) async {
+      final deepLink = dynamicLink?.link;
+      // ignore: unnecessary_string_interpolations
+      log('${deepLink?.path}', name: 'ONLINK');
+    }, onError: (e) async {
+      log(e.message ?? '', name: 'onLinkError');
+      log(e.code, name: 'onLinkError');
+    });
+
+    final pendingData = await FirebaseDynamicLinks.instance.getInitialLink();
+    final deepLink = pendingData?.link;
+    // ignore: unnecessary_string_interpolations
+    log('${deepLink?.path}', name: 'ONLINK');
+  }
 
   @override
   Widget build(BuildContext context) {

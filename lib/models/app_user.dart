@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 
 @immutable
@@ -8,6 +10,8 @@ class AppUser {
     this.email,
     this.image,
     this.userId,
+    this.link,
+    this.androidLink,
   });
 
   factory AppUser.fromMap(Map<String, dynamic> map) {
@@ -17,6 +21,8 @@ class AppUser {
       email: map['email'] as String?,
       image: map['image'] as String?,
       userId: map['userId'] as String?,
+      link: map['link'] as String?,
+      androidLink: map['androidLink'] as String?,
     );
   }
 
@@ -25,6 +31,8 @@ class AppUser {
   final String? email;
   final String? image;
   final String? userId;
+  final String? link;
+  final String? androidLink;
 
   AppUser copyWith({
     String? name,
@@ -32,6 +40,8 @@ class AppUser {
     String? email,
     String? image,
     String? userId,
+    String? link,
+    String? androidLink,
   }) {
     return AppUser(
       name: name ?? this.name,
@@ -39,6 +49,8 @@ class AppUser {
       email: email ?? this.email,
       image: image ?? this.image,
       userId: userId ?? this.userId,
+      link: link ?? this.link,
+      androidLink: androidLink ?? this.androidLink,
     );
   }
 
@@ -49,12 +61,14 @@ class AppUser {
       'email': email,
       'image': image,
       'userId': userId,
+      'link': link,
+      'androidLink': androidLink,
     };
   }
 
   @override
   String toString() {
-    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId)';
+    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId, link: $link, androidLink: $androidLink)';
   }
 
   @override
@@ -66,7 +80,9 @@ class AppUser {
         other.username == username &&
         other.email == email &&
         other.image == image &&
-        other.userId == userId;
+        other.userId == userId &&
+        other.link == link &&
+        other.androidLink == androidLink;
   }
 
   @override
@@ -75,7 +91,8 @@ class AppUser {
         username.hashCode ^
         email.hashCode ^
         image.hashCode ^
-        userId.hashCode;
+        userId.hashCode ^
+        link.hashCode ^
+        androidLink.hashCode;
   }
-
 }

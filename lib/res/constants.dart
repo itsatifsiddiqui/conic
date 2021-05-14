@@ -8,6 +8,8 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'platform_dialogue.dart';
 
 double kBorderRadius = 6;
+const dynamicLinkPrefix = 'https://conic.page.link';
+
 // const String kSupportMail = 'appsupport@draughtguardian.com';
 
 // Widget kImagePlaceHolder(_, __) {
