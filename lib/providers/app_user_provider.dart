@@ -7,15 +7,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../models/app_user.dart';
 import '../res/extension.dart';
-import 'firestore_provider.dart';
 
 final appUserProvider = StateNotifierProvider<AppUserProvider, AppUser?>(
-  (ref) => AppUserProvider(ref.read),
+  (ref) => AppUserProvider(),
 );
 
 class AppUserProvider extends StateNotifier<AppUser?> {
-  AppUserProvider(this._read) : super(null);
-  final Reader _read;
+  AppUserProvider() : super(null);
 
   AppUser? get user => state;
 

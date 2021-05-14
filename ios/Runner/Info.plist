@@ -44,7 +44,7 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 
-	<!-- Configurations -->
+	<!-- Firebase Google and facebook login Configurations -->
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -57,7 +57,7 @@
 			</array>
 		</dict>
 	</array>
-	<!-- FACEBook -->
+	<!-- Facebook Setup -->
 	<key>FacebookAppID</key>
 	<string>175011417756560</string>
 	<key>FacebookDisplayName</key>
@@ -79,6 +79,34 @@
 		<string>fb-messenger-share-api</string>
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
+	</array>
+
+
+	<!-- Camera And Gallery Permission -->
+	<key>NSCameraUsageDescription</key>
+	<string>Please allow access to your camera to upload a profile photo for your profile</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Please allow us to access your photo library to upload a profile photo for your profile</string>
+
+	<!-- NFC Permissions -->
+	<key>NFCReaderUsageDescription</key>
+	<string>NFC is required to powk.</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>nfc</string>
+	</array>
+	<key>com.apple.developer.nfc.readersession.felica.systemcodes</key>
+	<array>
+		<string>8008</string>
+	</array>
+	<key>com.apple.developer.nfc.readersession.formats</key>
+	<array>
+		<string>NDEF</string>
+		<string>TAG</string>
+	</array>
+	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
+	<array>
+		<string>A00000000386980701</string>
 	</array>
 </dict>
 </plist>

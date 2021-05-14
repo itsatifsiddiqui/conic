@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../res/res.dart';
 
 class AddAccountScreen extends StatelessWidget {

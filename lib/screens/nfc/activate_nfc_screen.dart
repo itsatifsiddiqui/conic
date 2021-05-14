@@ -1,9 +1,17 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:developer';
 
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../providers/app_user_provider.dart';
+import '../../providers/auth_provider.dart';
 import '../../res/res.dart';
 import '../../widgets/auth_header.dart';
 import '../../widgets/custom_widgets.dart';
 import '../tabs_view/tabs_view.dart';
+import 'tag_reader.dart';
+import 'tag_writer.dart';
 
 class ActivateNfcScreen extends StatelessWidget {
   const ActivateNfcScreen({Key? key}) : super(key: key);
@@ -25,7 +33,25 @@ class ActivateNfcScreen extends StatelessWidget {
             8.heightBox,
             PrimaryButton(
               text: 'Tap here to activate',
-              onTap: () => Get.offAll<void>(() => const TabsView()),
+              onTap: () async {
+                final completer = Completer<String>();
+                await readNfcTag(
+                  context: context,
+                  handleTag: (tag) async {
+                    final link = context.read(appUserProvider)!.link!;
+                    final uri = Uri.parse(link);
+                    final result = (await writeTag(tag, uri)) ?? '';
+                    completer.complete(result);
+                    return result;
+                  },
+                );
+                final result = await completer.future;
+                if (result == 'Success') {
+                  log('WRITE SUCCESS');
+                  // ignore: unawaited_futures
+                  context.read(authProvider).navigateBasedOnCondition();
+                }
+              },
             ),
             12.heightBox,
             PrimaryButton(

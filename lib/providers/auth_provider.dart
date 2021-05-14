@@ -1,5 +1,3 @@
-import 'package:conic/screens/nfc/activate_nfc_screen.dart';
-import 'package:conic/services/dynamic_link_generator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
@@ -12,8 +10,10 @@ import '../models/app_user.dart';
 import '../res/constants.dart';
 import '../res/platform_dialogue.dart';
 import '../screens/auth/login_screen.dart';
+import '../screens/nfc/activate_nfc_screen.dart';
 import '../screens/profile/username_setup_page.dart';
 import '../screens/tabs_view/tabs_view.dart';
+import '../services/dynamic_link_generator.dart';
 import 'app_user_provider.dart';
 import 'base_provider.dart';
 import 'firestore_provider.dart';
