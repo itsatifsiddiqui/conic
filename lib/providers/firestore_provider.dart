@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:conic/models/account_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../models/account_model.dart';
 import '../models/app_user.dart';
 import '../res/constants.dart';
 import 'app_user_provider.dart';

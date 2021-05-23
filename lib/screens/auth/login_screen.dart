@@ -17,8 +17,7 @@ class LoginScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading =
-        useProvider(authProvider.select((value) => value.isLoading));
+    final isLoading = useProvider(authProvider.select((value) => value.isLoading));
     return LoadingOverlay(
       isLoading: isLoading,
       child: Scaffold(
@@ -74,6 +73,7 @@ class _LoginForm extends HookWidget {
           ),
           16.heightBox,
           FilledTextField(
+            maxLines: 1,
             controller: passwordController,
             title: 'Password',
             hintText: 'Please enter your password',
@@ -88,14 +88,7 @@ class _LoginForm extends HookWidget {
               context,
             ),
           ),
-          'Forgot password?'
-              .text
-              .end
-              .color(context.adaptive87)
-              .base
-              .make()
-              .p12()
-              .mdClick(() {
+          'Forgot password?'.text.end.color(context.adaptive87).base.make().p12().mdClick(() {
             Get.to<void>(() => const ForgotPasswordScreen());
           }).make(),
           12.heightBox,

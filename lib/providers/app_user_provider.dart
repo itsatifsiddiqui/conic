@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../models/app_user.dart';
+import '../models/linked_account.dart';
 import '../res/extension.dart';
 
 final appUserProvider = StateNotifierProvider<AppUserProvider, AppUser?>(
@@ -20,8 +21,7 @@ class AppUserProvider extends StateNotifier<AppUser?> {
   void overrideUser(AppUser? user) => state = user;
 
   void subscibeToUserStream(String uid) {
-    final snapshots =
-        FirebaseFirestore.instance.collection('users').doc(uid).snapshots();
+    final snapshots = FirebaseFirestore.instance.collection('users').doc(uid).snapshots();
     snapshots.listen((event) {
       if (event.doesNotExist) return;
       try {
@@ -62,5 +62,11 @@ class AppUserProvider extends StateNotifier<AppUser?> {
       link: link,
       androidLink: androidLink,
     );
+  }
+
+  void addAccount(LinkedAccount linkedAccount) {
+    final linkedAccounts = state!.linkedAccounts ?? [];
+    linkedAccounts.add(linkedAccount);
+    state = state!.copyWith(linkedAccounts: linkedAccounts);
   }
 }

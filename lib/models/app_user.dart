@@ -1,5 +1,5 @@
-
 import 'package:flutter/foundation.dart';
+import 'linked_account.dart';
 
 @immutable
 class AppUser {
@@ -11,9 +11,13 @@ class AppUser {
     this.userId,
     this.link,
     this.androidLink,
+    this.linkedAccounts,
   });
 
   factory AppUser.fromMap(Map<String, dynamic> map) {
+    final linkedAccounts = map.containsKey('linkedAccounts')
+        ? (map['linkedAccounts'] as List).cast<Map<String, dynamic>>()
+        : <Map<String, dynamic>>[];
     return AppUser(
       name: map['name'] as String?,
       username: map['username'] as String?,
@@ -22,6 +26,9 @@ class AppUser {
       userId: map['userId'] as String?,
       link: map['link'] as String?,
       androidLink: map['androidLink'] as String?,
+      linkedAccounts: List<LinkedAccount>.from(
+        linkedAccounts.map<LinkedAccount>((x) => LinkedAccount.fromMap(x)),
+      ),
     );
   }
 
@@ -32,6 +39,7 @@ class AppUser {
   final String? userId;
   final String? link;
   final String? androidLink;
+  final List<LinkedAccount>? linkedAccounts;
 
   AppUser copyWith({
     String? name,
@@ -41,6 +49,7 @@ class AppUser {
     String? userId,
     String? link,
     String? androidLink,
+    List<LinkedAccount>? linkedAccounts,
   }) {
     return AppUser(
       name: name ?? this.name,
@@ -50,6 +59,7 @@ class AppUser {
       userId: userId ?? this.userId,
       link: link ?? this.link,
       androidLink: androidLink ?? this.androidLink,
+      linkedAccounts: linkedAccounts ?? this.linkedAccounts,
     );
   }
 
@@ -62,12 +72,13 @@ class AppUser {
       'userId': userId,
       'link': link,
       'androidLink': androidLink,
+      'linkedAccounts': (linkedAccounts ?? []).map((x) => x.toMap()).toList(),
     };
   }
 
   @override
   String toString() {
-    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId, link: $link, androidLink: $androidLink)';
+    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId, link: $link, androidLink: $androidLink, linkedAccounts: $linkedAccounts)';
   }
 
   @override
@@ -81,7 +92,8 @@ class AppUser {
         other.image == image &&
         other.userId == userId &&
         other.link == link &&
-        other.androidLink == androidLink;
+        other.androidLink == androidLink &&
+        listEquals(other.linkedAccounts, linkedAccounts);
   }
 
   @override
@@ -92,6 +104,7 @@ class AppUser {
         image.hashCode ^
         userId.hashCode ^
         link.hashCode ^
-        androidLink.hashCode;
+        androidLink.hashCode ^
+        linkedAccounts.hashCode;
   }
 }

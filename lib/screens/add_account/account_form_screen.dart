@@ -4,7 +4,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../models/account_model.dart';
+import '../../models/linked_account.dart';
+import '../../providers/app_user_provider.dart';
+import '../../providers/firestore_provider.dart';
+import '../../res/platform_dialogue.dart';
 import '../../res/res.dart';
+import '../../res/validators.dart';
 import '../../widgets/custom_widgets.dart';
 import '../../widgets/primary_button.dart';
 
@@ -23,6 +28,7 @@ class AccountFormScreen extends HookWidget {
     final titleNode = useFocusNode();
     final descriptionController = useTextEditingController();
     final descriptionNode = useFocusNode();
+    final formKey = GlobalObjectKey<FormState>(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -33,50 +39,78 @@ class AccountFormScreen extends HookWidget {
       body: SafeArea(
           child: Column(
         children: [
-          Column(
-            children: [
-              16.heightBox,
-              _ImageBuilder(account: account),
-              16.heightBox,
-              FilledTextField(
-                focusNode: fieldNode,
-                nextNode: titleNode,
-                controller: fieldController,
-                title: account.field,
-                hintText: account.fieldHint,
-                textInputAction: TextInputAction.next,
-              ),
-              12.heightBox,
-              FilledTextField(
-                focusNode: titleNode,
-                nextNode: descriptionNode,
-                controller: titleController,
-                title: 'Title',
-                hintText: '${account.title} (Optional)',
-                textInputAction: TextInputAction.next,
-              ),
-              12.heightBox,
-              FilledTextField(
-                minLines: 2,
-                maxLines: 4,
-                focusNode: descriptionNode,
-                controller: descriptionController,
-                title: 'Description',
-                hintText: '${account.description} (Optional)',
-                textInputAction: TextInputAction.done,
-              ),
-              12.heightBox,
-              _FocusedTile(),
-              8.heightBox,
-              _NotifyFollowersTile(),
-              8.heightBox,
-              _HiddenTile(),
-              24.heightBox,
-            ],
-          ).px24().scrollVertical().expand(),
+          Form(
+            key: formKey,
+            child: Column(
+              children: [
+                16.heightBox,
+                _ImageBuilder(account: account),
+                16.heightBox,
+                FilledTextField(
+                  focusNode: fieldNode,
+                  nextNode: titleNode,
+                  controller: fieldController,
+                  title: account.field,
+                  hintText: account.fieldHint,
+                  textInputAction: TextInputAction.next,
+                  validator: Validators.emptyValidator,
+                ),
+                12.heightBox,
+                FilledTextField(
+                  focusNode: titleNode,
+                  nextNode: descriptionNode,
+                  controller: titleController,
+                  title: 'Title',
+                  hintText: '${account.title} (Optional)',
+                  textInputAction: TextInputAction.next,
+                ),
+                12.heightBox,
+                FilledTextField(
+                  minLines: 2,
+                  maxLines: 4,
+                  focusNode: descriptionNode,
+                  controller: descriptionController,
+                  title: 'Description',
+                  hintText: '${account.description} (Optional)',
+                  textInputAction: TextInputAction.done,
+                ),
+                12.heightBox,
+                _FocusedTile(),
+                8.heightBox,
+                _NotifyFollowersTile(),
+                8.heightBox,
+                _HiddenTile(),
+                24.heightBox,
+              ],
+            ).px24().scrollVertical().expand(),
+          ),
           PrimaryButton(
             text: 'Add Account',
-            onTap: () {},
+            onTap: () {
+              if (!formKey.currentState!.validate()) return;
+              FocusScope.of(context).unfocus();
+              final focused = context.read(focusedProvider).state;
+              final notify = context.read(notifyFollowersProvider).state;
+              final hidden = context.read(isHiddenProvider).state;
+              final linkedAccount = LinkedAccount(
+                image: account.image,
+                link: fieldController.text.trim(),
+                title: titleController.text.trim(),
+                description: descriptionController.text.trim(),
+                focused: focused,
+                notify: notify,
+                hidden: hidden,
+                media: const <String>[],
+              );
+              final linkedAccounts = context.read(appUserProvider)!.linkedAccounts ?? [];
+              if (linkedAccounts.contains(linkedAccount)) {
+                showPlatformDialogue(title: 'Account Already Exist');
+                return;
+              }
+              context.read(appUserProvider.notifier).addAccount(linkedAccount);
+              context.read(firestoreProvider).updateUser();
+              Get.back<void>();
+            },
           ).px16().py8()
         ],
       )),
@@ -172,7 +206,7 @@ class _HiddenTile extends HookWidget {
 
     return SwitchListTile.adaptive(
       contentPadding: EdgeInsets.zero,
-      title: 'Focused'.text.base.bold.make(),
+      title: 'Hidden'.text.base.bold.make(),
       subtitle:
           'Hidden accounts will not be shown on your Homepage, but still can be added to cards Or shared.'
               .text
