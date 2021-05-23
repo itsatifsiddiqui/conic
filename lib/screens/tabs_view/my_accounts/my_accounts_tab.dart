@@ -1,11 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:conic/widgets/context_action.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../models/linked_account.dart';
 import '../../../providers/app_user_provider.dart';
+import '../../../providers/app_user_provider.dart';
+import '../../../providers/firestore_provider.dart';
 import '../../../res/res.dart';
 
 final businessModeProvider = StateProvider<bool>((ref) => false);
@@ -144,31 +148,46 @@ class _MyAccountsBuilder extends HookWidget {
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         children: accounts.map((e) {
-          return GestureDetector(
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: context.adaptive.withOpacity(0.04),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                children: [
-                  4.widthBox,
-                  Hero(
-                    tag: e.image,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: CachedNetworkImage(
-                        imageUrl: e.image,
-                        width: 36,
-                        height: 36,
-                      ),
-                    ),
+          return CupertinoContextMenu(
+            previewBuilder: (context, animation, child) {
+              return AnimatedBuilder(
+                animation: animation,
+                builder: (context, child) {
+                  return child!;
+                },
+                child: AccountImage(url: e.image),
+              );
+            },
+            actions: buildContextActions(context, e),
+            child: GestureDetector(
+              child: Material(
+                type: MaterialType.transparency,
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: context.adaptive.withOpacity(0.04),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  12.widthBox,
-                  e.title.text.lg.medium.color(context.adaptive87).make().expand()
-                ],
+                  child: Row(
+                    children: [
+                      4.widthBox,
+                      Hero(
+                        tag: e.image,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: CachedNetworkImage(
+                            imageUrl: e.image,
+                            width: 36,
+                            height: 36,
+                          ),
+                        ),
+                      ),
+                      12.widthBox,
+                      e.title.text.lg.medium.color(context.adaptive87).make().expand()
+                    ],
+                  ),
+                ),
               ),
             ),
           );
@@ -182,14 +201,71 @@ class _MyAccountsBuilder extends HookWidget {
       mainAxisSpacing: 16,
       crossAxisSpacing: 8,
       children: accounts.map((e) {
-        return GestureDetector(
-          onTap: () {},
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: CachedNetworkImage(imageUrl: e.image),
+        return CupertinoContextMenu(
+          actions: buildContextActions(context, e),
+          child: GestureDetector(
+            onTap: () {},
+            child: AccountImage(url: e.image),
           ),
         );
       }).toList(),
+    );
+  }
+
+  List<Widget> buildContextActions(BuildContext context, LinkedAccount account) => [
+        ContextActionWidget(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          trailingIcon: Icons.ios_share,
+          child: const Text('Share'),
+        ),
+        ContextActionWidget(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          trailingIcon: Icons.content_copy_outlined,
+          child: const Text('Copy'),
+        ),
+        ContextActionWidget(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          trailingIcon: Icons.open_in_new_outlined,
+          child: const Text('Open'),
+        ),
+        ContextActionWidget(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          trailingIcon: Icons.edit_outlined,
+          child: const Text('Edit'),
+        ),
+        ContextActionWidget(
+          isDestructiveAction: true,
+          trailingIcon: Icons.close,
+          onPressed: () {
+            context.read(appUserProvider.notifier).removeAccount(account);
+            context.read(firestoreProvider).updateUser();
+            Navigator.pop(context);
+          },
+          child: const Text('Delete'),
+        ),
+      ];
+}
+
+class AccountImage extends StatelessWidget {
+  const AccountImage({Key? key, required this.url}) : super(key: key);
+  final String url;
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: CachedNetworkImage(
+        imageUrl: url,
+        width: 120,
+        height: 120,
+      ),
     );
   }
 }

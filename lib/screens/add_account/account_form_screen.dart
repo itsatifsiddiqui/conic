@@ -92,10 +92,11 @@ class AccountFormScreen extends HookWidget {
               final focused = context.read(focusedProvider).state;
               final notify = context.read(notifyFollowersProvider).state;
               final hidden = context.read(isHiddenProvider).state;
+              final title = titleController.text.trim();
               final linkedAccount = LinkedAccount(
                 image: account.image,
                 link: fieldController.text.trim(),
-                title: titleController.text.trim(),
+                title: title.isEmpty ? account.title : title,
                 description: descriptionController.text.trim(),
                 focused: focused,
                 notify: notify,
