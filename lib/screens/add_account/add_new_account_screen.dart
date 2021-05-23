@@ -12,6 +12,7 @@ import '../../providers/firestore_provider.dart';
 import '../../res/res.dart';
 import '../../widgets/adaptive_progress_indicator.dart';
 import '../../widgets/custom_widgets.dart';
+import 'account_form_screen.dart';
 
 //HOLD THE STATE FOR ALL ACCOUNTS
 final allAccountsStateProvider = StateProvider((ref) => <AccountModel>[]);
@@ -35,8 +36,8 @@ final filteredAccountsStateProvider = StateProvider<List<AccountModel>>((ref) {
 //TOGGLE BETWEEN LIST AND GRID VIEW
 final isListModeProvider = StateProvider<bool>((ref) => false);
 
-class AddAccountScreen extends HookWidget {
-  const AddAccountScreen({Key? key}) : super(key: key);
+class AddNewAccountScreen extends HookWidget {
+  const AddNewAccountScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,27 +107,39 @@ class _AccountsBuilder extends HookWidget {
       return ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         children: allAccounts.map((e) {
-          return Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: context.adaptive.withOpacity(0.04),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              children: [
-                4.widthBox,
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: CachedNetworkImage(
-                    imageUrl: e.image,
-                    width: 36,
-                    height: 36,
+          return GestureDetector(
+            onTap: () => _onItemTap(e),
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: context.adaptive.withOpacity(0.04),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                children: [
+                  4.widthBox,
+                  Hero(
+                    tag: e.image,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: CachedNetworkImage(
+                        imageUrl: e.image,
+                        width: 36,
+                        height: 36,
+                      ),
+                    ),
                   ),
-                ),
-                12.widthBox,
-                e.name.text.lg.medium.color(context.adaptive87).make().expand()
-              ],
+                  12.widthBox,
+                  Hero(
+                    tag: e.name,
+                    child: Material(
+                      type: MaterialType.transparency,
+                      child: e.name.text.lg.medium.color(context.adaptive87).make(),
+                    ),
+                  ).expand()
+                ],
+              ),
             ),
           );
         }).toList(),
@@ -139,11 +152,19 @@ class _AccountsBuilder extends HookWidget {
       mainAxisSpacing: 16,
       crossAxisSpacing: 8,
       children: allAccounts.map((e) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: CachedNetworkImage(imageUrl: e.image),
+        return GestureDetector(
+          onTap: () => _onItemTap(e),
+          child: Hero(
+            tag: e.image,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: CachedNetworkImage(imageUrl: e.image),
+            ),
+          ),
         );
       }).toList(),
     );
   }
+
+  void _onItemTap(AccountModel account) => Get.to<void>(() => AccountFormScreen(account: account));
 }

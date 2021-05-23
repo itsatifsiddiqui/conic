@@ -8,6 +8,7 @@ class AppColors {
   static const Color googleOrange = Color(0xfff44336);
   static const Color orange = Color(0xffFF9F00);
   static const Color lightGrey = Color(0xffeeeeee);
+  static const Color link = Color(0xff3D60BF);
 
   static LinearGradient dashboardGradient = const LinearGradient(
     begin: Alignment.topLeft,

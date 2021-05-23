@@ -21,6 +21,8 @@ class FilledTextField extends StatelessWidget {
     this.suffixIcon,
     this.prefixIcon,
     this.textInputAction,
+    this.minLines,
+    this.maxLines,
   }) : super(key: key);
   final TextEditingController controller;
   final String title;
@@ -37,13 +39,15 @@ class FilledTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final TextInputAction? textInputAction;
+  final int? minLines;
+  final int? maxLines;
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        title.text.medium.color(context.adaptive60).make().pOnly(left: 8),
-        8.heightBox,
+        title.text.medium.color(context.adaptive60).make().pOnly(left: 4),
+        6.heightBox,
         Material(
           shape: Vx.withRounded(kBorderRadius),
           shadowColor: context.shadow,
@@ -55,6 +59,8 @@ class FilledTextField extends StatelessWidget {
                 top: Radius.circular(4),
               ),
               child: TextFormField(
+                minLines: minLines,
+                maxLines: maxLines,
                 initialValue: initialText,
                 keyboardType: keyboardType,
                 focusNode: focusNode,
@@ -70,9 +76,7 @@ class FilledTextField extends StatelessWidget {
                   }
                 },
                 textInputAction: textInputAction ??
-                    (nextNode == null
-                        ? TextInputAction.done
-                        : TextInputAction.next),
+                    (nextNode == null ? TextInputAction.done : TextInputAction.next),
                 decoration: InputDecoration(
                   fillColor: context.adaptive8,
                   filled: true,
