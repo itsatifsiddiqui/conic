@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:conic/models/account_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -62,5 +63,18 @@ class FirestoreProvider {
     } catch (e) {
       return false;
     }
+  }
+
+  Stream<List<AccountModel>> getAllAccounts() {
+    final snaps = _firestore.collection('accounts').doc('all_accounts').snapshots();
+    return snaps.map((event) {
+      final hasAccounts = (event.data() ?? <String, dynamic>{}).containsKey('all_accounts');
+      if (hasAccounts) {
+        final accountsListD = event.data()!['all_accounts'] as List<dynamic>;
+        final accountsList = accountsListD.cast<Map<String, dynamic>>();
+        return accountsList.map((e) => AccountModel.fromMap(e)).toList();
+      }
+      return <AccountModel>[];
+    });
   }
 }

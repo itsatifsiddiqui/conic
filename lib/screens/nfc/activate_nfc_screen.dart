@@ -80,7 +80,7 @@ class ActivateNfcScreen extends HookWidget {
             error: (e, s) => StreamErrorWidget(
               error: e.toString(),
               onTryAgain: () {
-                context.read(isNfcAvailable);
+                context.refresh(isNfcAvailable);
               },
             ),
           ),
