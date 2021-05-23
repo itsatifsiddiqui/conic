@@ -90,15 +90,10 @@ class ActivateNfcScreen extends HookWidget {
   }
 }
 
-class _NotAvailableView extends StatefulWidget {
+class _NotAvailableView extends StatelessWidget {
   const _NotAvailableView({
     Key? key,
   }) : super(key: key);
-  @override
-  _NotAvailableViewState createState() => _NotAvailableViewState();
-}
-
-class _NotAvailableViewState extends State<_NotAvailableView> {
   @override
   Widget build(BuildContext context) {
     return Column(

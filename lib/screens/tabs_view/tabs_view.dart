@@ -17,6 +17,7 @@ class TabsView extends HookWidget {
   Widget build(BuildContext context) {
     final index = useProvider(tabsIndexProvider).state;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: IndexedStack(
         index: index,
         children: const [
