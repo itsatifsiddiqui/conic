@@ -71,8 +71,7 @@ class _BottomNavigationBar extends HookWidget {
           label: '',
         ),
         BottomNavigationBarItem(
-          icon:
-              const Icon(Icons.masks, color: Colors.transparent).pOnly(top: 8),
+          icon: const Icon(Icons.masks, color: Colors.transparent).pOnly(top: 8),
           label: '',
         ),
         BottomNavigationBarItem(

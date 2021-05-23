@@ -7,10 +7,14 @@ class InfoWidget extends StatelessWidget {
     Key? key,
     required this.text,
     this.subText,
+    this.onTryAgain,
+    this.tryAgainText,
   }) : super(key: key);
 
   final String text;
   final String? subText;
+  final GestureTapCallback? onTryAgain;
+  final String? tryAgainText;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +44,18 @@ class InfoWidget extends StatelessWidget {
                 style: TextStyle(
                   color: Theme.of(context).dividerColor.withOpacity(0.54),
                   fontSize: 16.sp,
+                ),
+              ),
+            24.heightBox,
+            if (onTryAgain != null)
+              TextButton(
+                onPressed: onTryAgain,
+                child: Text(
+                  tryAgainText ?? 'Try Again',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 24.sp,
+                  ),
                 ),
               ),
             const SizedBox(height: 24),

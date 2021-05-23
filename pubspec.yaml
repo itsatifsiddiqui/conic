@@ -39,6 +39,7 @@ dependencies:
   intl: ^0.17.0
   loading_overlay: ^0.3.0
   nfc_manager: ^3.0.0+2
+  open_settings: ^2.0.1
   sign_in_with_apple: ^3.0.0
   velocity_x: ^3.0.0
 

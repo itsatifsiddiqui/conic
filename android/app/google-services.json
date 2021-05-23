@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "651633604777",
+    "project_id": "conic-688fe",
+    "storage_bucket": "conic-688fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651633604777:android:3f2138ee3e5bd3145a11b8",
+        "android_client_info": {
+          "package_name": "com.fyp.conic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "651633604777-ekssn44lcqfbbcour3sl6krnv3l2roou.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fyp.conic",
+            "certificate_hash": "3d0266ceda78b113c6cb4fde36f3b1b88358eb7b"
+          }
+        },
+        {
+          "client_id": "651633604777-ssrua6tagg9uptlkci4bk90tsvrrc25k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGwiCsBIT-jo7Anekv0GxqJ14oMuU22fA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "651633604777-ssrua6tagg9uptlkci4bk90tsvrrc25k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "651633604777-hff31tqngmdfb85ke9bhim4h1ancvfo3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fyp.conic",
+                "app_store_id": "1527429208"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
