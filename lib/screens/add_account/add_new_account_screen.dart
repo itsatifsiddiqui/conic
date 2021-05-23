@@ -12,6 +12,7 @@ import '../../providers/firestore_provider.dart';
 import '../../res/res.dart';
 import '../../widgets/adaptive_progress_indicator.dart';
 import '../../widgets/custom_widgets.dart';
+import '../tabs_view/my_accounts/my_accounts_tab.dart';
 import 'account_form_screen.dart';
 
 //HOLD THE STATE FOR ALL ACCOUNTS
@@ -32,9 +33,6 @@ final filteredAccountsStateProvider = StateProvider<List<AccountModel>>((ref) {
   if (query.isEmpty) return allAccounts;
   return allAccounts.where((element) => element.name.toLowerCase().contains(query)).toList();
 });
-
-//TOGGLE BETWEEN LIST AND GRID VIEW
-final isListModeProvider = StateProvider<bool>((ref) => false);
 
 class AddNewAccountScreen extends HookWidget {
   const AddNewAccountScreen({Key? key}) : super(key: key);
@@ -131,13 +129,7 @@ class _AccountsBuilder extends HookWidget {
                     ),
                   ),
                   12.widthBox,
-                  Hero(
-                    tag: e.name,
-                    child: Material(
-                      type: MaterialType.transparency,
-                      child: e.name.text.lg.medium.color(context.adaptive87).make(),
-                    ),
-                  ).expand()
+                  e.name.text.lg.medium.color(context.adaptive87).make().expand()
                 ],
               ),
             ),
