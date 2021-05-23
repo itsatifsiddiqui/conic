@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +11,9 @@ class AccountModel {
     required this.title,
     required this.description,
     required this.position,
+    this.focused = false,
+    this.hiddent = false,
+    this.notify = false,
   });
 
   factory AccountModel.fromMap(Map<String, dynamic> map) {
@@ -24,6 +25,9 @@ class AccountModel {
       title: map['title'] as String,
       description: map['description'] as String,
       position: map['position'] as int,
+      focused: map['focused'] as bool,
+      hiddent: map['hiddent'] as bool,
+      notify: map['notify'] as bool,
     );
   }
 
@@ -35,6 +39,10 @@ class AccountModel {
   final String description;
   final int position;
 
+  final bool focused;
+  final bool hiddent;
+  final bool notify;
+
   AccountModel copyWith({
     String? name,
     String? image,
@@ -43,6 +51,9 @@ class AccountModel {
     String? title,
     String? description,
     int? position,
+    bool? focused,
+    bool? hiddent,
+    bool? notify,
   }) {
     return AccountModel(
       name: name ?? this.name,
@@ -52,10 +63,28 @@ class AccountModel {
       title: title ?? this.title,
       description: description ?? this.description,
       position: position ?? this.position,
+      focused: focused ?? this.focused,
+      hiddent: hiddent ?? this.hiddent,
+      notify: notify ?? this.notify,
     );
   }
 
   Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'name': name,
+      'image': image,
+      'field': field,
+      'fieldHint': fieldHint,
+      'title': title,
+      'description': description,
+      'position': position,
+      'focused': focused,
+      'hiddent': hiddent,
+      'notify': notify,
+    };
+  }
+
+  Map<String, dynamic> toAccountMap() {
     return <String, dynamic>{
       'name': name,
       'image': image,
@@ -69,7 +98,7 @@ class AccountModel {
 
   @override
   String toString() {
-    return 'AccountModel(name: $name, image: $image, field: $field, fieldHint: $fieldHint, title: $title, description: $description, position: $position)';
+    return 'AccountModel(name: $name, image: $image, field: $field, fieldHint: $fieldHint, title: $title, description: $description, position: $position, focused: $focused, hiddent: $hiddent, notify: $notify)';
   }
 
   @override
@@ -83,7 +112,10 @@ class AccountModel {
         other.fieldHint == fieldHint &&
         other.title == title &&
         other.description == description &&
-        other.position == position;
+        other.position == position &&
+        other.focused == focused &&
+        other.hiddent == hiddent &&
+        other.notify == notify;
   }
 
   @override
@@ -94,10 +126,11 @@ class AccountModel {
         fieldHint.hashCode ^
         title.hashCode ^
         description.hashCode ^
-        position.hashCode;
+        position.hashCode ^
+        focused.hashCode ^
+        hiddent.hashCode ^
+        notify.hashCode;
   }
-
-  String toJson() => json.encode(toMap());
 }
 
 final globalAccounts = <AccountModel>[
@@ -214,7 +247,7 @@ final globalAccounts = <AccountModel>[
 ];
 
 void globalAccountsUploader() {
-  final allAccountsMap = globalAccounts.map((e) => e.toMap()).toList();
+  final allAccountsMap = globalAccounts.map((e) => e.toAccountMap()).toList();
   FirebaseFirestore.instance
       .collection('accounts')
       .doc('all_accounts')

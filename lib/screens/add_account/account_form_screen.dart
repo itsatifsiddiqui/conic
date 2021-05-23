@@ -77,7 +77,7 @@ class AccountFormScreen extends HookWidget {
           PrimaryButton(
             text: 'Add Account',
             onTap: () {},
-          ).px24().py16()
+          ).px16().py8()
         ],
       )),
     );
