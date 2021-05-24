@@ -3,6 +3,11 @@ import 'package:flutter/foundation.dart';
 @immutable
 class LinkedAccount {
   const LinkedAccount({
+    required this.name,
+    required this.field,
+    required this.fieldHint,
+    required this.titleHint,
+    required this.descHint,
     required this.image,
     required this.link,
     required this.title,
@@ -15,6 +20,11 @@ class LinkedAccount {
 
   factory LinkedAccount.fromMap(Map<String, dynamic> map) {
     return LinkedAccount(
+      name: map['name'] as String,
+      field: map['field'] as String,
+      fieldHint: map['fieldHint'] as String,
+      titleHint: map['titleHint'] as String,
+      descHint: map['descHint'] as String,
       image: map['image'] as String,
       link: map['link'] as String,
       title: map['title'] as String,
@@ -28,6 +38,11 @@ class LinkedAccount {
     );
   }
 
+  final String name;
+  final String field;
+  final String fieldHint;
+  final String titleHint;
+  final String descHint;
   final String image;
   final String link;
   final String title;
@@ -38,6 +53,11 @@ class LinkedAccount {
   final List<String>? media;
 
   LinkedAccount copyWith({
+    String? name,
+    String? field,
+    String? fieldHint,
+    String? titleHint,
+    String? descHint,
     String? image,
     String? link,
     String? title,
@@ -48,6 +68,11 @@ class LinkedAccount {
     List<String>? media,
   }) {
     return LinkedAccount(
+      name: name ?? this.name,
+      field: field ?? this.field,
+      fieldHint: fieldHint ?? this.fieldHint,
+      titleHint: titleHint ?? this.titleHint,
+      descHint: descHint ?? this.descHint,
       image: image ?? this.image,
       link: link ?? this.link,
       title: title ?? this.title,
@@ -61,6 +86,11 @@ class LinkedAccount {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'name': name,
+      'field': field,
+      'fieldHint': fieldHint,
+      'titleHint': titleHint,
+      'descHint': descHint,
       'image': image,
       'link': link,
       'title': title,
@@ -68,13 +98,13 @@ class LinkedAccount {
       'focused': focused,
       'notify': notify,
       'hidden': hidden,
-      'media': media ?? [],
+      'media': media,
     };
   }
 
   @override
   String toString() {
-    return 'LinkedAccount(image: $image, link: $link, title: $title, description: $description, focused: $focused, notify: $notify, hidden: $hidden, media: $media)';
+    return 'LinkedAccount(name: $name, field: $field, fieldHint: $fieldHint, titleHint: $titleHint, descHint: $descHint, image: $image, link: $link, title: $title, description: $description, focused: $focused, notify: $notify, hidden: $hidden, media: $media)';
   }
 
   @override
@@ -82,6 +112,11 @@ class LinkedAccount {
     if (identical(this, other)) return true;
 
     return other is LinkedAccount &&
+        other.name == name &&
+        other.field == field &&
+        other.fieldHint == fieldHint &&
+        other.titleHint == titleHint &&
+        other.descHint == descHint &&
         other.image == image &&
         other.link == link &&
         other.title == title &&
@@ -94,7 +129,12 @@ class LinkedAccount {
 
   @override
   int get hashCode {
-    return image.hashCode ^
+    return name.hashCode ^
+        field.hashCode ^
+        fieldHint.hashCode ^
+        titleHint.hashCode ^
+        descHint.hashCode ^
+        image.hashCode ^
         link.hashCode ^
         title.hashCode ^
         description.hashCode ^

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:conic/screens/add_account/account_form_screen.dart';
 import 'package:conic/widgets/context_action.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -223,6 +224,8 @@ class _MyAccountsBuilder extends HookWidget {
         ContextActionWidget(
           onPressed: () {
             Navigator.pop(context);
+            Clipboard.setData(ClipboardData(text: account.link));
+            VxToast.show(context, msg: 'Link Copied', showTime: 1000);
           },
           trailingIcon: Icons.content_copy_outlined,
           child: const Text('Copy'),
@@ -237,6 +240,7 @@ class _MyAccountsBuilder extends HookWidget {
         ContextActionWidget(
           onPressed: () {
             Navigator.pop(context);
+            Get.to<void>(() => AccountFormScreen(linkedAccount: account));
           },
           trailingIcon: Icons.edit_outlined,
           child: const Text('Edit'),

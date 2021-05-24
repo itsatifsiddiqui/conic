@@ -16,24 +16,31 @@ import '../../widgets/primary_button.dart';
 class AccountFormScreen extends HookWidget {
   const AccountFormScreen({
     Key? key,
-    required this.account,
+    this.account,
+    this.linkedAccount,
   }) : super(key: key);
 
-  final AccountModel account;
+  final AccountModel? account;
+  final LinkedAccount? linkedAccount;
   @override
   Widget build(BuildContext context) {
-    final fieldController = useTextEditingController();
+    final fieldController = useTextEditingController(text: linkedAccount?.field);
     final fieldNode = useFocusNode();
-    final titleController = useTextEditingController();
+    final titleController = useTextEditingController(text: linkedAccount?.title);
     final titleNode = useFocusNode();
-    final descriptionController = useTextEditingController();
+    final descriptionController = useTextEditingController(text: linkedAccount?.description);
     final descriptionNode = useFocusNode();
     final formKey = GlobalObjectKey<FormState>(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: FittedBox(
-          child: account.name.text.xl.semiBold.color(context.adaptive).make(),
+          child: (account?.name ?? linkedAccount?.name)!
+              .text
+              .xl
+              .semiBold
+              .color(context.adaptive)
+              .make(),
         ),
       ),
       body: SafeArea(
@@ -44,14 +51,14 @@ class AccountFormScreen extends HookWidget {
             child: Column(
               children: [
                 16.heightBox,
-                _ImageBuilder(account: account),
+                _ImageBuilder(image: (account?.image ?? linkedAccount?.image)!),
                 16.heightBox,
                 FilledTextField(
                   focusNode: fieldNode,
                   nextNode: titleNode,
                   controller: fieldController,
-                  title: account.field,
-                  hintText: account.fieldHint,
+                  title: (account?.field ?? linkedAccount?.field)!,
+                  hintText: account?.fieldHint ?? linkedAccount?.fieldHint,
                   textInputAction: TextInputAction.next,
                   validator: Validators.emptyValidator,
                 ),
@@ -61,7 +68,7 @@ class AccountFormScreen extends HookWidget {
                   nextNode: descriptionNode,
                   controller: titleController,
                   title: 'Title',
-                  hintText: '${account.title} (Optional)',
+                  hintText: '${(account?.title ?? linkedAccount?.title)!} (Optional)',
                   textInputAction: TextInputAction.next,
                 ),
                 12.heightBox,
@@ -71,7 +78,7 @@ class AccountFormScreen extends HookWidget {
                   focusNode: descriptionNode,
                   controller: descriptionController,
                   title: 'Description',
-                  hintText: '${account.description} (Optional)',
+                  hintText: '${(account?.description ?? linkedAccount?.descHint)!} (Optional)',
                   textInputAction: TextInputAction.done,
                 ),
                 12.heightBox,
@@ -93,24 +100,33 @@ class AccountFormScreen extends HookWidget {
               final notify = context.read(notifyFollowersProvider).state;
               final hidden = context.read(isHiddenProvider).state;
               final title = titleController.text.trim();
-              final linkedAccount = LinkedAccount(
-                image: account.image,
-                link: fieldController.text.trim(),
-                title: title.isEmpty ? account.title : title,
-                description: descriptionController.text.trim(),
-                focused: focused,
-                notify: notify,
-                hidden: hidden,
-                media: const <String>[],
-              );
-              final linkedAccounts = context.read(appUserProvider)!.linkedAccounts ?? [];
-              if (linkedAccounts.contains(linkedAccount)) {
-                showPlatformDialogue(title: 'Account Already Exist');
-                return;
+              //EDIT MODE
+              if (account == null) {
+              } else {
+                final linkedAccount = LinkedAccount(
+                  name: account!.name,
+                  descHint: account!.description,
+                  field: account!.field,
+                  fieldHint: account!.fieldHint,
+                  titleHint: account!.title,
+                  image: account!.image,
+                  link: fieldController.text.trim(),
+                  title: title.isEmpty ? account!.title : title,
+                  description: descriptionController.text.trim(),
+                  focused: focused,
+                  notify: notify,
+                  hidden: hidden,
+                  media: const <String>[],
+                );
+                final linkedAccounts = context.read(appUserProvider)!.linkedAccounts ?? [];
+                if (linkedAccounts.contains(linkedAccount)) {
+                  showPlatformDialogue(title: 'Account Already Exist');
+                  return;
+                }
+                context.read(appUserProvider.notifier).addAccount(linkedAccount);
+                context.read(firestoreProvider).updateUser();
+                Get.back<void>();
               }
-              context.read(appUserProvider.notifier).addAccount(linkedAccount);
-              context.read(firestoreProvider).updateUser();
-              Get.back<void>();
             },
           ).px16().py8()
         ],
@@ -122,21 +138,21 @@ class AccountFormScreen extends HookWidget {
 class _ImageBuilder extends StatelessWidget {
   const _ImageBuilder({
     Key? key,
-    required this.account,
+    required this.image,
   }) : super(key: key);
 
-  final AccountModel account;
+  final String image;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Hero(
-          tag: account.image,
+          tag: image,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: CachedNetworkImage(
-              imageUrl: account.image,
+              imageUrl: image,
               width: 0.1.sh,
               height: 0.1.sh,
             ),
