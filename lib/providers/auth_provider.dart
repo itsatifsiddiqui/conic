@@ -1,3 +1,4 @@
+import 'package:conic/screens/add_account/add_new_account_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
@@ -82,10 +83,9 @@ class AuthProvider extends BaseProvider {
     setBusy();
 
     try {
-      final userCredential = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      _read(appUserProvider.notifier)
-          .overrideFromFirebaseUser(userCredential.user!);
+      final userCredential =
+          await _auth.signInWithEmailAndPassword(email: email, password: password);
+      _read(appUserProvider.notifier).overrideFromFirebaseUser(userCredential.user!);
 
       await navigateBasedOnCondition();
     } catch (e) {
@@ -108,11 +108,9 @@ class AuthProvider extends BaseProvider {
         idToken: googleAuth.idToken,
       );
       final userCredential = await _auth.signInWithCredential(credential);
-      final currentUser = await _read(firestoreProvider)
-          .getCurrentUser(userCredential.user!.uid);
+      final currentUser = await _read(firestoreProvider).getCurrentUser(userCredential.user!.uid);
       if (currentUser == null) {
-        _read(appUserProvider.notifier)
-            .overrideFromFirebaseUser(userCredential.user!);
+        _read(appUserProvider.notifier).overrideFromFirebaseUser(userCredential.user!);
         await _read(firestoreProvider).createUser();
       }
       setIdle();
@@ -134,14 +132,12 @@ class AuthProvider extends BaseProvider {
               setIdle();
               return;
             }
-            final credential =
-                FacebookAuthProvider.credential(result.accessToken!.token);
+            final credential = FacebookAuthProvider.credential(result.accessToken!.token);
             final userCredential = await _auth.signInWithCredential(credential);
-            final currentUser = await _read(firestoreProvider)
-                .getCurrentUser(userCredential.user!.uid);
+            final currentUser =
+                await _read(firestoreProvider).getCurrentUser(userCredential.user!.uid);
             if (currentUser == null) {
-              _read(appUserProvider.notifier)
-                  .overrideFromFirebaseUser(userCredential.user!);
+              _read(appUserProvider.notifier).overrideFromFirebaseUser(userCredential.user!);
               await _read(firestoreProvider).createUser();
             }
             setIdle();
@@ -173,14 +169,12 @@ class AuthProvider extends BaseProvider {
         idToken: appleResult.identityToken,
       );
 
-      final name =
-          '${appleResult.givenName ?? ''} ${appleResult.familyName ?? ""}';
+      final name = '${appleResult.givenName ?? ''} ${appleResult.familyName ?? ""}';
 
       final userCredential = await _auth.signInWithCredential(credential);
       await userCredential.user?.updateProfile(displayName: name);
 
-      final currentUser = await _read(firestoreProvider)
-          .getCurrentUser(userCredential.user!.uid);
+      final currentUser = await _read(firestoreProvider).getCurrentUser(userCredential.user!.uid);
       if (currentUser == null) {
         _read(appUserProvider.notifier).overrideFromAppleUser(
           userCredential.user!.uid,
@@ -211,12 +205,11 @@ class AuthProvider extends BaseProvider {
   ) async {
     setBusy();
     try {
-      final userCredential = await _auth.createUserWithEmailAndPassword(
-          email: appuser.email!, password: password);
+      final userCredential =
+          await _auth.createUserWithEmailAndPassword(email: appuser.email!, password: password);
       await userCredential.user!.updateProfile(displayName: appuser.name);
 
-      _read(appUserProvider.notifier)
-          .overrideFromFirebaseUser(userCredential.user!);
+      _read(appUserProvider.notifier).overrideFromFirebaseUser(userCredential.user!);
       final user = _read(appUserProvider.notifier).user!.copyWith(
             name: appuser.name,
           );
@@ -234,8 +227,7 @@ class AuthProvider extends BaseProvider {
   Future<void> completeProfileSetup(String username) async {
     setBusy();
     try {
-      final link =
-          DynamicLinkGenerator(username: username).generateDynamicLink();
+      final link = DynamicLinkGenerator(username: username).generateDynamicLink();
       final androidLink = DynamicLinkGenerator(
         username: username,
         isAndroidLink: true,
@@ -283,6 +275,7 @@ class AuthProvider extends BaseProvider {
     await FacebookLogin().logOut();
     await Future<void>.delayed(500.milliseconds);
     debugPrint('OVERRIDING USER TO NULL');
+    _read(tabsIndexProvider).state = 0;
     _read(appUserProvider.notifier).overrideUser(null);
   }
 }

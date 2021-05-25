@@ -62,7 +62,6 @@ class AddNewAccountScreen extends HookWidget {
       ),
       body: useProvider(allAccountsProvider).when(
         data: (accounts) {
-          scheduleMicrotask(() => context.read(allAccountsStateProvider).state = accounts);
           return Column(
             children: [
               12.heightBox,

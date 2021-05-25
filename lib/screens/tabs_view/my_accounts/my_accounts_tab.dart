@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:conic/screens/add_account/add_new_account_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../models/linked_account.dart';
 import '../../../providers/app_user_provider.dart';
@@ -112,8 +114,8 @@ class _Greetings extends HookWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FittedBox(child: 'Hi, $name'.text.xl3.extraBold.tight.make()),
-            4.heightBox,
-            'View My Profile'.text.base.color(context.adaptive75).make(),
+            // 4.heightBox,
+            // 'View My Profile'.text.base.color(context.adaptive75).make(),
           ],
         ).expand(),
         Column(
@@ -163,6 +165,7 @@ class _MyAccountsBuilder extends HookWidget {
             },
             actions: buildContextActions(context, e),
             child: GestureDetector(
+              onTap: () => onAccountTap(e),
               child: Material(
                 type: MaterialType.transparency,
                 child: Container(
@@ -215,7 +218,7 @@ class _MyAccountsBuilder extends HookWidget {
     );
   }
 
-  List<Widget> buildContextActions(BuildContext context, LinkedAccount account) => [
+  List<Widget> buildContextActions(BuildContext context, LinkedAccount linkedAccount) => [
         ContextActionWidget(
           onPressed: () {
             Navigator.pop(context);
@@ -226,7 +229,7 @@ class _MyAccountsBuilder extends HookWidget {
         ContextActionWidget(
           onPressed: () {
             Navigator.pop(context);
-            Clipboard.setData(ClipboardData(text: account.link));
+            Clipboard.setData(ClipboardData(text: linkedAccount.fullLink));
             VxToast.show(context, msg: 'Link Copied', showTime: 1000);
           },
           trailingIcon: Icons.content_copy_outlined,
@@ -234,6 +237,7 @@ class _MyAccountsBuilder extends HookWidget {
         ),
         ContextActionWidget(
           onPressed: () {
+            kOpenLink(linkedAccount.fullLink!);
             Navigator.pop(context);
           },
           trailingIcon: Icons.open_in_new_outlined,
@@ -242,7 +246,15 @@ class _MyAccountsBuilder extends HookWidget {
         ContextActionWidget(
           onPressed: () {
             Navigator.pop(context);
-            Get.to<void>(() => AccountFormScreen(linkedAccount: account));
+            final allAccounts = context.read(allAccountsProvider).data!.value;
+            final account = allAccounts.whereName(linkedAccount.name);
+            debugPrint(account.toString());
+            Get.to<void>(
+              () => AccountFormScreen(
+                account: account,
+                linkedAccount: linkedAccount,
+              ),
+            );
           },
           trailingIcon: Icons.edit_outlined,
           child: const Text('Edit'),
@@ -251,13 +263,17 @@ class _MyAccountsBuilder extends HookWidget {
           isDestructiveAction: true,
           trailingIcon: Icons.close,
           onPressed: () {
-            context.read(appUserProvider.notifier).removeAccount(account);
+            context.read(appUserProvider.notifier).removeAccount(linkedAccount);
             context.read(firestoreProvider).updateUser();
             Navigator.pop(context);
           },
           child: const Text('Delete'),
         ),
       ];
+
+  void onAccountTap(LinkedAccount e) {
+    kOpenLink(e.fullLink!);
+  }
 }
 
 class AccountImage extends StatelessWidget {

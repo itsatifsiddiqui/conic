@@ -75,6 +75,7 @@ class FilledTextField extends StatelessWidget {
                     onSubmitAction!();
                   }
                 },
+                textAlignVertical: TextAlignVertical.center,
                 textInputAction: textInputAction ??
                     (nextNode == null ? TextInputAction.done : TextInputAction.next),
                 decoration: InputDecoration(

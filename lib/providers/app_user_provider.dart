@@ -87,4 +87,8 @@ class AppUserProvider extends StateNotifier<AppUser?> {
     final gridMode = state!.gridMode ?? true;
     state = state!.copyWith(gridMode: !gridMode);
   }
+
+  void updateName(String? value) {
+    state = state!.copyWith(name: value);
+  }
 }

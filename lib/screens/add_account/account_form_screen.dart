@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/account_model.dart';
 import '../../models/linked_account.dart';
@@ -9,33 +10,33 @@ import '../../providers/app_user_provider.dart';
 import '../../providers/firestore_provider.dart';
 import '../../res/platform_dialogue.dart';
 import '../../res/res.dart';
-import '../../res/validators.dart';
 import '../../widgets/custom_widgets.dart';
 import '../../widgets/primary_button.dart';
 
 class AccountFormScreen extends HookWidget {
   const AccountFormScreen({
     Key? key,
-    this.account,
+    required this.account,
     this.linkedAccount,
   }) : super(key: key);
 
-  final AccountModel? account;
+  final AccountModel account;
   final LinkedAccount? linkedAccount;
   @override
   Widget build(BuildContext context) {
-    final fieldController = useTextEditingController(text: linkedAccount?.link);
+    final fieldController = useTextEditingController(text: linkedAccount?.enteredLink);
     final fieldNode = useFocusNode();
     final titleController = useTextEditingController(text: linkedAccount?.title);
     final titleNode = useFocusNode();
     final descriptionController = useTextEditingController(text: linkedAccount?.description);
     final descriptionNode = useFocusNode();
     final formKey = GlobalObjectKey<FormState>(context);
+    final isEditMode = linkedAccount != null;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: FittedBox(
-          child: (account?.name ?? 'Edit ${linkedAccount?.name}')
+          child: '${isEditMode ? "" : "Edit"} ${account.name}'
               .text
               .xl
               .semiBold
@@ -51,16 +52,34 @@ class AccountFormScreen extends HookWidget {
             child: Column(
               children: [
                 16.heightBox,
-                _ImageBuilder(image: (account?.image ?? linkedAccount?.image)!),
+                _ImageBuilder(image: linkedAccount?.image ?? account.image),
                 16.heightBox,
                 FilledTextField(
                   focusNode: fieldNode,
                   nextNode: titleNode,
                   controller: fieldController,
-                  title: (account?.field ?? linkedAccount?.field)!,
-                  hintText: account?.fieldHint ?? linkedAccount?.fieldHint,
+                  title: account.field,
+                  hintText: account.fieldHint,
                   textInputAction: TextInputAction.next,
-                  validator: Validators.emptyValidator,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please fill in the ${account.field}';
+                    }
+                    if (account.isValidLink(value)) return null;
+                    return 'Invalid ${account.field}';
+                  },
+                  suffixIcon: IconButton(
+                    icon: const Icon(
+                      Icons.play_circle_fill,
+                      color: AppColors.primaryColor,
+                    ),
+                    onPressed: () {
+                      if (!formKey.currentState!.validate()) return;
+                      FocusScope.of(context).unfocus();
+                      final link = account.getLink(fieldController.text.trim());
+                      kOpenLink(link);
+                    },
+                  ),
                 ),
                 12.heightBox,
                 FilledTextField(
@@ -68,7 +87,7 @@ class AccountFormScreen extends HookWidget {
                   nextNode: descriptionNode,
                   controller: titleController,
                   title: 'Title',
-                  hintText: '${(account?.title ?? linkedAccount?.title)!} (Optional)',
+                  hintText: '${account.title} (Optional)',
                   textInputAction: TextInputAction.next,
                 ),
                 12.heightBox,
@@ -78,7 +97,7 @@ class AccountFormScreen extends HookWidget {
                   focusNode: descriptionNode,
                   controller: descriptionController,
                   title: 'Description',
-                  hintText: '${(account?.description ?? linkedAccount?.descHint)!} (Optional)',
+                  hintText: '${account.description} (Optional)',
                   textInputAction: TextInputAction.done,
                 ),
                 12.heightBox,
@@ -92,7 +111,7 @@ class AccountFormScreen extends HookWidget {
             ).px24().scrollVertical().expand(),
           ),
           PrimaryButton(
-            text: account == null ? 'Edit Account' : 'Add Account',
+            text: isEditMode ? 'Edit Account' : 'Add Account',
             onTap: () {
               if (!formKey.currentState!.validate()) return;
               FocusScope.of(context).unfocus();
@@ -100,49 +119,79 @@ class AccountFormScreen extends HookWidget {
               final notify = context.read(notifyFollowersProvider(linkedAccount)).state;
               final hidden = context.read(isHiddenProvider(linkedAccount)).state;
               final title = titleController.text.trim();
-              //EDIT MODE
-              if (account == null) {
-                final editedAccount = linkedAccount!.copyWith(
-                  focused: focused,
-                  hidden: hidden,
-                  notify: notify,
-                  title: title.isEmpty ? account!.title : title,
-                  link: fieldController.text.trim(),
-                  description: descriptionController.text.trim(),
-                );
-                final linkedAccounts = context.read(appUserProvider)!.linkedAccounts ?? [];
-                if (linkedAccounts.contains(editedAccount)) {
-                  Get.back<void>();
-                  return;
-                }
-                context.read(appUserProvider.notifier).editAccount(editedAccount, linkedAccount!);
+              final desc = descriptionController.text.trim();
+              final enteredLink = fieldController.text.trim();
+              final fullLink = account.getLink(enteredLink);
+
+              final newlinkedAccount = LinkedAccount(
+                name: account.name,
+                image: account.image,
+                title: title,
+                description: desc,
+                enteredLink: enteredLink,
+                fullLink: fullLink,
+                focused: focused,
+                notify: notify,
+                hidden: hidden,
+                media: const [],
+              );
+
+              if (isEditMode) {
+                context
+                    .read(appUserProvider.notifier)
+                    .editAccount(newlinkedAccount, linkedAccount!);
                 context.read(firestoreProvider).updateUser();
                 Get.back<void>();
               } else {
-                final linkedAccount = LinkedAccount(
-                  name: account!.name,
-                  descHint: account!.description,
-                  field: account!.field,
-                  fieldHint: account!.fieldHint,
-                  titleHint: account!.title,
-                  image: account!.image,
-                  link: fieldController.text.trim(),
-                  title: title.isEmpty ? account!.title : title,
-                  description: descriptionController.text.trim(),
-                  focused: focused,
-                  notify: notify,
-                  hidden: hidden,
-                  media: const <String>[],
-                );
-                final linkedAccounts = context.read(appUserProvider)!.linkedAccounts ?? [];
-                if (linkedAccounts.contains(linkedAccount)) {
-                  showPlatformDialogue(title: 'Account Already Exist');
-                  return;
-                }
-                context.read(appUserProvider.notifier).addAccount(linkedAccount);
+                context.read(appUserProvider.notifier).addAccount(newlinkedAccount);
                 context.read(firestoreProvider).updateUser();
                 Get.back<void>();
               }
+
+              // //EDIT MODE
+              // if (account == null) {
+              //   final editedAccount = linkedAccount!.copyWith(
+              //     focused: focused,
+              //     hidden: hidden,
+              //     notify: notify,
+              //     title: title.isEmpty ? account!.title : title,
+              //     link: fieldController.text.trim(),
+              //     description: descriptionController.text.trim(),
+              //   );
+              //   final linkedAccounts = context.read(appUserProvider)!.linkedAccounts ?? [];
+              //   if (linkedAccounts.contains(editedAccount)) {
+              //     Get.back<void>();
+              //     return;
+              //   }
+              // context.read(appUserProvider.notifier).editAccount(editedAccount, linkedAccount!);
+              // context.read(firestoreProvider).updateUser();
+              //   Get.back<void>();
+              // } else {
+              //   final link = account!.getLink(fieldController.text.trim());
+              //   final linkedAccount = LinkedAccount(
+              //     name: account!.name,
+              //     descHint: account!.description,
+              //     field: account!.field,
+              //     fieldHint: account!.fieldHint,
+              //     titleHint: account!.title,
+              //     image: account!.image,
+              //     link: link,
+              //     title: title.isEmpty ? account!.title : title,
+              //     description: descriptionController.text.trim(),
+              //     focused: focused,
+              //     notify: notify,
+              //     hidden: hidden,
+              //     media: const <String>[],
+              //   );
+              //   final linkedAccounts = context.read(appUserProvider)!.linkedAccounts ?? [];
+              //   if (linkedAccounts.contains(linkedAccount)) {
+              //     showPlatformDialogue(title: 'Account Already Exist');
+              //     return;
+              //   }
+              //   context.read(appUserProvider.notifier).addAccount(linkedAccount);
+              // context.read(firestoreProvider).updateUser();
+              // Get.back<void>();
+              // }
             },
           ).px16().py8()
         ],
@@ -264,3 +313,5 @@ class _HiddenTile extends HookWidget {
     );
   }
 }
+
+// (?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w\-]*\/)?(?:profile.php\?id=(?=\d.*))?([\w\-]*)?

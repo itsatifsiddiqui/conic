@@ -4,11 +4,35 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'platform_dialogue.dart';
 
 double kBorderRadius = 6;
 const dynamicLinkPrefix = 'https://conic.page.link';
+
+Future<void> kOpenLink(String url) async {
+  debugPrint('OPENING URL: $url');
+  if (await canLaunch(url)) {
+    try {
+      final result = await launch(
+        url,
+        forceSafariVC: false,
+        universalLinksOnly: true,
+      );
+      debugPrint(result.toString());
+      if (!result) {
+        await launch(url);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  } else {
+    // ignore: unawaited_futures
+    launch(url);
+    debugPrint('UNABLE TO OPEN');
+  }
+}
 
 // const String kSupportMail = 'appsupport@draughtguardian.com';
 
@@ -31,8 +55,7 @@ void showExceptionDialog(dynamic e) {
     if (e.code == 'user-not-found') {
       showPlatformDialogue(
         title: 'User Not Found',
-        content:
-            const Text('No user correspond to this email. Try signing up.'),
+        content: const Text('No user correspond to this email. Try signing up.'),
       );
     } else if (e.code == 'operation-not-allowed') {
       showPlatformDialogue(

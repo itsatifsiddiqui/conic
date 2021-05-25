@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:conic/models/account_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -15,19 +16,16 @@ extension BuildContextExtended on BuildContext {
   Color get adaptive75 => theme.dividerColor.withOpacity(0.75);
   Color get adaptive87 => theme.dividerColor.withOpacity(0.87);
   Color get adaptive => theme.dividerColor;
-  Color get shadow =>
-      theme.brightness == Brightness.dark ? Colors.transparent : Colors.black12;
+  Color get shadow => theme.brightness == Brightness.dark ? Colors.transparent : Colors.black12;
   void nextEditableTextFocus() {
     do {
       FocusScope.of(this).nextFocus();
-    } while (
-        FocusScope.of(this).focusedChild?.context?.widget is! EditableText);
+    } while (FocusScope.of(this).focusedChild?.context?.widget is! EditableText);
   }
 }
 
 extension ExtendedStringExtension<T> on String {
-  String get capializeAllFirst =>
-      split(' ').map((e) => e.capitalizeFirst).toList().join(' ');
+  String get capializeAllFirst => split(' ').map((e) => e.capitalizeFirst).toList().join(' ');
 }
 
 extension ExtendedDocumentSnapshot on DocumentSnapshot<Map> {
@@ -47,12 +45,9 @@ extension ExtendedWidget on Widget {
 }
 
 extension ExtendedDate on DateTime {
-  bool dateIsEqualTo(DateTime date) =>
-      day == date.day && month == date.month && year == date.year;
+  bool dateIsEqualTo(DateTime date) => day == date.day && month == date.month && year == date.year;
   bool get isSameDay =>
-      day == DateTime.now().day &&
-      month == DateTime.now().month &&
-      year == DateTime.now().year;
+      day == DateTime.now().day && month == DateTime.now().month && year == DateTime.now().year;
   bool get isYesterDay =>
       day == DateTime.now().subtract(const Duration(days: 1)).day &&
       month == DateTime.now().month &&
@@ -78,4 +73,8 @@ extension ExtendedDate on DateTime {
   String get volumeRequestFormat => DateFormat('yyyy-MM-dd hh:mm').format(this);
   String get firstLetter => DateFormat('E').format(this);
   String get dayName => DateFormat('EEEE').format(this);
+}
+
+extension ExtendedAccountModelList on List<AccountModel> {
+  AccountModel whereName(String name) => where((element) => element.name == name).first;
 }

@@ -10,7 +10,7 @@ class AppColors {
   static const Color lightGrey = Color(0xffeeeeee);
   static const Color link = Color(0xff3D60BF);
 
-  static LinearGradient dashboardGradient = const LinearGradient(
+  static LinearGradient blueGradient = const LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
@@ -18,15 +18,16 @@ class AppColors {
       Color(0xff3677FC),
     ],
   );
-  static LinearGradient myDevicesGradient = const LinearGradient(
+  static LinearGradient orangeGradient = const LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0xff8549D7),
-      Color(0xff4E5BC8),
+      Color(0xffF6B57A),
+      Color(0xffF08891),
     ],
   );
-  static LinearGradient nearbyGradient = const LinearGradient(
+
+  static LinearGradient redGradient = const LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
@@ -34,7 +35,24 @@ class AppColors {
       Color(0xffEB4D6C),
     ],
   );
-  static LinearGradient helpGradient = const LinearGradient(
+  static LinearGradient lightPurpleGradient = const LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xff9F69F0),
+      Color(0xffE35FD5),
+    ],
+  );
+
+  static LinearGradient purpleGradient = const LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xff8549D7),
+      Color(0xff4E5BC8),
+    ],
+  );
+  static LinearGradient greenGradient = const LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
