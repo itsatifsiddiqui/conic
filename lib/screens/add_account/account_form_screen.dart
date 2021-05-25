@@ -314,4 +314,9 @@ class _HiddenTile extends HookWidget {
   }
 }
 
+//FACEBOOK
 // (?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w\-]*\/)?(?:profile.php\?id=(?=\d.*))?([\w\-]*)?
+// INSTAGRAM
+// (?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/([A-Za-z0-9-_\.]+)     
+
+//TIKTOK

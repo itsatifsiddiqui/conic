@@ -130,7 +130,7 @@ class AccountModel {
     if (regex.hasMatch(value)) {
       return true;
     }
-    final merged = prefix! + value;
+    final merged = (prefix ?? '') + value;
 
     if (regex.hasMatch(merged)) return true;
 
@@ -150,7 +150,7 @@ class AccountModel {
     if (regex.hasMatch(value)) {
       var merged = value;
       if (prefix != null && prefix!.isNotEmpty) {
-        merged = prefix! + merged;
+        merged = (prefix ?? '') + merged;
       }
       if (suffix != null && suffix!.isNotEmpty) {
         merged = merged + suffix!;
