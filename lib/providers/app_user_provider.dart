@@ -75,4 +75,16 @@ class AppUserProvider extends StateNotifier<AppUser?> {
     linkedAccounts.remove(account);
     state = state!.copyWith(linkedAccounts: linkedAccounts);
   }
+
+  void editAccount(LinkedAccount editedAccount, LinkedAccount linkedAccount) {
+    final linkedAccounts = state!.linkedAccounts ?? [];
+    final index = linkedAccounts.indexOf(linkedAccount);
+    linkedAccounts[index] = editedAccount;
+    state = state!.copyWith(linkedAccounts: linkedAccounts);
+  }
+
+  void updateListMode() {
+    final gridMode = state!.gridMode ?? true;
+    state = state!.copyWith(gridMode: !gridMode);
+  }
 }

@@ -24,7 +24,7 @@ class AccountFormScreen extends HookWidget {
   final LinkedAccount? linkedAccount;
   @override
   Widget build(BuildContext context) {
-    final fieldController = useTextEditingController(text: linkedAccount?.field);
+    final fieldController = useTextEditingController(text: linkedAccount?.link);
     final fieldNode = useFocusNode();
     final titleController = useTextEditingController(text: linkedAccount?.title);
     final titleNode = useFocusNode();
@@ -35,7 +35,7 @@ class AccountFormScreen extends HookWidget {
       appBar: AppBar(
         centerTitle: true,
         title: FittedBox(
-          child: (account?.name ?? linkedAccount?.name)!
+          child: (account?.name ?? 'Edit ${linkedAccount?.name}')
               .text
               .xl
               .semiBold
@@ -82,26 +82,42 @@ class AccountFormScreen extends HookWidget {
                   textInputAction: TextInputAction.done,
                 ),
                 12.heightBox,
-                _FocusedTile(),
+                _FocusedTile(account: linkedAccount),
                 8.heightBox,
-                _NotifyFollowersTile(),
+                _NotifyFollowersTile(account: linkedAccount),
                 8.heightBox,
-                _HiddenTile(),
+                _HiddenTile(account: linkedAccount),
                 24.heightBox,
               ],
             ).px24().scrollVertical().expand(),
           ),
           PrimaryButton(
-            text: 'Add Account',
+            text: account == null ? 'Edit Account' : 'Add Account',
             onTap: () {
               if (!formKey.currentState!.validate()) return;
               FocusScope.of(context).unfocus();
-              final focused = context.read(focusedProvider).state;
-              final notify = context.read(notifyFollowersProvider).state;
-              final hidden = context.read(isHiddenProvider).state;
+              final focused = context.read(focusedProvider(linkedAccount)).state;
+              final notify = context.read(notifyFollowersProvider(linkedAccount)).state;
+              final hidden = context.read(isHiddenProvider(linkedAccount)).state;
               final title = titleController.text.trim();
               //EDIT MODE
               if (account == null) {
+                final editedAccount = linkedAccount!.copyWith(
+                  focused: focused,
+                  hidden: hidden,
+                  notify: notify,
+                  title: title.isEmpty ? account!.title : title,
+                  link: fieldController.text.trim(),
+                  description: descriptionController.text.trim(),
+                );
+                final linkedAccounts = context.read(appUserProvider)!.linkedAccounts ?? [];
+                if (linkedAccounts.contains(editedAccount)) {
+                  Get.back<void>();
+                  return;
+                }
+                context.read(appUserProvider.notifier).editAccount(editedAccount, linkedAccount!);
+                context.read(firestoreProvider).updateUser();
+                Get.back<void>();
               } else {
                 final linkedAccount = LinkedAccount(
                   name: account!.name,
@@ -165,12 +181,16 @@ class _ImageBuilder extends StatelessWidget {
   }
 }
 
-final focusedProvider = StateProvider<bool>((ref) => false);
+final focusedProvider =
+    StateProvider.family<bool, LinkedAccount?>((ref, account) => account?.focused ?? false);
 
 class _FocusedTile extends HookWidget {
+  const _FocusedTile({Key? key, required this.account}) : super(key: key);
+  final LinkedAccount? account;
+
   @override
   Widget build(BuildContext context) {
-    final isFocused = useProvider(focusedProvider).state;
+    final isFocused = useProvider(focusedProvider(account)).state;
     return SwitchListTile.adaptive(
       contentPadding: EdgeInsets.zero,
       title: 'Focused'.text.base.bold.make(),
@@ -183,18 +203,21 @@ class _FocusedTile extends HookWidget {
               .pOnly(top: 4),
       value: isFocused,
       onChanged: (value) {
-        context.read(focusedProvider).state = value;
+        context.read(focusedProvider(account)).state = value;
       },
     );
   }
 }
 
-final notifyFollowersProvider = StateProvider<bool>((ref) => true);
+final notifyFollowersProvider =
+    StateProvider.family<bool, LinkedAccount?>((ref, account) => account?.notify ?? true);
 
 class _NotifyFollowersTile extends HookWidget {
+  const _NotifyFollowersTile({Key? key, required this.account}) : super(key: key);
+  final LinkedAccount? account;
   @override
   Widget build(BuildContext context) {
-    final notify = useProvider(notifyFollowersProvider).state;
+    final notify = useProvider(notifyFollowersProvider(account)).state;
 
     return SwitchListTile.adaptive(
       contentPadding: EdgeInsets.zero,
@@ -208,18 +231,21 @@ class _NotifyFollowersTile extends HookWidget {
               .pOnly(top: 4),
       value: notify,
       onChanged: (value) {
-        context.read(notifyFollowersProvider).state = value;
+        context.read(notifyFollowersProvider(account)).state = value;
       },
     );
   }
 }
 
-final isHiddenProvider = StateProvider<bool>((ref) => false);
+final isHiddenProvider =
+    StateProvider.family<bool, LinkedAccount?>((ref, account) => account?.hidden ?? false);
 
 class _HiddenTile extends HookWidget {
+  const _HiddenTile({Key? key, required this.account}) : super(key: key);
+  final LinkedAccount? account;
   @override
   Widget build(BuildContext context) {
-    final isHidden = useProvider(isHiddenProvider).state;
+    final isHidden = useProvider(isHiddenProvider(account)).state;
 
     return SwitchListTile.adaptive(
       contentPadding: EdgeInsets.zero,
@@ -233,7 +259,7 @@ class _HiddenTile extends HookWidget {
               .pOnly(top: 4),
       value: isHidden,
       onChanged: (value) {
-        context.read(isHiddenProvider).state = value;
+        context.read(isHiddenProvider(account)).state = value;
       },
     );
   }

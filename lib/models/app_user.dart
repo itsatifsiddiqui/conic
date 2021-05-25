@@ -11,6 +11,7 @@ class AppUser {
     this.userId,
     this.link,
     this.androidLink,
+    this.gridMode,
     this.linkedAccounts,
   });
 
@@ -26,6 +27,7 @@ class AppUser {
       userId: map['userId'] as String?,
       link: map['link'] as String?,
       androidLink: map['androidLink'] as String?,
+      gridMode: map['gridMode'] as bool?,
       linkedAccounts: List<LinkedAccount>.from(
         linkedAccounts.map<LinkedAccount>((x) => LinkedAccount.fromMap(x)),
       ),
@@ -39,6 +41,7 @@ class AppUser {
   final String? userId;
   final String? link;
   final String? androidLink;
+  final bool? gridMode;
   final List<LinkedAccount>? linkedAccounts;
 
   AppUser copyWith({
@@ -49,6 +52,7 @@ class AppUser {
     String? userId,
     String? link,
     String? androidLink,
+    bool? gridMode,
     List<LinkedAccount>? linkedAccounts,
   }) {
     return AppUser(
@@ -59,6 +63,7 @@ class AppUser {
       userId: userId ?? this.userId,
       link: link ?? this.link,
       androidLink: androidLink ?? this.androidLink,
+      gridMode: gridMode ?? this.gridMode,
       linkedAccounts: linkedAccounts ?? this.linkedAccounts,
     );
   }
@@ -72,13 +77,14 @@ class AppUser {
       'userId': userId,
       'link': link,
       'androidLink': androidLink,
+      'gridMode': gridMode ?? true,
       'linkedAccounts': (linkedAccounts ?? []).map((x) => x.toMap()).toList(),
     };
   }
 
   @override
   String toString() {
-    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId, link: $link, androidLink: $androidLink, linkedAccounts: $linkedAccounts)';
+    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId, link: $link, androidLink: $androidLink, gridMode: $gridMode linkedAccounts: $linkedAccounts)';
   }
 
   @override
@@ -93,6 +99,7 @@ class AppUser {
         other.userId == userId &&
         other.link == link &&
         other.androidLink == androidLink &&
+        other.gridMode == gridMode &&
         listEquals(other.linkedAccounts, linkedAccounts);
   }
 
@@ -105,6 +112,7 @@ class AppUser {
         userId.hashCode ^
         link.hashCode ^
         androidLink.hashCode ^
+        gridMode.hashCode ^
         linkedAccounts.hashCode;
   }
 }

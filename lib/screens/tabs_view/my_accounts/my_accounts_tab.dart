@@ -1,6 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:conic/screens/add_account/account_form_screen.dart';
-import 'package:conic/widgets/context_action.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,12 +7,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../models/linked_account.dart';
 import '../../../providers/app_user_provider.dart';
-import '../../../providers/app_user_provider.dart';
 import '../../../providers/firestore_provider.dart';
 import '../../../res/res.dart';
+import '../../../widgets/context_action.dart';
+import '../../add_account/account_form_screen.dart';
 
 final businessModeProvider = StateProvider<bool>((ref) => false);
-final isListModeProvider = StateProvider<bool>((ref) => false);
+final isListModeProvider = StateProvider<bool>((ref) {
+  return ref.watch(appUserProvider)!.gridMode ?? true;
+});
 final queryProvider = StateProvider<String>((ref) => '');
 
 ///Listen to [queryProvider] and return filtered results
@@ -89,7 +90,8 @@ class _MyAccountsTextRow extends StatelessWidget {
                 color: context.primaryColor,
               ),
               onPressed: () {
-                context.read(isListModeProvider).state = !context.read(isListModeProvider).state;
+                context.read(appUserProvider.notifier).updateListMode();
+                context.read(firestoreProvider).updateUser();
               },
             );
           },

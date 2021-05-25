@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:conic/providers/app_user_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,8 @@ class AddNewAccountScreen extends HookWidget {
                   color: context.primaryColor,
                 ),
                 onPressed: () {
-                  context.read(isListModeProvider).state = !context.read(isListModeProvider).state;
+                  context.read(appUserProvider.notifier).updateListMode();
+                  context.read(firestoreProvider).updateUser();
                 },
               );
             },
