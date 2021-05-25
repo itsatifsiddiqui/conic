@@ -189,7 +189,13 @@ class _MyAccountsBuilder extends HookWidget {
                         ),
                       ),
                       12.widthBox,
-                      e.title.text.lg.medium.color(context.adaptive87).make().expand()
+                      (e.title.isEmptyOrNull ? e.name : e.title)
+                          .text
+                          .lg
+                          .medium
+                          .color(context.adaptive87)
+                          .make()
+                          .expand()
                     ],
                   ),
                 ),
