@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:conic/models/account_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import '../models/account_model.dart';
 
 extension BuildContextExtended on BuildContext {
   Color get adaptive8 => theme.dividerColor.withOpacity(0.08);

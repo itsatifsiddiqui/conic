@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:conic/screens/add_account/add_new_account_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../providers/auth_provider.dart';
 import '../../res/res.dart';
+import '../add_account/add_new_account_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

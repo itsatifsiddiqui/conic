@@ -1,8 +1,8 @@
-import 'package:conic/screens/tabs_view/dashboard/my_profile/my_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../res/res.dart';
+import 'my_profile/my_profile_screen.dart';
 
 class DashboardTab extends StatelessWidget {
   const DashboardTab({Key? key}) : super(key: key);

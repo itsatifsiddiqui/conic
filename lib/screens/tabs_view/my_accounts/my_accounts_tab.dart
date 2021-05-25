@@ -1,11 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:conic/screens/add_account/add_new_account_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../models/linked_account.dart';
 import '../../../providers/app_user_provider.dart';
@@ -13,6 +11,7 @@ import '../../../providers/firestore_provider.dart';
 import '../../../res/res.dart';
 import '../../../widgets/context_action.dart';
 import '../../add_account/account_form_screen.dart';
+import '../../add_account/add_new_account_screen.dart';
 
 final businessModeProvider = StateProvider<bool>((ref) => false);
 final isListModeProvider = StateProvider<bool>((ref) {

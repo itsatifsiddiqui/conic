@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:conic/screens/add_account/add_new_account_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../models/account_model.dart';
 import '../models/app_user.dart';
 import '../res/constants.dart';
+import '../screens/add_account/add_new_account_screen.dart';
 import 'app_user_provider.dart';
 
 final firestoreProvider = Provider.autoDispose<FirestoreProvider>((ref) {

@@ -2,13 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/account_model.dart';
 import '../../models/linked_account.dart';
 import '../../providers/app_user_provider.dart';
 import '../../providers/firestore_provider.dart';
-import '../../res/platform_dialogue.dart';
 import '../../res/res.dart';
 import '../../widgets/custom_widgets.dart';
 import '../../widgets/primary_button.dart';
@@ -317,6 +315,6 @@ class _HiddenTile extends HookWidget {
 //FACEBOOK
 // (?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w\-]*\/)?(?:profile.php\?id=(?=\d.*))?([\w\-]*)?
 // INSTAGRAM
-// (?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/([A-Za-z0-9-_\.]+)     
+// (?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/([A-Za-z0-9-_\.]+)
 
 //TIKTOK

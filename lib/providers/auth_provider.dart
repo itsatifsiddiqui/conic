@@ -1,4 +1,3 @@
-import 'package:conic/screens/add_account/add_new_account_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
