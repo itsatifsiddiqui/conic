@@ -117,25 +117,25 @@ class _Greetings extends HookWidget {
             // 'View My Profile'.text.base.color(context.adaptive75).make(),
           ],
         ).expand(),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            HookBuilder(
-              builder: (context) {
-                final isBusinesssMode = useProvider(businessModeProvider).state;
-                return CupertinoSwitch(
-                  activeColor: context.primaryColor,
-                  value: isBusinesssMode,
-                  onChanged: (value) {
-                    context.read(businessModeProvider).state = value;
-                  },
-                );
-              },
-            ),
-            4.heightBox,
-            'Switch to business'.text.xs.color(context.adaptive87).make(),
-          ],
-        )
+        // Column(
+        //   crossAxisAlignment: CrossAxisAlignment.end,
+        //   children: [
+        //     HookBuilder(
+        //       builder: (context) {
+        //         final isBusinesssMode = useProvider(businessModeProvider).state;
+        //         return CupertinoSwitch(
+        //           activeColor: context.primaryColor,
+        //           value: isBusinesssMode,
+        //           onChanged: (value) {
+        //             context.read(businessModeProvider).state = value;
+        //           },
+        //         );
+        //       },
+        //     ),
+        //     4.heightBox,
+        //     'Switch to business'.text.xs.color(context.adaptive87).make(),
+        //   ],
+        // )
       ],
     ).py8();
   }

@@ -83,5 +83,14 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+
+            <!-- IMAGR CROPPER ACTIVITY -->
+        <activity
+          android:name="com.yalantis.ucrop.UCropActivity"
+          android:screenOrientation="portrait"
+          android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            <!-- IMAGR CROPPER ACTIVITY END-->
+
     </application>
 </manifest>

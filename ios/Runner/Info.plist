@@ -116,5 +116,9 @@
 		<string>https</string>
 		<string>http</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>User need the access to camera to add message in the social chat and to change profile picture</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>User need the access to photos to add message in the social chat and to change profile picture</string>
 </dict>
 </plist>

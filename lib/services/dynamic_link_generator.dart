@@ -5,8 +5,7 @@ import '../res/constants.dart';
 
 @immutable
 class DynamicLinkGenerator {
-  const DynamicLinkGenerator(
-      {required this.username, this.isAndroidLink = false});
+  const DynamicLinkGenerator({required this.username, this.isAndroidLink = false});
   final String username;
   final bool isAndroidLink;
 
