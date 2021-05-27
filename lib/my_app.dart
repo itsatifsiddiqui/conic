@@ -64,6 +64,19 @@ class _MyAppState extends State<MyApp> {
             iconTheme: IconThemeData(color: Colors.white),
             actionsIconTheme: IconThemeData(color: Colors.white),
           ),
+          indicatorColor: AppColors.primaryColor,
+          tabBarTheme: const TabBarTheme(
+            unselectedLabelColor: Colors.white54,
+            labelColor: AppColors.primaryColor,
+            labelStyle: TextStyle(
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1,
+            ),
+            unselectedLabelStyle: TextStyle(
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1,
+            ),
+          ),
         ),
         theme: ThemeData(
           canvasColor: const Color(0xffF6F8FB),
@@ -76,6 +89,19 @@ class _MyAppState extends State<MyApp> {
             cursorColor: AppColors.primaryColor,
           ),
           fontFamily: 'montserrat',
+          indicatorColor: AppColors.primaryColor,
+          tabBarTheme: const TabBarTheme(
+            unselectedLabelColor: Colors.black54,
+            labelColor: AppColors.primaryColor,
+            labelStyle: TextStyle(
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1,
+            ),
+            unselectedLabelStyle: TextStyle(
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1,
+            ),
+          ),
           appBarTheme: const AppBarTheme(
             elevation: 0,
             color: Colors.transparent,

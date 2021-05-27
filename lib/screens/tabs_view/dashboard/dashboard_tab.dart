@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../res/res.dart';
+import 'my_connections/my_connections_screen.dart';
 import 'my_profile/my_profile_screen.dart';
 
 class DashboardTab extends StatelessWidget {
@@ -26,7 +27,10 @@ class DashboardTab extends StatelessWidget {
             Row(
               children: [
                 _ItemCard(
-                  onTap: HapticFeedback.lightImpact,
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Get.to<void>(() => const MyConnectionScreen());
+                  },
                   icon: Icons.group_sharp,
                   title: 'Connections',
                   subtitle: 'Friends & Followers',

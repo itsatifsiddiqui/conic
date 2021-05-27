@@ -70,3 +70,4 @@ linter:
     diagnostic_describe_all_properties: false
     use_setters_to_change_properties: false
     always_put_control_body_on_new_line: false
+    prefer_mixin: false
