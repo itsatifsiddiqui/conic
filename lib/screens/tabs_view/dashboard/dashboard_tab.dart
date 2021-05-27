@@ -1,3 +1,4 @@
+import 'package:conic/screens/nfc/activate_nfc_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -37,7 +38,10 @@ class DashboardTab extends StatelessWidget {
                   gradient: AppColors.blueGradient,
                 ),
                 _ItemCard(
-                  onTap: HapticFeedback.lightImpact,
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Get.to<void>(() => const ActivateNfcScreen(showBackButton: true));
+                  },
                   icon: Icons.nfc_outlined,
                   title: 'Activate Account',
                   subtitle: 'NFC Rewrite',

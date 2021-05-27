@@ -24,67 +24,79 @@ final isNfcAvailable = FutureProvider.autoDispose<bool>(
 );
 
 class ActivateNfcScreen extends HookWidget {
-  const ActivateNfcScreen({Key? key}) : super(key: key);
+  const ActivateNfcScreen({
+    Key? key,
+    this.showBackButton = false,
+  }) : super(key: key);
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
     return _NfcObserver(
       child: Scaffold(
         body: SafeArea(
-          child: useProvider(isNfcAvailable).when(
-            data: (isAvailable) {
-              if (!isAvailable) {
-                return const _NotAvailableView();
-              }
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  16.heightBox,
-                  const AuthHeader(
-                    title: 'Let’s Activate',
-                    subtitle:
-                        'Please put the nfc tag above the nfc scanner at the back of your phone to activate.',
-                  ).pOnly(right: 0.17.sw),
-                  Image.asset(Images.onBoarding1).centered().expand(),
-                  8.heightBox,
-                  PrimaryButton(
-                    text: 'Tap here to activate',
-                    onTap: () async {
-                      final completer = Completer<String>();
-                      await readNfcTag(
-                        context: context,
-                        handleTag: (tag) async {
-                          final link = context.read(appUserProvider)!.link!;
-                          final uri = Uri.parse(link);
-                          final result = (await writeTag(tag, uri)) ?? '';
-                          completer.complete(result);
-                          return result;
-                        },
-                      );
-                      final result = await completer.future;
-                      if (result == 'Success') {
-                        log('WRITE SUCCESS');
-                        // ignore: unawaited_futures
-                        context.read(authProvider).navigateBasedOnCondition();
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (showBackButton) const BackButton(),
+              if (!showBackButton) 16.heightBox,
+              useProvider(isNfcAvailable)
+                  .when(
+                    data: (isAvailable) {
+                      if (!isAvailable) {
+                        return const _NotAvailableView();
                       }
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const AuthHeader(
+                            title: 'Let’s Activate',
+                            subtitle:
+                                'Please put the nfc tag above the nfc scanner at the back of your phone to activate.',
+                          ).pOnly(right: 0.17.sw),
+                          Image.asset(Images.onBoarding1).centered().expand(),
+                          8.heightBox,
+                          PrimaryButton(
+                            text: 'Tap here to activate',
+                            onTap: () async {
+                              final completer = Completer<String>();
+                              await readNfcTag(
+                                context: context,
+                                handleTag: (tag) async {
+                                  final link = context.read(appUserProvider)!.link!;
+                                  final uri = Uri.parse(link);
+                                  final result = (await writeTag(tag, uri)) ?? '';
+                                  completer.complete(result);
+                                  return result;
+                                },
+                              );
+                              final result = await completer.future;
+                              if (result == 'Success') {
+                                log('WRITE SUCCESS');
+                                // ignore: unawaited_futures
+                                context.read(authProvider).navigateBasedOnCondition();
+                              }
+                            },
+                          ),
+                          12.heightBox,
+                          PrimaryButton(
+                            isOutline: true,
+                            text: 'Skip for now',
+                            onTap: () => Get.offAll<void>(() => const TabsView()),
+                          )
+                        ],
+                      ).p16();
                     },
-                  ),
-                  12.heightBox,
-                  PrimaryButton(
-                    isOutline: true,
-                    text: 'Skip for now',
-                    onTap: () => Get.offAll<void>(() => const TabsView()),
+                    loading: () => const AdaptiveProgressIndicator(),
+                    error: (e, s) => StreamErrorWidget(
+                      error: e.toString(),
+                      onTryAgain: () {
+                        context.refresh(isNfcAvailable);
+                      },
+                    ),
                   )
-                ],
-              ).p16();
-            },
-            loading: () => const AdaptiveProgressIndicator(),
-            error: (e, s) => StreamErrorWidget(
-              error: e.toString(),
-              onTryAgain: () {
-                context.refresh(isNfcAvailable);
-              },
-            ),
+                  .expand(),
+            ],
           ),
         ),
       ),
@@ -101,7 +113,6 @@ class _NotAvailableView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        16.heightBox,
         const AuthHeader(
           title: 'NO NFC DETECTED',
           subtitle: 'No worries, you can still use all the features using our qrcode feature.',

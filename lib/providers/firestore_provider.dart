@@ -80,4 +80,15 @@ class FirestoreProvider {
       return allAccounts;
     });
   }
+
+  Stream<List<AppUser>> getFollowings() {
+    return Stream.value(<AppUser>[]);
+  }
+
+  Stream<List<AppUser>> getFollowers() {
+    final userId = _read(appUserProvider)!.userId;
+    final snaps =
+        _firestore.collection('users').where('followedBy', arrayContains: userId).snapshots();
+    return snaps.map((event) => event.docs.map((e) => AppUser.fromMap(e.data())).toList());
+  }
 }
