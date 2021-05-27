@@ -1,14 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:conic/models/app_user.dart';
-import 'package:conic/providers/app_user_provider.dart';
-import 'package:conic/providers/firestore_provider.dart';
-import 'package:conic/providers/paginated_docs_provider.dart';
-import 'package:conic/res/res.dart';
-import 'package:conic/screens/tabs_view/dashboard/my_connections/user_list_item.dart';
-import 'package:conic/widgets/paginated_docs_builder.dart';
+import 'package:conic/res/platform_dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../../../models/app_user.dart';
+import '../../../../providers/firestore_provider.dart';
+import '../../../../res/res.dart';
+import '../../../../widgets/adaptive_progress_indicator.dart';
+import '../../../../widgets/error_widet.dart';
+import 'user_list_item.dart';
 
 final followingsProvider = StreamProvider<List<AppUser>>((ref) {
   return ref.read(firestoreProvider).getFollowings();
@@ -19,33 +19,44 @@ class FollowingTab extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userId = useProvider(appUserProvider.select((value) => value!.userId))!;
-    return PaginatedDocsBuilder(
-      options: PaginationOptions(
-        path: 'users',
-        whereQuery: Where(
-          arrayContains: true,
-          field: 'followings',
-          condition: userId,
-        ),
-      ),
-      builder: (context, docs) {
+    return useProvider(followingsProvider).when(
+      data: (docs) {
         return ListView.builder(
           padding: const EdgeInsets.symmetric(vertical: 16),
           itemCount: docs.length,
           itemBuilder: (context, index) {
-            final doc = docs[index].data()! as Map<String, dynamic>;
-            final user = AppUser.fromMap(doc);
+            final user = docs[index];
             return UserListItem(
               onTap: () {},
               image: user.image,
               username: user.username ?? 'username',
               name: user.name ?? 'Name',
               trailing: OutlinedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final result = await showPlatformDialogue(
+                    title: 'Unfollow ${user.name}?',
+                    content: Text('Are you sure you want to unfollow ${user.name}?'),
+                    action1OnTap: true,
+                    action1Text: 'Yes',
+                    action2OnTap: false,
+                    action2Text: 'No',
+                  );
+                  if (result ?? false) {
+                    context.read(firestoreProvider).unfollowUser(user.userId!);
+                  }
+                },
                 child: 'Unfollow'.text.sm.color(context.primaryColor).make(),
               ),
             );
+          },
+        );
+      },
+      loading: () => const AdaptiveProgressIndicator(),
+      error: (e, s) {
+        return StreamErrorWidget(
+          error: e.toString(),
+          onTryAgain: () {
+            context.refresh(followingsProvider);
           },
         );
       },

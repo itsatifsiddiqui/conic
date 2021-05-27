@@ -82,7 +82,10 @@ class FirestoreProvider {
   }
 
   Stream<List<AppUser>> getFollowings() {
-    return Stream.value(<AppUser>[]);
+    final userId = _read(appUserProvider)!.userId;
+    final snaps =
+        _firestore.collection('users').where('followings', arrayContains: userId).snapshots();
+    return snaps.map((event) => event.docs.map((e) => AppUser.fromMap(e.data())).toList());
   }
 
   Stream<List<AppUser>> getFollowers() {
@@ -90,5 +93,19 @@ class FirestoreProvider {
     final snaps =
         _firestore.collection('users').where('followedBy', arrayContains: userId).snapshots();
     return snaps.map((event) => event.docs.map((e) => AppUser.fromMap(e.data())).toList());
+  }
+
+  void unfollowUser(String userId) {
+    final myId = _read(appUserProvider)!.userId!;
+    _firestore.collection('users').doc(userId).update({
+      'followings': FieldValue.arrayRemove(<String>[myId])
+    });
+  }
+
+  void removeUser(String userId) {
+    final myId = _read(appUserProvider)!.userId!;
+    _firestore.collection('users').doc(userId).update({
+      'followedBy': FieldValue.arrayRemove(<String>[myId])
+    });
   }
 }

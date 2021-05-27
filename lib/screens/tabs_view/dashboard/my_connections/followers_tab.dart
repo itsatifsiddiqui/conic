@@ -1,15 +1,15 @@
-import 'package:conic/models/app_user.dart';
-import 'package:conic/providers/app_user_provider.dart';
-import 'package:conic/providers/firestore_provider.dart';
-import 'package:conic/providers/paginated_docs_provider.dart';
-import 'package:conic/res/res.dart';
-import 'package:conic/screens/tabs_view/dashboard/my_connections/user_list_item.dart';
-import 'package:conic/widgets/paginated_docs_builder.dart';
+import 'package:conic/res/platform_dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final followersProvider = StreamProvider.autoDispose<List<AppUser>>((ref) {
+import '../../../../models/app_user.dart';
+import '../../../../providers/firestore_provider.dart';
+import '../../../../res/res.dart';
+import '../../../../widgets/custom_widgets.dart';
+import 'user_list_item.dart';
+
+final followersProvider = StreamProvider<List<AppUser>>((ref) {
   return ref.read(firestoreProvider).getFollowers();
 });
 
@@ -17,33 +17,45 @@ class FollowersTab extends HookWidget {
   const FollowersTab({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final userId = useProvider(appUserProvider.select((value) => value!.userId))!;
-    return PaginatedDocsBuilder(
-      options: PaginationOptions(
-        path: 'users',
-        whereQuery: Where(
-          arrayContains: true,
-          field: 'followedBy',
-          condition: userId,
-        ),
-      ),
-      builder: (context, docs) {
+    return useProvider(followersProvider).when(
+      data: (docs) {
         return ListView.builder(
           padding: const EdgeInsets.symmetric(vertical: 16),
           itemCount: docs.length,
           itemBuilder: (context, index) {
-            final doc = docs[index].data()! as Map<String, dynamic>;
-            final user = AppUser.fromMap(doc);
+            final user = docs[index];
             return UserListItem(
               onTap: () {},
               image: user.image,
               username: user.username ?? 'username',
               name: user.name ?? 'Name',
               trailing: OutlinedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final result = await showPlatformDialogue(
+                    title: 'Remove ${user.name}?',
+                    content:
+                        Text('Are you sure you want to remove ${user.name} from your followers?'),
+                    action1OnTap: true,
+                    action1Text: 'Yes',
+                    action2OnTap: false,
+                    action2Text: 'No',
+                  );
+                  if (result ?? false) {
+                    context.read(firestoreProvider).removeUser(user.userId!);
+                  }
+                },
                 child: 'Remove'.text.sm.color(context.primaryColor).make(),
               ),
             );
+          },
+        );
+      },
+      loading: () => const AdaptiveProgressIndicator(),
+      error: (e, s) {
+        return StreamErrorWidget(
+          error: e.toString(),
+          onTryAgain: () {
+            context.refresh(followersProvider);
           },
         );
       },
