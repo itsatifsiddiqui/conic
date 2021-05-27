@@ -19,7 +19,9 @@ import '../tabs_view/tabs_view.dart';
 import 'tag_reader.dart';
 import 'tag_writer.dart';
 
-final isNfcAvailable = FutureProvider.autoDispose<bool>((ref) => NfcManager.instance.isAvailable());
+final isNfcAvailable = FutureProvider.autoDispose<bool>(
+  (ref) => NfcManager.instance.isAvailable(),
+);
 
 class ActivateNfcScreen extends HookWidget {
   const ActivateNfcScreen({Key? key}) : super(key: key);

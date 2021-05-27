@@ -418,9 +418,11 @@ packages:
   open_settings:
     dependency: "direct main"
     description:
-      name: open_settings
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "464219d58ef924b47bcc3eb0d3f91fe11308a60a"
+      url: "https://github.com/marcojoao/open_settings"
+    source: git
     version: "2.0.1"
   path:
     dependency: transitive
