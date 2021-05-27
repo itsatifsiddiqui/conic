@@ -1,11 +1,11 @@
-import 'package:conic/screens/tabs_view/dashboard/my_connections/followers_tab.dart';
-import 'package:conic/screens/tabs_view/dashboard/my_connections/following_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../providers/app_user_provider.dart';
 import '../../../../res/res.dart';
+import 'followers_tab.dart';
+import 'following_tab.dart';
 
 class MyConnectionScreen extends StatelessWidget {
   const MyConnectionScreen({Key? key}) : super(key: key);

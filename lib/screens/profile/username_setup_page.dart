@@ -113,7 +113,7 @@ class _UsernameValidationForm extends HookWidget {
                 ).pSymmetric(v: 15),
               );
             },
-            error: (e, s) {
+            error: (e, s) { 
               return PrimaryButton(
                 text: 'ERROR: ${e.toString()}',
                 enabled: false,

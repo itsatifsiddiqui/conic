@@ -66,6 +66,22 @@ class FirestoreProvider {
     }
   }
 
+  Future<AppUser?> searchUserByUsername(String username) async {
+    try {
+      final docs = await FirebaseFirestore.instance
+          .collection('users')
+          .where('username', isEqualTo: username)
+          .limit(1)
+          .get();
+      if (docs.docs.isNotEmpty) {
+        return AppUser.fromMap(docs.docs.first.data());
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
   Stream<List<AccountModel>> getAllAccounts() {
     final snaps = _firestore.collection('accounts').doc('all_accounts').snapshots();
     return snaps.map((event) {

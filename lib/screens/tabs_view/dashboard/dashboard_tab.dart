@@ -1,4 +1,5 @@
 import 'package:conic/screens/nfc/activate_nfc_screen.dart';
+import 'package:conic/screens/tabs_view/dashboard/search/search_users_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -60,7 +61,10 @@ class DashboardTab extends StatelessWidget {
                   gradient: AppColors.redGradient,
                 ),
                 _ItemCard(
-                  onTap: HapticFeedback.lightImpact,
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Get.to<void>(() => const SearchUsersScreen());
+                  },
                   icon: Icons.person_search_outlined,
                   title: 'Search',
                   subtitle: 'Find Users',
