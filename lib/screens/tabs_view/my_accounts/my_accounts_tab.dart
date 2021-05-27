@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:conic/widgets/accounts_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -144,9 +145,13 @@ class _Greetings extends HookWidget {
 class _MyAccountsBuilder extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final isListMode = useProvider(isListModeProvider).state;
     final accounts = useProvider(filteredAccountsStateProvider).state;
 
+    return LinkedAccountsBuilder(
+      accounts: accounts,
+      longPressEnabled: true,
+    );
+    final isListMode = useProvider(isListModeProvider).state;
     if (isListMode) {
       return ListView(
         physics: const NeverScrollableScrollPhysics(),

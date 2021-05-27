@@ -40,7 +40,7 @@ class MyConnectionScreen extends StatelessWidget {
                     ],
                   ),
                   Expanded(
-                    child: [
+                    child: const [
                       FollowersTab(),
                       FollowingTab(),
                     ][index.value],

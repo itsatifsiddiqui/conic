@@ -1,17 +1,24 @@
-import 'package:conic/res/platform_dialogue.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../models/app_user.dart';
+import '../../../../providers/app_user_provider.dart';
 import '../../../../providers/firestore_provider.dart';
+import '../../../../res/platform_dialogue.dart';
 import '../../../../res/res.dart';
 import '../../../../widgets/adaptive_progress_indicator.dart';
 import '../../../../widgets/error_widet.dart';
+import 'firend_detail.dart';
 import 'user_list_item.dart';
 
 final followingsProvider = StreamProvider<List<AppUser>>((ref) {
-  return ref.read(firestoreProvider).getFollowings();
+  final userId = ref.watch(appUserProvider)?.userId;
+  log('Creating Provider', name: 'followingsProvider');
+  if (userId == null) return Stream.value([]);
+  return ref.read(firestoreProvider).getFollowings(userId);
 });
 
 class FollowingTab extends HookWidget {
@@ -27,7 +34,11 @@ class FollowingTab extends HookWidget {
           itemBuilder: (context, index) {
             final user = docs[index];
             return UserListItem(
-              onTap: () {},
+              onTap: () {
+                Get.to<void>(
+                  () => FriendDetail(friend: user, fromFollowing: true),
+                );
+              },
               image: user.image,
               username: user.username ?? 'username',
               name: user.name ?? 'Name',
