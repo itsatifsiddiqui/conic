@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+
 import 'linked_account.dart';
 
 @immutable
@@ -13,6 +14,8 @@ class AppUser {
     this.androidLink,
     this.gridMode,
     this.linkedAccounts,
+    this.followedBy,
+    this.followings,
   });
 
   factory AppUser.fromMap(Map<String, dynamic> map) {
@@ -31,6 +34,12 @@ class AppUser {
       linkedAccounts: List<LinkedAccount>.from(
         linkedAccounts.map<LinkedAccount>((x) => LinkedAccount.fromMap(x)),
       ),
+      followedBy: map.containsKey('followedBy')
+          ? List<String>.from((map['followedBy'] as List).cast<String>())
+          : <String>[],
+      followings: map.containsKey('followings')
+          ? List<String>.from((map['followings'] as List).cast<String>())
+          : <String>[],
     );
   }
 
@@ -43,6 +52,8 @@ class AppUser {
   final String? androidLink;
   final bool? gridMode;
   final List<LinkedAccount>? linkedAccounts;
+  final List<String>? followedBy;
+  final List<String>? followings;
 
   AppUser copyWith({
     String? name,
@@ -54,6 +65,8 @@ class AppUser {
     String? androidLink,
     bool? gridMode,
     List<LinkedAccount>? linkedAccounts,
+    List<String>? followedBy,
+    List<String>? followings,
   }) {
     return AppUser(
       name: name ?? this.name,
@@ -65,6 +78,8 @@ class AppUser {
       androidLink: androidLink ?? this.androidLink,
       gridMode: gridMode ?? this.gridMode,
       linkedAccounts: linkedAccounts ?? this.linkedAccounts,
+      followedBy: followedBy ?? <String>[],
+      followings: followings ?? <String>[],
     );
   }
 
@@ -77,14 +92,16 @@ class AppUser {
       'userId': userId,
       'link': link,
       'androidLink': androidLink,
-      'gridMode': gridMode ?? true,
+      'gridMode': gridMode,
       'linkedAccounts': (linkedAccounts ?? []).map((x) => x.toMap()).toList(),
+      'followedBy': followedBy ?? [],
+      'followings': followings ?? [],
     };
   }
 
   @override
   String toString() {
-    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId, link: $link, androidLink: $androidLink, gridMode: $gridMode linkedAccounts: $linkedAccounts)';
+    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId, link: $link, androidLink: $androidLink, gridMode: $gridMode, linkedAccounts: $linkedAccounts, followedBy: $followedBy, followings: $followings)';
   }
 
   @override
@@ -100,7 +117,9 @@ class AppUser {
         other.link == link &&
         other.androidLink == androidLink &&
         other.gridMode == gridMode &&
-        listEquals(other.linkedAccounts, linkedAccounts);
+        listEquals(other.linkedAccounts, linkedAccounts) &&
+        listEquals(other.followedBy, followedBy) &&
+        listEquals(other.followings, followings);
   }
 
   @override
@@ -113,6 +132,8 @@ class AppUser {
         link.hashCode ^
         androidLink.hashCode ^
         gridMode.hashCode ^
-        linkedAccounts.hashCode;
+        linkedAccounts.hashCode ^
+        followedBy.hashCode ^
+        followings.hashCode;
   }
 }
