@@ -9,8 +9,8 @@ import '../../../../res/res.dart';
 import '../../../../widgets/accounts_builder.dart';
 import '../../my_accounts/my_accounts_tab.dart';
 
-class FriendDetail extends StatelessWidget {
-  const FriendDetail({
+class FriendDetailScreen extends StatelessWidget {
+  const FriendDetailScreen({
     Key? key,
     required this.friend,
     required this.fromFollowing,

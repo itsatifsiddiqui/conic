@@ -122,4 +122,51 @@ class FirestoreProvider {
       'followedBy': FieldValue.arrayRemove(<String>[myId])
     });
   }
+
+  void sendFollowRequest(String userId) {
+    final myId = _read(appUserProvider)!.userId!;
+    final batch = _firestore.batch();
+    final usersCollection = _firestore.collection('users');
+    final myDoc = usersCollection.doc(myId);
+    final sentRequestData = {
+      'sentRequests': FieldValue.arrayUnion(<String>[userId])
+    };
+    final otherUserDoc = usersCollection.doc(userId);
+    final recievedRequestData = {
+      'recievedRequests': FieldValue.arrayUnion(<String>[myId])
+    };
+    final followData = {
+      'followings': FieldValue.arrayUnion(<String>[myId])
+    };
+    batch.update(myDoc, sentRequestData);
+    batch.update(otherUserDoc, followData);
+    batch.update(otherUserDoc, recievedRequestData);
+
+    batch.commit();
+  }
+
+  void unSendFollowRequest(String userId) {
+    final myId = _read(appUserProvider)!.userId!;
+    final batch = _firestore.batch();
+    final usersCollection = _firestore.collection('users');
+
+    final myDoc = usersCollection.doc(myId);
+    final requestAddData = {
+      'sentRequests': FieldValue.arrayRemove(<String>[userId])
+    };
+    final otherUserDoc = usersCollection.doc(userId);
+    final followData = {
+      'followings': FieldValue.arrayRemove(<String>[myId])
+    };
+    batch.update(myDoc, requestAddData);
+    batch.update(otherUserDoc, followData);
+
+    batch.commit();
+  }
+
+  Stream<List<AppUser>> getFollowRequests(String userId) {
+    final snaps =
+        _firestore.collection('users').where('sentRequests', arrayContains: userId).snapshots();
+    return snaps.map((event) => event.docs.map((e) => AppUser.fromMap(e.data())).toList());
+  }
 }

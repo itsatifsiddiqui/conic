@@ -36,7 +36,7 @@ class FollowingTab extends HookWidget {
             return UserListItem(
               onTap: () {
                 Get.to<void>(
-                  () => FriendDetail(friend: user, fromFollowing: true),
+                  () => FriendDetailScreen(friend: user, fromFollowing: true),
                 );
               },
               image: user.image,

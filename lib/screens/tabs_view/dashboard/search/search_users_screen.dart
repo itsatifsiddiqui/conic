@@ -4,6 +4,7 @@ import 'package:conic/models/app_user.dart';
 import 'package:conic/providers/app_user_provider.dart';
 import 'package:conic/providers/firestore_provider.dart';
 import 'package:conic/res/debouncer.dart';
+import 'package:conic/screens/tabs_view/dashboard/my_connections/firend_detail.dart';
 import 'package:conic/screens/tabs_view/dashboard/my_connections/user_list_item.dart';
 import 'package:conic/widgets/adaptive_progress_indicator.dart';
 import 'package:conic/widgets/error_widet.dart';
@@ -64,55 +65,84 @@ class SearchUsersScreen extends HookWidget {
               16.heightBox,
             ],
           ).px16(),
-          Expanded(
-            child: HookBuilder(
-              builder: (context) {
-                final query = useProvider(queryProvider).state;
-                if (query.isEmpty) {
-                  return const InfoWidget(
-                    text: 'Search Profile',
-                    subText: 'Fill in the field to search a user.',
-                  ).px24();
-                }
-                if (query.length < 6) {
-                  return const InfoWidget(
-                    text: 'User not found',
-                    subText: 'No user found, please check the searched username',
-                  ).px64();
-                }
+          HookBuilder(
+            builder: (context) {
+              final query = useProvider(queryProvider).state;
+              if (query.isEmpty) {
+                return const InfoWidget(
+                  text: 'Search Profile',
+                  subText: 'Fill in the field to search a user.',
+                ).px24().expand();
+              }
+              if (query.length < 6) {
+                return const InfoWidget(
+                  text: 'User not found',
+                  subText: 'No user found, please check the searched username',
+                ).px64().expand();
+              }
 
-                if (query == username) {
-                  return const InfoWidget(
-                    text: 'Nice Try!',
-                    subText: "You don't need to search yourself.",
-                  ).px64();
-                }
-                return useProvider(searchedUserProvider).when(
-                  data: (data) {
-                    if (data == null) {
-                      return const InfoWidget(
-                        text: 'User not found',
-                        subText: 'No user found, please check the searched username',
-                      ).px64();
-                    }
-                    return UserListItem(
-                      image: data.image,
-                      username: data.username!,
-                      name: data.name!,
-                    );
-                  },
-                  loading: () => const AdaptiveProgressIndicator(),
-                  error: (e, s) {
-                    return StreamErrorWidget(
-                      error: e.toString(),
-                      onTryAgain: () {
-                        context.refresh(searchedUserProvider);
+              if (query == username) {
+                return const InfoWidget(
+                  text: 'Nice Try!',
+                  subText: "You don't need to search yourself.",
+                ).px64().expand();
+              }
+              return useProvider(searchedUserProvider).when(
+                data: (data) {
+                  if (data == null) {
+                    return const InfoWidget(
+                      text: 'User not found',
+                      subText: 'No user found, please check the searched username',
+                    ).px64().expand();
+                  }
+                  return UserListItem(
+                    onTap: () {
+                      Get.to<void>(
+                        () => FriendDetailScreen(
+                          friend: data,
+                          fromFollowing: false,
+                        ),
+                      );
+                    },
+                    image: data.image,
+                    username: data.username!,
+                    name: data.name!,
+                    trailing: HookBuilder(
+                      builder: (context) {
+                        final sentRequests =
+                            useProvider(appUserProvider.select((value) => value!.sentRequests)) ??
+                                [];
+                        final hasRequestSent = sentRequests.contains(data.userId);
+
+                        return OutlinedButton(
+                          onPressed: () {
+                            if (hasRequestSent) {
+                              context.read(firestoreProvider).unSendFollowRequest(data.userId!);
+                            } else {
+                              context.read(firestoreProvider).sendFollowRequest(data.userId!);
+                            }
+                          },
+                          child: (hasRequestSent ? 'Requested' : 'Follow')
+                              .text
+                              .sm
+                              .color(context.primaryColor)
+                              .make(),
+                        );
                       },
-                    );
-                  },
-                );
-              },
-            ),
+                    ),
+                  );
+                },
+                loading: () => const AdaptiveProgressIndicator().expand(),
+                error: (e, s) {
+                  return StreamErrorWidget(
+                    error: e.toString(),
+                    onTryAgain: () {
+                      context.refresh(searchedUserProvider);
+                    },
+                  ).expand();
+                },
+              );
+            },
           )
         ],
       ),

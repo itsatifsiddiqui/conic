@@ -16,6 +16,8 @@ class AppUser {
     this.linkedAccounts,
     this.followedBy,
     this.followings,
+    this.sentRequests,
+    this.recievedRequests,
   });
 
   factory AppUser.fromMap(Map<String, dynamic> map) {
@@ -40,6 +42,12 @@ class AppUser {
       followings: map.containsKey('followings')
           ? List<String>.from((map['followings'] as List).cast<String>())
           : <String>[],
+      sentRequests: map.containsKey('sentRequests')
+          ? List<String>.from((map['sentRequests'] as List).cast<String>())
+          : <String>[],
+      recievedRequests: map.containsKey('recievedRequests')
+          ? List<String>.from((map['recievedRequests'] as List).cast<String>())
+          : <String>[],
     );
   }
 
@@ -54,6 +62,8 @@ class AppUser {
   final List<LinkedAccount>? linkedAccounts;
   final List<String>? followedBy;
   final List<String>? followings;
+  final List<String>? sentRequests;
+  final List<String>? recievedRequests;
 
   AppUser copyWith({
     String? name,
@@ -67,6 +77,8 @@ class AppUser {
     List<LinkedAccount>? linkedAccounts,
     List<String>? followedBy,
     List<String>? followings,
+    List<String>? sentRequests,
+    List<String>? recievedRequests,
   }) {
     return AppUser(
       name: name ?? this.name,
@@ -78,8 +90,10 @@ class AppUser {
       androidLink: androidLink ?? this.androidLink,
       gridMode: gridMode ?? this.gridMode,
       linkedAccounts: linkedAccounts ?? this.linkedAccounts,
-      followedBy: followedBy ?? <String>[],
-      followings: followings ?? <String>[],
+      followedBy: followedBy ?? this.followedBy,
+      followings: followings ?? this.followings,
+      sentRequests: sentRequests ?? this.sentRequests,
+      recievedRequests: recievedRequests ?? this.recievedRequests,
     );
   }
 
@@ -96,12 +110,14 @@ class AppUser {
       'linkedAccounts': (linkedAccounts ?? []).map((x) => x.toMap()).toList(),
       'followedBy': followedBy ?? [],
       'followings': followings ?? [],
+      'sentRequests': sentRequests ?? [],
+      'recievedRequests': recievedRequests ?? [],
     };
   }
 
   @override
   String toString() {
-    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId, link: $link, androidLink: $androidLink, gridMode: $gridMode, linkedAccounts: $linkedAccounts, followedBy: $followedBy, followings: $followings)';
+    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId, link: $link, androidLink: $androidLink, gridMode: $gridMode, linkedAccounts: $linkedAccounts, followedBy: $followedBy, followings: $followings, sentRequests: $sentRequests recievedRequests: $recievedRequests)';
   }
 
   @override
@@ -119,7 +135,9 @@ class AppUser {
         other.gridMode == gridMode &&
         listEquals(other.linkedAccounts, linkedAccounts) &&
         listEquals(other.followedBy, followedBy) &&
-        listEquals(other.followings, followings);
+        listEquals(other.followings, followings) &&
+        listEquals(other.recievedRequests, recievedRequests) &&
+        listEquals(other.sentRequests, sentRequests);
   }
 
   @override
@@ -134,6 +152,8 @@ class AppUser {
         gridMode.hashCode ^
         linkedAccounts.hashCode ^
         followedBy.hashCode ^
-        followings.hashCode;
+        followings.hashCode ^
+        recievedRequests.hashCode ^
+        sentRequests.hashCode;
   }
 }
