@@ -14,10 +14,7 @@ class AppUser {
     this.androidLink,
     this.gridMode,
     this.linkedAccounts,
-    this.followedBy,
-    this.followings,
-    this.sentRequests,
-    this.recievedRequests,
+    this.followRequestsRecieved,
   });
 
   factory AppUser.fromMap(Map<String, dynamic> map) {
@@ -36,17 +33,8 @@ class AppUser {
       linkedAccounts: List<LinkedAccount>.from(
         linkedAccounts.map<LinkedAccount>((x) => LinkedAccount.fromMap(x)),
       ),
-      followedBy: map.containsKey('followedBy')
-          ? List<String>.from((map['followedBy'] as List).cast<String>())
-          : <String>[],
-      followings: map.containsKey('followings')
-          ? List<String>.from((map['followings'] as List).cast<String>())
-          : <String>[],
-      sentRequests: map.containsKey('sentRequests')
-          ? List<String>.from((map['sentRequests'] as List).cast<String>())
-          : <String>[],
-      recievedRequests: map.containsKey('recievedRequests')
-          ? List<String>.from((map['recievedRequests'] as List).cast<String>())
+      followRequestsRecieved: map.containsKey('followRequestsRecieved')
+          ? List<String>.from((map['followRequestsRecieved'] as List).cast<String>())
           : <String>[],
     );
   }
@@ -60,10 +48,7 @@ class AppUser {
   final String? androidLink;
   final bool? gridMode;
   final List<LinkedAccount>? linkedAccounts;
-  final List<String>? followedBy;
-  final List<String>? followings;
-  final List<String>? sentRequests;
-  final List<String>? recievedRequests;
+  final List<String>? followRequestsRecieved;
 
   AppUser copyWith({
     String? name,
@@ -75,10 +60,7 @@ class AppUser {
     String? androidLink,
     bool? gridMode,
     List<LinkedAccount>? linkedAccounts,
-    List<String>? followedBy,
-    List<String>? followings,
-    List<String>? sentRequests,
-    List<String>? recievedRequests,
+    List<String>? followRequestsRecieved,
   }) {
     return AppUser(
       name: name ?? this.name,
@@ -90,10 +72,7 @@ class AppUser {
       androidLink: androidLink ?? this.androidLink,
       gridMode: gridMode ?? this.gridMode,
       linkedAccounts: linkedAccounts ?? this.linkedAccounts,
-      followedBy: followedBy ?? this.followedBy,
-      followings: followings ?? this.followings,
-      sentRequests: sentRequests ?? this.sentRequests,
-      recievedRequests: recievedRequests ?? this.recievedRequests,
+      followRequestsRecieved: followRequestsRecieved ?? this.followRequestsRecieved,
     );
   }
 
@@ -108,16 +87,13 @@ class AppUser {
       'androidLink': androidLink,
       'gridMode': gridMode,
       'linkedAccounts': (linkedAccounts ?? []).map((x) => x.toMap()).toList(),
-      'followedBy': followedBy ?? [],
-      'followings': followings ?? [],
-      'sentRequests': sentRequests ?? [],
-      'recievedRequests': recievedRequests ?? [],
+      'followRequestsRecieved': followRequestsRecieved,
     };
   }
 
   @override
   String toString() {
-    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId, link: $link, androidLink: $androidLink, gridMode: $gridMode, linkedAccounts: $linkedAccounts, followedBy: $followedBy, followings: $followings, sentRequests: $sentRequests recievedRequests: $recievedRequests)';
+    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId, link: $link, androidLink: $androidLink, gridMode: $gridMode, linkedAccounts: $linkedAccounts, followRequestsRecieved: $followRequestsRecieved)';
   }
 
   @override
@@ -134,10 +110,7 @@ class AppUser {
         other.androidLink == androidLink &&
         other.gridMode == gridMode &&
         listEquals(other.linkedAccounts, linkedAccounts) &&
-        listEquals(other.followedBy, followedBy) &&
-        listEquals(other.followings, followings) &&
-        listEquals(other.recievedRequests, recievedRequests) &&
-        listEquals(other.sentRequests, sentRequests);
+        listEquals(other.followRequestsRecieved, followRequestsRecieved);
   }
 
   @override
@@ -151,9 +124,6 @@ class AppUser {
         androidLink.hashCode ^
         gridMode.hashCode ^
         linkedAccounts.hashCode ^
-        followedBy.hashCode ^
-        followings.hashCode ^
-        recievedRequests.hashCode ^
-        sentRequests.hashCode;
+        followRequestsRecieved.hashCode;
   }
 }

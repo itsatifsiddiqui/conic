@@ -15,9 +15,11 @@ import 'user_list_item.dart';
 
 final followersProvider = StreamProvider<List<AppUser>>((ref) {
   final userId = ref.watch(appUserProvider)?.userId;
-  log('Creating Provider', name: 'followersProvider');
-  if (userId == null) return Stream.value([]);
-  return ref.read(firestoreProvider).getFollowers(userId);
+  // final followedBy = ref.watch(appUserProvider)?.followedBy ?? [];
+  // log('Creating Provider ${followedBy.length}', name: 'followersProvider');
+  // if (userId == null)
+  return Stream.value([]);
+  // return ref.read(firestoreProvider).getFollowers(userId);
 });
 
 class FollowersTab extends HookWidget {

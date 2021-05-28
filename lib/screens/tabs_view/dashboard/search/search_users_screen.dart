@@ -16,7 +16,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../res/res.dart';
 
-final queryProvider = StateProvider<String>((ref) => '');
+final queryProvider = StateProvider.autoDispose<String>((ref) => '');
 
 final searchedUserProvider = FutureProvider.autoDispose<AppUser?>((ref) async {
   final userName = ref.watch(queryProvider).state.trim().toLowerCase();
@@ -39,6 +39,7 @@ class SearchUsersScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final username = useProvider(appUserProvider.select((value) => value!.username))!;
+    final currentUserId = useProvider(appUserProvider.select((value) => value!.userId))!;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -107,28 +108,9 @@ class SearchUsersScreen extends HookWidget {
                     image: data.image,
                     username: data.username!,
                     name: data.name!,
-                    trailing: HookBuilder(
-                      builder: (context) {
-                        final sentRequests =
-                            useProvider(appUserProvider.select((value) => value!.sentRequests)) ??
-                                [];
-                        final hasRequestSent = sentRequests.contains(data.userId);
-
-                        return OutlinedButton(
-                          onPressed: () {
-                            if (hasRequestSent) {
-                              context.read(firestoreProvider).unSendFollowRequest(data.userId!);
-                            } else {
-                              context.read(firestoreProvider).sendFollowRequest(data.userId!);
-                            }
-                          },
-                          child: (hasRequestSent ? 'Requested' : 'Follow')
-                              .text
-                              .sm
-                              .color(context.primaryColor)
-                              .make(),
-                        );
-                      },
+                    trailing: SendRequestButton(
+                      appUser: data,
+                      currentUserId: currentUserId,
                     ),
                   );
                 },
@@ -146,6 +128,62 @@ class SearchUsersScreen extends HookWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class SendRequestButton extends StatefulHookWidget {
+  const SendRequestButton({
+    Key? key,
+    required this.appUser,
+    required this.currentUserId,
+  }) : super(key: key);
+  final AppUser appUser;
+  final String currentUserId;
+
+  @override
+  _SendRequestButtonState createState() => _SendRequestButtonState();
+}
+
+class _SendRequestButtonState extends State<SendRequestButton> {
+  late AppUser otherUser;
+
+  @override
+  void initState() {
+    super.initState();
+    otherUser = widget.appUser;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return HookBuilder(
+      builder: (context) {
+        final currentUserId = widget.currentUserId;
+        final hasRequestSent = (otherUser.followRequestsRecieved ?? []).contains(currentUserId);
+
+        debugPrint('HAS REQUEST SENT $hasRequestSent');
+
+        return OutlinedButton(
+          onPressed: () {
+            final requests = otherUser.followRequestsRecieved ?? [];
+            debugPrint('OLD REQUESTS $requests');
+            if (hasRequestSent) {
+              requests.remove(currentUserId);
+              context.read(firestoreProvider).unSendFollowRequest(otherUser.userId!);
+            } else {
+              requests.add(currentUserId);
+              context.read(firestoreProvider).sendFollowRequest(otherUser.userId!);
+            }
+            debugPrint('NEW REQUESTS $requests');
+
+            final newUser = otherUser.copyWith(followRequestsRecieved: requests);
+            otherUser = newUser;
+            setState(() {});
+          },
+          child:
+              (hasRequestSent ? 'Requested' : 'Follow').text.sm.color(context.primaryColor).make(),
+        );
+      },
     );
   }
 }
