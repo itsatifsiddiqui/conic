@@ -177,7 +177,7 @@ class _ConfirmationButtonsState extends State<ConfirmationButtons> {
             onPressed: () async {
               hasAccepted = false;
               setState(() {});
-              // context.read(firestoreProvider).discardFolowRequest(user.userId!);
+              context.read(firestoreProvider).discardFolowRequest(otherUser.userId!);
             },
             child: 'Discard'.text.sm.color(context.primaryColor).make(),
           ),

@@ -13,20 +13,21 @@ import '../../../../widgets/custom_widgets.dart';
 import 'firend_detail.dart';
 import 'user_list_item.dart';
 
-final followersProvider = StreamProvider<List<AppUser>>((ref) {
+///Users following currently signed in user.
+/// Ex: Ahmed Follows Atif and faisal.
+/// users.where(followedBy: array-contains: Ahmed)
+final myFollowersProvider = StreamProvider<List<AppUser>>((ref) {
   final userId = ref.watch(appUserProvider)?.userId;
-  // final followedBy = ref.watch(appUserProvider)?.followedBy ?? [];
-  // log('Creating Provider ${followedBy.length}', name: 'followersProvider');
-  // if (userId == null)
-  return Stream.value([]);
-  // return ref.read(firestoreProvider).getFollowers(userId);
+  log('Creating Provider', name: 'myFollowersProvider');
+  if (userId == null) return Stream.value([]);
+  return ref.read(firestoreProvider).getMyFollowers(userId);
 });
 
 class FollowersTab extends HookWidget {
   const FollowersTab({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return useProvider(followersProvider).when(
+    return useProvider(myFollowersProvider).when(
       data: (docs) {
         return ListView.builder(
           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -68,7 +69,7 @@ class FollowersTab extends HookWidget {
         return StreamErrorWidget(
           error: e.toString(),
           onTryAgain: () {
-            context.refresh(followersProvider);
+            context.refresh(myFollowersProvider);
           },
         );
       },

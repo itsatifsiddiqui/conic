@@ -97,15 +97,16 @@ class FirestoreProvider {
     });
   }
 
-  Stream<List<AppUser>> getFollowings(String userId) {
+  //Ahmed followed by Atif and faisal.
+  Stream<List<AppUser>> getMyFollowers(String myId) {
     final snaps =
-        _firestore.collection('users').where('followedBy', arrayContains: userId).snapshots();
+        _firestore.collection('users').where('followedBy', arrayContains: myId).snapshots();
     return snaps.map((event) => event.docs.map((e) => AppUser.fromMap(e.data())).toList());
   }
 
-  Stream<List<AppUser>> getFollowers(String userId) {
+  Stream<List<AppUser>> getUsersIFollow(String userId) {
     final snaps =
-        _firestore.collection('users').where('followings', arrayContains: userId).snapshots();
+        _firestore.collection('users').where('isFollowing', arrayContains: userId).snapshots();
     return snaps.map((event) => event.docs.map((e) => AppUser.fromMap(e.data())).toList());
   }
 
@@ -171,9 +172,18 @@ class FirestoreProvider {
     batch.commit();
   }
 
-  void discardFolowRequest(String userId) async {
-    // final myId = _read(appUserProvider)!.userId!;
-    // final usersCollection = _firestore.collection('users');
+  void discardFolowRequest(String userId) {
+    final myId = _read(appUserProvider)!.userId!;
+    _firestore.collection('users').doc(userId).update(
+      {
+        'followRequestsRecieved': FieldValue.arrayRemove(<String>[myId])
+      },
+    );
+    _firestore.collection('users').doc(myId).update(
+      {
+        'followRequestsRecieved': FieldValue.arrayRemove(<String>[userId])
+      },
+    );
   }
 
   Stream<List<AppUser>> getFollowRequestsLessThan10(List<String> followRequestsRecieved) {

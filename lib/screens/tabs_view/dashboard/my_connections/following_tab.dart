@@ -14,14 +14,11 @@ import '../../../../widgets/error_widet.dart';
 import 'firend_detail.dart';
 import 'user_list_item.dart';
 
-final followingsProvider = StreamProvider<List<AppUser>>((ref) {
+final peopleIFollowsProvider = StreamProvider<List<AppUser>>((ref) {
   final userId = ref.watch(appUserProvider)?.userId;
-  // final followings = ref.watch(appUserProvider)?.followings ?? [];
-
-  // log('Creating Provider ${followings.length}', name: 'followingsProvider');
-  // if (userId == null) return
-  return Stream.value([]);
-  // return ref.read(firestoreProvider).getFollowings(userId);
+  log('Creating Provider', name: 'peopleIFollowsProvider');
+  if (userId == null) return Stream.value([]);
+  return ref.read(firestoreProvider).getUsersIFollow(userId);
 });
 
 class FollowingTab extends HookWidget {
@@ -29,7 +26,7 @@ class FollowingTab extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return useProvider(followingsProvider).when(
+    return useProvider(peopleIFollowsProvider).when(
       data: (docs) {
         return ListView.builder(
           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -70,7 +67,7 @@ class FollowingTab extends HookWidget {
         return StreamErrorWidget(
           error: e.toString(),
           onTryAgain: () {
-            context.refresh(followingsProvider);
+            context.refresh(peopleIFollowsProvider);
           },
         );
       },
