@@ -55,7 +55,7 @@ class FollowersTab extends HookWidget {
                     action2Text: 'No',
                   );
                   if (result ?? false) {
-                    context.read(firestoreProvider).removeUser(user.userId!);
+                    context.read(firestoreProvider).removeFollower(user.userId!);
                   }
                 },
                 child: 'Remove'.text.sm.color(context.primaryColor).make(),

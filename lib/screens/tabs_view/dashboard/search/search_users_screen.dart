@@ -4,6 +4,7 @@ import 'package:conic/models/app_user.dart';
 import 'package:conic/providers/app_user_provider.dart';
 import 'package:conic/providers/firestore_provider.dart';
 import 'package:conic/res/debouncer.dart';
+import 'package:conic/res/platform_dialogue.dart';
 import 'package:conic/screens/tabs_view/dashboard/my_connections/firend_detail.dart';
 import 'package:conic/screens/tabs_view/dashboard/my_connections/user_list_item.dart';
 import 'package:conic/widgets/adaptive_progress_indicator.dart';
@@ -108,8 +109,8 @@ class SearchUsersScreen extends HookWidget {
                     image: data.image,
                     username: data.username!,
                     name: data.name!,
-                    trailing: SendRequestButton(
-                      appUser: data,
+                    trailing: RequestStatusButton(
+                      requestedUserId: data.userId!,
                       currentUserId: currentUserId,
                     ),
                   );
@@ -128,6 +129,74 @@ class SearchUsersScreen extends HookWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+final userDataProvider = StreamProvider.autoDispose.family<AppUser, String>(
+  (ref, userId) {
+    return ref.read(firestoreProvider).getUserById(userId);
+  },
+);
+
+class RequestStatusButton extends HookWidget {
+  const RequestStatusButton({
+    Key? key,
+    required this.currentUserId,
+    required this.requestedUserId,
+  }) : super(key: key);
+  final String currentUserId;
+  final String requestedUserId;
+
+  @override
+  Widget build(BuildContext context) {
+    return useProvider(userDataProvider(requestedUserId)).when(
+      data: (user) {
+        if ((user.isFollowing ?? []).contains(currentUserId)) {
+          return OutlinedButton(
+            onPressed: () async {
+              final result = await showPlatformDialogue(
+                title: 'Unfollow ${user.name}?',
+                content: Text('Are you sure you want to unfoloow ${user.name}?'),
+                action1OnTap: true,
+                action1Text: 'Yes',
+                action2OnTap: false,
+                action2Text: 'No',
+              );
+              if (result ?? false) {
+                context.read(firestoreProvider).unfollowUser(user.userId!);
+              }
+            },
+            child: 'Following'.text.sm.color(context.primaryColor).make(),
+          );
+        }
+
+        final requestSent = (user.followRequestsRecieved ?? []).contains(currentUserId);
+        if (requestSent) {
+          return OutlinedButton(
+            onPressed: () {
+              context.read(firestoreProvider).unSendFollowRequest(user.userId!);
+            },
+            child: 'Requested'.text.sm.color(context.primaryColor).make(),
+          );
+        }
+        if (!requestSent) {
+          return OutlinedButton(
+            onPressed: () {
+              context.read(firestoreProvider).sendFollowRequest(user.userId!);
+            },
+            child: 'Follow'.text.sm.color(context.primaryColor).make(),
+          );
+        }
+
+        return Container();
+      },
+      loading: () => const SizedBox(
+        width: 16,
+        height: 16,
+        child: CircularProgressIndicator(),
+      ),
+      error: (e, s) => 'error'.text.make(),
     );
   }
 }

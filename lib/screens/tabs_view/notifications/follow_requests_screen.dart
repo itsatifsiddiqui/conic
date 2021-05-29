@@ -164,9 +164,7 @@ class _ConfirmationButtonsState extends State<ConfirmationButtons> {
               backgroundColor: context.primaryColor,
             ),
             onPressed: () async {
-              hasAccepted = true;
-              setState(() {});
-              // context.read(firestoreProvider).confirmFollowRequest(user.userId!);
+              context.read(firestoreProvider).confirmFollowRequest(otherUser.userId!);
             },
             child: 'Confrim'.text.sm.medium.color(Colors.white).make(),
           ),

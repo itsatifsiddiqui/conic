@@ -25,6 +25,11 @@ class FirestoreProvider {
     return null;
   }
 
+  Stream<AppUser> getUserById(String userId) {
+    final user = _firestore.collection('users').doc(userId).snapshots();
+    return user.map((event) => AppUser.fromMap(event.data()!));
+  }
+
   Future<AppUser> createUser() async {
     final appUser = _read(appUserProvider.notifier).user!;
     try {
@@ -110,16 +115,23 @@ class FirestoreProvider {
     return snaps.map((event) => event.docs.map((e) => AppUser.fromMap(e.data())).toList());
   }
 
-  void unfollowUser(String userId) {
+  void followUser(String followedUserId) {
     final myId = _read(appUserProvider)!.userId!;
-    _firestore.collection('users').doc(userId).update({
-      'followings': FieldValue.arrayRemove(<String>[myId])
+    _firestore.collection('users').doc(followedUserId).update({
+      'isFollowing': FieldValue.arrayUnion(<String>[myId])
     });
   }
 
-  void removeUser(String userId) {
+  void unfollowUser(String followedUserId) {
     final myId = _read(appUserProvider)!.userId!;
-    _firestore.collection('users').doc(userId).update({
+    _firestore.collection('users').doc(followedUserId).update({
+      'isFollowing': FieldValue.arrayRemove(<String>[myId])
+    });
+  }
+
+  void removeFollower(String followerId) {
+    final myId = _read(appUserProvider)!.userId!;
+    _firestore.collection('users').doc(followerId).update({
       'followedBy': FieldValue.arrayRemove(<String>[myId])
     });
   }
@@ -155,20 +167,18 @@ class FirestoreProvider {
   //   return snaps.map((event) => event.docs.map((e) => AppUser.fromMap(e.data())).toList());
   // }
 
-  void confirmFollowRequest(String userId) {
+  void confirmFollowRequest(String requestedUserId) {
     final myId = _read(appUserProvider)!.userId!;
     final usersCollection = _firestore.collection('users');
     final batch = _firestore.batch();
-    //1: Remove from other users sent requests
-    //2: Add me to their following
-    final otherUserDoc = usersCollection.doc(userId);
-    final removeRequestData = {
-      'sentRequests': FieldValue.arrayRemove(<String>[myId]),
-      //TODO IF THERE WILL BE FOLLOWING OR FOLLOWED BY
-      'followedBy': FieldValue.arrayUnion(<String>[myId]),
+    //Remove the other user from my requests
+    //Add to is following
+    final myDoc = usersCollection.doc(myId);
+    final removeData = {
+      'followRequestsRecieved': FieldValue.arrayRemove(<String>[requestedUserId]),
+      'isFollowing': FieldValue.arrayUnion(<String>[requestedUserId]),
     };
-    batch.update(otherUserDoc, removeRequestData);
-
+    batch.update(myDoc, removeData);
     batch.commit();
   }
 
