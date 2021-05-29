@@ -1,17 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:conic/models/linked_account.dart';
-import 'package:conic/providers/app_user_provider.dart';
-import 'package:conic/providers/firestore_provider.dart';
-import 'package:conic/res/res.dart';
-import 'package:conic/screens/add_account/account_form_screen.dart';
-import 'package:conic/screens/add_account/add_new_account_screen.dart';
-import 'package:conic/screens/tabs_view/my_accounts/my_accounts_tab.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../models/linked_account.dart';
+import '../providers/app_user_provider.dart';
+import '../providers/firestore_provider.dart';
+import '../res/res.dart';
+import '../screens/add_account/account_form_screen.dart';
+import '../screens/add_account/add_new_account_screen.dart';
+import '../screens/tabs_view/my_accounts/my_accounts_tab.dart';
 import 'context_action.dart';
 
 class LinkedAccountsBuilder extends HookWidget {

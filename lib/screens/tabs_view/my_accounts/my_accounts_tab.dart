@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:conic/widgets/accounts_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +9,7 @@ import '../../../models/linked_account.dart';
 import '../../../providers/app_user_provider.dart';
 import '../../../providers/firestore_provider.dart';
 import '../../../res/res.dart';
+import '../../../widgets/accounts_builder.dart';
 import '../../../widgets/context_action.dart';
 import '../../add_account/account_form_screen.dart';
 import '../../add_account/add_new_account_screen.dart';
@@ -151,81 +151,81 @@ class _MyAccountsBuilder extends HookWidget {
       accounts: accounts,
       longPressEnabled: true,
     );
-    final isListMode = useProvider(isListModeProvider).state;
-    if (isListMode) {
-      return ListView(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        children: accounts.map((e) {
-          return CupertinoContextMenu(
-            previewBuilder: (context, animation, child) {
-              return AnimatedBuilder(
-                animation: animation,
-                builder: (context, child) {
-                  return child!;
-                },
-                child: AccountImage(url: e.image),
-              );
-            },
-            actions: buildContextActions(context, e),
-            child: GestureDetector(
-              onTap: () => onAccountTap(e),
-              child: Material(
-                type: MaterialType.transparency,
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: context.adaptive.withOpacity(0.04),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    children: [
-                      4.widthBox,
-                      Hero(
-                        tag: e.image,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: CachedNetworkImage(
-                            imageUrl: e.image,
-                            width: 36,
-                            height: 36,
-                          ),
-                        ),
-                      ),
-                      12.widthBox,
-                      (e.title.isEmptyOrNull ? e.name : e.title)
-                          .text
-                          .lg
-                          .medium
-                          .color(context.adaptive87)
-                          .make()
-                          .expand()
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        }).toList(),
-      );
-    }
-    return GridView.count(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      crossAxisCount: 4,
-      mainAxisSpacing: 16,
-      crossAxisSpacing: 8,
-      children: accounts.map((e) {
-        return CupertinoContextMenu(
-          actions: buildContextActions(context, e),
-          child: GestureDetector(
-            onTap: () {},
-            child: AccountImage(url: e.image),
-          ),
-        );
-      }).toList(),
-    );
+    // final isListMode = useProvider(isListModeProvider).state;
+    // if (isListMode) {
+    //   return ListView(
+    //     physics: const NeverScrollableScrollPhysics(),
+    //     shrinkWrap: true,
+    //     children: accounts.map((e) {
+    //       return CupertinoContextMenu(
+    //         previewBuilder: (context, animation, child) {
+    //           return AnimatedBuilder(
+    //             animation: animation,
+    //             builder: (context, child) {
+    //               return child!;
+    //             },
+    //             child: AccountImage(url: e.image),
+    //           );
+    //         },
+    //         actions: buildContextActions(context, e),
+    //         child: GestureDetector(
+    //           onTap: () => onAccountTap(e),
+    //           child: Material(
+    //             type: MaterialType.transparency,
+    //             child: Container(
+    //               margin: const EdgeInsets.only(bottom: 12),
+    //               padding: const EdgeInsets.all(8),
+    //               decoration: BoxDecoration(
+    //                 color: context.adaptive.withOpacity(0.04),
+    //                 borderRadius: BorderRadius.circular(10),
+    //               ),
+    //               child: Row(
+    //                 children: [
+    //                   4.widthBox,
+    //                   Hero(
+    //                     tag: e.image,
+    //                     child: ClipRRect(
+    //                       borderRadius: BorderRadius.circular(4),
+    //                       child: CachedNetworkImage(
+    //                         imageUrl: e.image,
+    //                         width: 36,
+    //                         height: 36,
+    //                       ),
+    //                     ),
+    //                   ),
+    //                   12.widthBox,
+    //                   (e.title.isEmptyOrNull ? e.name : e.title)
+    //                       .text
+    //                       .lg
+    //                       .medium
+    //                       .color(context.adaptive87)
+    //                       .make()
+    //                       .expand()
+    //                 ],
+    //               ),
+    //             ),
+    //           ),
+    //         ),
+    //       );
+    //     }).toList(),
+    //   );
+    // }
+    // return GridView.count(
+    //   physics: const NeverScrollableScrollPhysics(),
+    //   shrinkWrap: true,
+    //   crossAxisCount: 4,
+    //   mainAxisSpacing: 16,
+    //   crossAxisSpacing: 8,
+    //   children: accounts.map((e) {
+    //     return CupertinoContextMenu(
+    //       actions: buildContextActions(context, e),
+    //       child: GestureDetector(
+    //         onTap: () {},
+    //         child: AccountImage(url: e.image),
+    //       ),
+    //     );
+    //   }).toList(),
+    // );
   }
 
   List<Widget> buildContextActions(BuildContext context, LinkedAccount linkedAccount) => [

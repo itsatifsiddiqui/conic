@@ -8,8 +8,9 @@ import '../../../../providers/firestore_provider.dart';
 import '../../../../res/res.dart';
 import '../../../../widgets/accounts_builder.dart';
 import '../../my_accounts/my_accounts_tab.dart';
+import '../search/search_users_screen.dart';
 
-class FriendDetailScreen extends StatelessWidget {
+class FriendDetailScreen extends HookWidget {
   const FriendDetailScreen({
     Key? key,
     required this.friend,
@@ -20,10 +21,17 @@ class FriendDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentUserId = useProvider(appUserProvider.select((value) => value!.userId!));
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: '@${friend.username}'.text.xl.color(context.adaptive).make(),
+        actions: [
+          RequestStatusButton(
+            currentUserId: currentUserId,
+            requestedUserId: friend.userId!,
+          ).p8()
+        ],
       ),
       body: Column(
         children: [

@@ -1,21 +1,21 @@
 import 'dart:async';
 
-import 'package:conic/models/app_user.dart';
-import 'package:conic/providers/app_user_provider.dart';
-import 'package:conic/providers/firestore_provider.dart';
-import 'package:conic/res/debouncer.dart';
-import 'package:conic/res/platform_dialogue.dart';
-import 'package:conic/screens/tabs_view/dashboard/my_connections/firend_detail.dart';
-import 'package:conic/screens/tabs_view/dashboard/my_connections/user_list_item.dart';
-import 'package:conic/widgets/adaptive_progress_indicator.dart';
-import 'package:conic/widgets/error_widet.dart';
-import 'package:conic/widgets/info_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../../models/app_user.dart';
+import '../../../../providers/app_user_provider.dart';
+import '../../../../providers/firestore_provider.dart';
+import '../../../../res/debouncer.dart';
+import '../../../../res/platform_dialogue.dart';
 import '../../../../res/res.dart';
+import '../../../../widgets/adaptive_progress_indicator.dart';
+import '../../../../widgets/error_widet.dart';
+import '../../../../widgets/info_widget.dart';
+import '../my_connections/firend_detail.dart';
+import '../my_connections/user_list_item.dart';
 
 final queryProvider = StateProvider.autoDispose<String>((ref) => '');
 
@@ -167,7 +167,7 @@ class RequestStatusButton extends HookWidget {
                 context.read(firestoreProvider).unfollowUser(user.userId!);
               }
             },
-            child: 'Following'.text.sm.color(context.primaryColor).make(),
+            child: 'Unfollow'.text.sm.color(context.primaryColor).make(),
           );
         }
 

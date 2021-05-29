@@ -1,14 +1,15 @@
-import 'package:conic/models/app_user.dart';
-import 'package:conic/providers/app_user_provider.dart';
-import 'package:conic/providers/firestore_provider.dart';
-import 'package:conic/screens/tabs_view/dashboard/my_connections/user_list_item.dart';
-import 'package:conic/screens/tabs_view/dashboard/search/search_users_screen.dart';
-import 'package:conic/widgets/adaptive_progress_indicator.dart';
-import 'package:conic/widgets/error_widet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../../models/app_user.dart';
+import '../../../providers/app_user_provider.dart';
+import '../../../providers/firestore_provider.dart';
 import '../../../res/res.dart';
+import '../../../widgets/adaptive_progress_indicator.dart';
+import '../../../widgets/error_widet.dart';
+import '../dashboard/my_connections/user_list_item.dart';
+import '../dashboard/search/search_users_screen.dart';
 
 // final followRequestsStateProvider = StateProvider<AsyncValue<List<AppUser>>>((ref) {
 //   return const AsyncValue.loading();
@@ -62,32 +63,32 @@ class FollowRequestsScreen extends HookWidget {
                 currentUserId: currentUserId,
               );
 
-              return UserListItem(
-                image: user.image,
-                username: user.username!,
-                name: user.name!,
-                trailing: ConfirmationButtons(
-                  appUser: user,
-                  currentUserId: currentUserId,
-                ),
-              );
-              return HookBuilder(
-                builder: (context) {
-                  final isAccepted = useState<bool?>(null);
-                  if (isAccepted.value == false) {
-                    return const SizedBox();
-                  }
-                  // return UserListItem(
-                  //   image: user.image,
-                  //   username: user.username!,
-                  //   name: user.name!,
-                  //   trailing: Row(
-                  //     mainAxisSize: MainAxisSize.min,
-                  //     children:,
-                  //   ),
-                  // );
-                },
-              );
+              // return UserListItem(
+              //   image: user.image,
+              //   username: user.username!,
+              //   name: user.name!,
+              //   trailing: ConfirmationButtons(
+              //     appUser: user,
+              //     currentUserId: currentUserId,
+              //   ),
+              // );
+              // return HookBuilder(
+              //   builder: (context) {
+              //     final isAccepted = useState<bool?>(null);
+              //     if (isAccepted.value == false) {
+              //       return const SizedBox();
+              //     }
+              //     // return UserListItem(
+              //     //   image: user.image,
+              //     //   username: user.username!,
+              //     //   name: user.name!,
+              //     //   trailing: Row(
+              //     //     mainAxisSize: MainAxisSize.min,
+              //     //     children:,
+              //     //   ),
+              //     // );
+              //   },
+              // );
             },
           );
         },

@@ -1,11 +1,11 @@
-import 'package:conic/screens/nfc/activate_nfc_screen.dart';
-import 'package:conic/screens/tabs_view/dashboard/search/search_users_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../res/res.dart';
+import '../../nfc/activate_nfc_screen.dart';
 import 'my_connections/my_connections_screen.dart';
 import 'my_profile/my_profile_screen.dart';
+import 'search/search_users_screen.dart';
 
 class DashboardTab extends StatelessWidget {
   const DashboardTab({Key? key}) : super(key: key);
