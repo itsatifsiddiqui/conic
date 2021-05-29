@@ -121,6 +121,10 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>User need the access to photos to add message in the social chat and to change profile picture</string>
 	<key>NSContactsUsageDescription</key>  
-<string>Contacts access is required to save the profile to your contacts.</string>
+	<string>Contacts access is required to save the profile to your contacts.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>User need access to location to find nearyby users.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>User need access to location to find nearyby users.</string>
 </dict>
 </plist>

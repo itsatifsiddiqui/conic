@@ -131,59 +131,61 @@ void showExceptionDialog(dynamic e) {
 }
 
 Future<Position?> kCheckAndAskForLocationPermission() async {
-  final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) {
-    // Location services are not enabled don't continue
-    // accessing the position and request users of the
-    // App to enable the location services.
+  if (Platform.isAndroid) {
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
 
-    final result = await showPlatformDialogue(
-      title: 'Please Enable Location your location first',
-      action1OnTap: true,
-      action1Text: 'Open Location Setting',
-      action2OnTap: false,
-      action2Text: 'Ok',
-    );
-    if (result ?? false) {
-      await OpenSettings.openLocationSourceSetting();
-    }
-    return null;
-  }
-  //ASK Location PERMISSION
-  final locationPermission = await Permission.location.isGranted;
-  if (!locationPermission) {
-    final locationPermissionStatus = await Permission.location.request();
-    if (locationPermissionStatus == PermissionStatus.permanentlyDenied) {
       final result = await showPlatformDialogue(
-        title: 'Location Permission is required',
-        content: const Text(
-          'Go to settings and give access to use location',
-        ),
+        title: 'Please Enable Location your location first',
         action1OnTap: true,
         action1Text: 'Open Location Setting',
         action2OnTap: false,
         action2Text: 'Ok',
       );
       if (result ?? false) {
-        await OpenSettings.openAppSetting();
+        await OpenSettings.openLocationSourceSetting();
       }
       return null;
     }
-    if (locationPermissionStatus == PermissionStatus.denied) {
-      final result = await showPlatformDialogue(
-        title: 'Location Permission is required',
-        content: const Text(
-          'Go to settings and give access to use location',
-        ),
-        action1OnTap: true,
-        action1Text: 'Open Location Setting',
-        action2OnTap: false,
-        action2Text: 'Ok',
-      );
-      if (result ?? false) {
-        await OpenSettings.openAppSetting();
+    //ASK Location PERMISSION
+    final locationPermission = await Permission.location.isGranted;
+    if (!locationPermission) {
+      final locationPermissionStatus = await Permission.location.request();
+      if (locationPermissionStatus == PermissionStatus.permanentlyDenied) {
+        final result = await showPlatformDialogue(
+          title: 'Location Permission is required',
+          content: const Text(
+            'Go to settings and give access to use location',
+          ),
+          action1OnTap: true,
+          action1Text: 'Open Location Setting',
+          action2OnTap: false,
+          action2Text: 'Ok',
+        );
+        if (result ?? false) {
+          await OpenSettings.openAppSetting();
+        }
+        return null;
       }
-      return null;
+      if (locationPermissionStatus == PermissionStatus.denied) {
+        final result = await showPlatformDialogue(
+          title: 'Location Permission is required',
+          content: const Text(
+            'Go to settings and give access to use location',
+          ),
+          action1OnTap: true,
+          action1Text: 'Open Location Setting',
+          action2OnTap: false,
+          action2Text: 'Ok',
+        );
+        if (result ?? false) {
+          await OpenSettings.openAppSetting();
+        }
+        return null;
+      }
     }
   }
 
@@ -191,6 +193,7 @@ Future<Position?> kCheckAndAskForLocationPermission() async {
 }
 
 Future<bool> kCheckAndAskForContactsPermission() async {
+  if (!Platform.isAndroid) return true;
   //ASK Contacts PERMISSION
   final locationPermission = await Permission.contacts.isGranted;
   if (!locationPermission) {
