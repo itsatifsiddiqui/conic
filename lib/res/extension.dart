@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:conic/models/linked_account.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:velocity_x/velocity_x.dart' show IterableBasics, IterableBasics2;
 
 import '../models/account_model.dart';
 
@@ -78,4 +80,26 @@ extension ExtendedDate on DateTime {
 
 extension ExtendedAccountModelList on List<AccountModel> {
   AccountModel whereName(String name) => where((element) => element.name == name).first;
+}
+
+extension ExtendedLinkedAccountList on List<LinkedAccount>? {
+  LinkedAccount? phoneNumberOrNull() {
+    final found = (this ?? []).where((element) => element.name == 'Phone Number').toList();
+    if (found.isNotEmpty) {
+      return found.first;
+    }
+    return null;
+  }
+
+  LinkedAccount? whatsappNumberOrNull() {
+    final found = (this ?? []).where((element) => element.name == 'WhatsApp').toList();
+    if (found.isNotEmpty) {
+      return found.first;
+    }
+    return null;
+  }
+
+  List<LinkedAccount>? allEmails() => (this ?? [])
+      .where((element) => element.name != 'WhatsApp' || element.name != 'Phone Number')
+      .toList();
 }

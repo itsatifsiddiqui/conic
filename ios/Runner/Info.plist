@@ -120,5 +120,7 @@
 	<string>User need the access to camera to add message in the social chat and to change profile picture</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>User need the access to photos to add message in the social chat and to change profile picture</string>
+	<key>NSContactsUsageDescription</key>  
+<string>Contacts access is required to save the profile to your contacts.</string>
 </dict>
 </plist>

@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -60,14 +63,71 @@ class FriendDetailScreen extends HookWidget {
                 },
               )
             ],
+          ).px16(),
+          ListTile(
+            selected: true,
+            onTap: () async {
+              final result = await kCheckAndAskForContactsPermission();
+              if (result != true) {
+                return;
+              }
+
+              final phone = friend.linkedAccounts.phoneNumberOrNull();
+              final whatsappNumber = friend.linkedAccounts.whatsappNumberOrNull();
+
+              final linedAccounts = friend.linkedAccounts ?? [];
+              final allEmails = [...linedAccounts];
+              allEmails.remove(phone);
+              allEmails.remove(whatsappNumber);
+
+              final newContact = Contact(
+                androidAccountType: AndroidAccountType.other,
+                displayName: friend.name,
+                givenName: friend.name,
+                emails: allEmails.map(
+                  (e) => Item(
+                    label: e.name,
+                    value: e.enteredLink,
+                  ),
+                ),
+                phones: [
+                  if (phone != null) Item(label: 'Mobile', value: phone.enteredLink),
+                  if (whatsappNumber != null)
+                    Item(label: 'Whatsapp', value: whatsappNumber.enteredLink),
+                ],
+              );
+              // log(newContact.toMap().toString());
+              // final allContacts = await ContactsService.getContacts(withThumbnails: false);
+              final filtered = await ContactsService.getContacts(query: newContact.displayName);
+              if (filtered.isEmpty) {
+                log('Add First');
+                await ContactsService.addContact(newContact);
+                log(newContact.toMap().toString());
+                VxToast.show(context, msg: 'Contact Added');
+                return;
+              } else {
+                final fullSearch =
+                    filtered.where((element) => element.displayName == newContact.displayName);
+                if (fullSearch.isEmpty) {
+                  await ContactsService.addContact(newContact);
+                  log(newContact.toMap().toString());
+                  VxToast.show(context, msg: 'Contact Added');
+                  return;
+                } else {
+                  VxToast.show(context, msg: 'Contact Already Exist');
+                }
+              }
+            },
+            title: 'Save to my contacts'.text.bold.make(),
+            trailing: const Icon(Icons.contact_mail_outlined),
           ),
           16.heightBox,
           LinkedAccountsBuilder(
             accounts: friend.linkedAccounts ?? [],
             longPressEnabled: false,
-          )
+          ).px16()
         ],
-      ).p16().scrollVertical(),
+      ).py16().scrollVertical(),
     );
   }
 }

@@ -165,7 +165,7 @@ Future<Position?> kCheckAndAskForLocationPermission() async {
         action2Text: 'Ok',
       );
       if (result ?? false) {
-        await OpenSettings.openLocationSourceSetting();
+        await OpenSettings.openAppSetting();
       }
       return null;
     }
@@ -181,11 +181,53 @@ Future<Position?> kCheckAndAskForLocationPermission() async {
         action2Text: 'Ok',
       );
       if (result ?? false) {
-        await OpenSettings.openLocationSourceSetting();
+        await OpenSettings.openAppSetting();
       }
       return null;
     }
   }
 
   return Geolocator.getCurrentPosition();
+}
+
+Future<bool> kCheckAndAskForContactsPermission() async {
+  //ASK Contacts PERMISSION
+  final locationPermission = await Permission.contacts.isGranted;
+  if (!locationPermission) {
+    final locationPermissionStatus = await Permission.contacts.request();
+    if (locationPermissionStatus == PermissionStatus.permanentlyDenied) {
+      final result = await showPlatformDialogue(
+        title: 'Contacts Permission is required',
+        content: const Text(
+          'Go to settings and give access to use contacts',
+        ),
+        action1OnTap: true,
+        action1Text: 'Open Setting',
+        action2OnTap: false,
+        action2Text: 'Ok',
+      );
+      if (result ?? false) {
+        await OpenSettings.openAppSetting();
+      }
+      return false;
+    }
+    if (locationPermissionStatus == PermissionStatus.denied) {
+      final result = await showPlatformDialogue(
+        title: 'Contacts Permission is required',
+        content: const Text(
+          'Go to settings and give access to use contacts',
+        ),
+        action1OnTap: true,
+        action1Text: 'Open Setting',
+        action2OnTap: false,
+        action2Text: 'Ok',
+      );
+      if (result ?? false) {
+        await OpenSettings.openAppSetting();
+      }
+      return false;
+    }
+  }
+
+  return true;
 }
