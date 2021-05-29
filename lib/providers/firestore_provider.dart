@@ -148,11 +148,11 @@ class FirestoreProvider {
     batch.commit();
   }
 
-  Stream<List<AppUser>> getFollowRequests(String userId) {
-    final snaps =
-        _firestore.collection('users').where('sentRequests', arrayContains: userId).snapshots();
-    return snaps.map((event) => event.docs.map((e) => AppUser.fromMap(e.data())).toList());
-  }
+  // Stream<List<AppUser>> getFollowRequests(String userId) {
+  //   final snaps =
+  //       _firestore.collection('users').where('sentRequests', arrayContains: userId).snapshots();
+  //   return snaps.map((event) => event.docs.map((e) => AppUser.fromMap(e.data())).toList());
+  // }
 
   void confirmFollowRequest(String userId) {
     final myId = _read(appUserProvider)!.userId!;
@@ -174,5 +174,25 @@ class FirestoreProvider {
   void discardFolowRequest(String userId) async {
     // final myId = _read(appUserProvider)!.userId!;
     // final usersCollection = _firestore.collection('users');
+  }
+
+  Stream<List<AppUser>> getFollowRequestsLessThan10(List<String> followRequestsRecieved) {
+    final snaps = _firestore
+        .collection('users')
+        .where('followRequestsRecieved', whereIn: followRequestsRecieved)
+        .snapshots();
+    return snaps.map((event) => event.docs.map((e) => AppUser.fromMap(e.data())).toList());
+  }
+
+  Stream<List<AppUser>> getFollowRequestsLessAbove10(List<String> followRequestsRecieved) async* {
+    final usersCollection = _firestore.collection('users');
+
+    final docsFuture = followRequestsRecieved.map((e) => usersCollection.doc(e).get()).toList();
+
+    final docs = await Future.wait(docsFuture);
+
+    final mapped = docs.map((e) => AppUser.fromMap(e.data()!)).toList();
+
+    yield mapped;
   }
 }

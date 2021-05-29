@@ -137,9 +137,11 @@ class SendRequestButton extends StatefulHookWidget {
     Key? key,
     required this.appUser,
     required this.currentUserId,
+    this.followback = false,
   }) : super(key: key);
   final AppUser appUser;
   final String currentUserId;
+  final bool followback;
 
   @override
   _SendRequestButtonState createState() => _SendRequestButtonState();
@@ -180,8 +182,15 @@ class _SendRequestButtonState extends State<SendRequestButton> {
             otherUser = newUser;
             setState(() {});
           },
-          child:
-              (hasRequestSent ? 'Requested' : 'Follow').text.sm.color(context.primaryColor).make(),
+          child: (hasRequestSent
+                  ? 'Requested'
+                  : widget.followback
+                      ? 'Follow Back'
+                      : 'Follow')
+              .text
+              .sm
+              .color(context.primaryColor)
+              .make(),
         );
       },
     );

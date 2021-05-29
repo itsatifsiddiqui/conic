@@ -36,46 +36,28 @@ class NotificationsTab extends StatelessWidget {
   }
 }
 
-final followRequestsProvider = StreamProvider<List<AppUser>>((ref) {
-  final userId = ref.watch(appUserProvider)?.userId;
-  if (userId == null) return Stream.value(<AppUser>[]);
-  return ref.read(firestoreProvider).getFollowRequests(userId);
-});
-
 class _FollowRequests extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    return useProvider(followRequestsProvider).when(
-      data: (requests) {
-        final requestsLength = requests.length;
-        return ListTile(
-          onTap: () {
-            Get.to<void>(() => FollowRequestsScreen(requests: requests));
-          },
-          title: 'Folow Requests'.text.semiBold.make(),
-          trailing: requestsLength == 0
-              ? const SizedBox()
-              : Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: context.primaryColor,
-                  ),
-                  child: requests.length.toString().text.bold.color(Colors.white).make(),
-                ),
-        );
+    final followRequestsRecieved =
+        useProvider(appUserProvider.select((value) => value!.followRequestsRecieved ?? []));
+    debugPrint(followRequestsRecieved.toString());
+    final requestsLength = followRequestsRecieved.length;
+    return ListTile(
+      onTap: () {
+        Get.to<void>(() => const FollowRequestsScreen());
       },
-      loading: () => ListTile(
-        onTap: () {},
-        title: 'Folow Requests'.text.semiBold.make(),
-        trailing: const SizedBox(
-          child: CircularProgressIndicator(),
-        ),
-      ),
-      error: (e, s) => ListTile(
-        onTap: () {},
-        title: 'Folow Requests'.text.semiBold.make(),
-      ),
+      title: 'Folow Requests'.text.semiBold.make(),
+      trailing: requestsLength == 0
+          ? const SizedBox()
+          : Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: context.primaryColor,
+              ),
+              child: '$requestsLength'.text.bold.color(Colors.white).make(),
+            ),
     );
   }
 }
