@@ -1,7 +1,14 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:conic/models/app_user.dart';
 import 'package:conic/providers/app_user_provider.dart';
 import 'package:conic/providers/firestore_provider.dart';
 import 'package:conic/res/res.dart';
+import 'package:conic/screens/tabs_view/dashboard/my_connections/firend_detail.dart';
+import 'package:conic/screens/tabs_view/dashboard/my_connections/user_list_item.dart';
+import 'package:conic/screens/tabs_view/dashboard/search/search_users_screen.dart';
 import 'package:conic/widgets/adaptive_progress_indicator.dart';
 import 'package:conic/widgets/error_widet.dart';
 import 'package:conic/widgets/info_widget.dart';
@@ -18,7 +25,7 @@ final locationCheckerProvider = FutureProvider.autoDispose((ref) {
 });
 
 final nearbyUsersProvider =
-    StreamProvider.autoDispose.family<List<DocumentSnapshot<Object?>>, Position>((ref, position) {
+    StreamProvider.autoDispose.family<List<AppUser>, Position>((ref, position) {
   final geo = GeoFlutterFire();
   final center = geo.point(
     latitude: position.latitude,
@@ -31,7 +38,10 @@ final nearbyUsersProvider =
         field: 'location',
       );
 
-  return stream;
+  final mapped = stream.map(
+      (event) => event.map((e) => AppUser.fromMap(e.data()! as Map<String, dynamic>)).toList());
+
+  return mapped;
 });
 
 class FindNearbyScreen extends HookWidget {
@@ -40,6 +50,7 @@ class FindNearbyScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final username = useProvider(appUserProvider.select((value) => value!.username))!;
+    final currentUserId = useProvider(appUserProvider.select((value) => value!.userId))!;
     final isVisible = useState(false);
     return WillPopScope(
       onWillPop: () {
@@ -79,27 +90,63 @@ class FindNearbyScreen extends HookWidget {
                             .center
                             .color(context.adaptive70)
                             .make(),
-                        Stack(
-                          children: [
-                            useProvider(nearbyUsersProvider(position)).when(
-                              data: (docs) {
-                                final filteredDocs = docs.where((element) =>
-                                    (element.data()! as Map<String, dynamic>)['username'] !=
-                                    username);
-                                return filteredDocs.toString().text.make();
-                              },
-                              loading: () => const SizedBox(),
-                              error: (e, s) => 'Error finding users'.text.makeCentered(),
-                            ),
-                            RippleAnimation(
-                              repeat: true,
-                              color: Colors.blue,
-                              minRadius: 50,
-                              ripplesCount: 6,
-                              child: Container(),
-                            )
-                          ],
-                        ).expand()
+                        HookBuilder(
+                          builder: (context) {
+                            final foundUsers = useState(false);
+                            return Stack(
+                              children: [
+                                useProvider(nearbyUsersProvider(position)).when(
+                                  data: (docs) {
+                                    final filteredDocs = docs
+                                        .where((element) => element.userId != currentUserId)
+                                        .toList();
+
+                                    if (filteredDocs.isNotEmpty) {
+                                      scheduleMicrotask(() => foundUsers.value = true);
+                                    } else {
+                                      foundUsers.value = false;
+                                    }
+
+                                    return ListView.builder(
+                                      padding: const EdgeInsets.symmetric(vertical: 16),
+                                      itemCount: filteredDocs.length,
+                                      itemBuilder: (context, index) {
+                                        final item = filteredDocs[index];
+                                        return UserListItem(
+                                          onTap: () {
+                                            Get.to<void>(
+                                              () => FriendDetailScreen(
+                                                friend: item,
+                                                fromFollowing: false,
+                                              ),
+                                            );
+                                          },
+                                          image: item.image,
+                                          username: item.username!,
+                                          name: item.name!,
+                                          trailing: RequestStatusButton(
+                                            currentUserId: currentUserId,
+                                            requestedUserId: item.userId!,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  loading: () => const SizedBox(),
+                                  error: (e, s) => 'Error finding users'.text.makeCentered(),
+                                ),
+                                if (foundUsers.value == false)
+                                  RippleAnimation(
+                                    repeat: true,
+                                    color: Colors.blue,
+                                    minRadius: 50,
+                                    ripplesCount: 6,
+                                    child: Container(),
+                                  )
+                              ],
+                            ).expand();
+                          },
+                        )
                       ],
                     ).px16().expand(),
                     PrimaryButton(
@@ -112,7 +159,7 @@ class FindNearbyScreen extends HookWidget {
                           return;
                         }
                         final result = await kCheckAndAskForLocationPermission();
-                        if (result == false) return;
+                        if (result == null) return;
 
                         isVisible.value = true;
 
