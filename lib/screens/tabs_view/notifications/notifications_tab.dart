@@ -1,3 +1,4 @@
+import 'package:conic/widgets/info_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -13,20 +14,24 @@ class NotificationsTab extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: 'Notifications'.text.semiBold.color(context.adaptive).make(),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.help_outline_rounded,
-            ),
-            onPressed: () {},
-          )
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(
+        //       Icons.help_outline_rounded,
+        //     ),
+        //     onPressed: () {},
+        //   )
+        // ],
       ),
       body: Column(
         children: [
           Divider(height: 0, color: context.adaptive12),
           _FollowRequests(),
           Divider(height: 0, color: context.adaptive12),
+          const InfoWidget(
+            text: 'Work in progress',
+            subText: 'Notifications will be implemented in later module',
+          ).expand(),
         ],
       ),
     );

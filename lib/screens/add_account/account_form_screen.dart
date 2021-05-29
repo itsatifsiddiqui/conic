@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -87,6 +88,7 @@ class AccountFormScreen extends HookWidget {
                         if (!formKey.currentState!.validate()) return;
                         FocusScope.of(context).unfocus();
                         final link = account.getLink(fieldController.text.trim());
+                        log('Opening Link $link');
                         kOpenLink(link);
                       },
                     ),

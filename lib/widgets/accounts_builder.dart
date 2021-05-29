@@ -95,11 +95,16 @@ class LinkedAccountsBuilder extends HookWidget {
       mainAxisSpacing: 16,
       crossAxisSpacing: 8,
       children: accounts.map((e) {
-        if (!longPressEnabled) return AccountImage(url: e.image);
+        if (!longPressEnabled) {
+          return GestureDetector(
+            onTap: () => onAccountTap(e),
+            child: AccountImage(url: e.image),
+          );
+        }
         return CupertinoContextMenu(
           actions: buildContextActions(context, e),
           child: GestureDetector(
-            onTap: () {},
+            onTap: () => onAccountTap(e),
             child: AccountImage(url: e.image),
           ),
         );

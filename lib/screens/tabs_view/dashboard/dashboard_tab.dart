@@ -15,14 +15,14 @@ class DashboardTab extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: 'Dashboard'.text.semiBold.color(context.adaptive).make(),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.help_outline_rounded,
-            ),
-            onPressed: () {},
-          )
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(
+        //       Icons.help_outline_rounded,
+        //     ),
+        //     onPressed: () {},
+        //   )
+        // ],
       ),
       body: SafeArea(
         child: Column(

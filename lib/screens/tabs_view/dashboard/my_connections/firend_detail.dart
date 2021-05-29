@@ -64,6 +64,7 @@ class FriendDetailScreen extends HookWidget {
               )
             ],
           ).px16(),
+          Divider(height: 0, color: context.adaptive12),
           ListTile(
             selected: true,
             onTap: () async {
@@ -119,8 +120,9 @@ class FriendDetailScreen extends HookWidget {
               }
             },
             title: 'Save to my contacts'.text.bold.make(),
-            trailing: const Icon(Icons.contact_mail_outlined),
+            trailing: const Icon(Icons.contact_mail_outlined).pOnly(right: 12),
           ),
+          Divider(height: 0, color: context.adaptive12),
           16.heightBox,
           LinkedAccountsBuilder(
             accounts: friend.linkedAccounts ?? [],

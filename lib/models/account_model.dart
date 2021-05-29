@@ -138,7 +138,7 @@ class AccountModel {
   String getLink(String value) {
     final regexString = this.regex;
     if (regexString == null || regexString.isEmpty) return value;
-    final isLink = value.contains('.com') || (value.contains('http') && value.contains('://'));
+    final isLink = value.contains('http') && value.contains('://');
     if (isValidLink(value) && isLink) {
       return value;
     }

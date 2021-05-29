@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:conic/widgets/info_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -28,6 +29,12 @@ class FollowingTab extends HookWidget {
   Widget build(BuildContext context) {
     return useProvider(peopleIFollowsProvider).when(
       data: (docs) {
+        if (docs.isEmpty) {
+          return const InfoWidget(
+            text: "You're not following anyone.",
+            subText: 'People you follow will appear here.',
+          );
+        }
         return ListView.builder(
           padding: const EdgeInsets.symmetric(vertical: 16),
           itemCount: docs.length,
