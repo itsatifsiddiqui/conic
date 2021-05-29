@@ -1,3 +1,4 @@
+import 'package:conic/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -20,7 +21,7 @@ class OnboardingScreen extends StatelessWidget {
               onPageChanged: (value) {
                 context.read(onBoardingProvider).state = value;
                 if (value == 4) {
-                  Get.offAll<void>(() => const LoginScreen());
+                  context.read(authProvider).saveKeyAndNavigate();
                   context.read(onBoardingProvider).state = 0;
                 }
               },
@@ -28,14 +29,12 @@ class OnboardingScreen extends StatelessWidget {
                 _OnBoardItem(
                   heading: 'Activate your conic.',
                   image: Images.onBoarding1,
-                  text:
-                      'Tap your nfc chip to back of your phone to make it conic.',
+                  text: 'Tap your nfc chip to back of your phone to make it conic.',
                 ),
                 _OnBoardItem(
                   heading: 'Conic focused',
                   image: Images.onBoarding2,
-                  text:
-                      'Mark an account as focused to only share specific account directly.',
+                  text: 'Mark an account as focused to only share specific account directly.',
                 ),
                 _OnBoardItem(
                   heading: 'Create personal cards',
@@ -95,12 +94,7 @@ class _Header extends StatelessWidget {
     return Column(
       children: [
         24.heightBox,
-        'Get Started With Conic'
-            .text
-            .color(context.adaptive87)
-            .xl
-            .medium
-            .makeCentered(),
+        'Get Started With Conic'.text.color(context.adaptive87).xl.medium.makeCentered(),
       ],
     );
   }
@@ -133,7 +127,7 @@ class _Footer extends HookWidget {
         8.heightBox,
         InkWell(
           onTap: () {
-            Get.offAll<void>(() => const LoginScreen());
+            context.read(authProvider).saveKeyAndNavigate();
           },
           child: Container(
             child: (index == 3 ? 'Get Started' : 'Skip')

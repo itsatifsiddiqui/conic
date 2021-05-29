@@ -1,9 +1,11 @@
+import 'package:conic/screens/onboarding/on_boarding_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../models/app_user.dart';
@@ -44,6 +46,12 @@ class AuthProvider extends BaseProvider {
   User get user => _auth.currentUser!;
 
   Future navigateBasedOnCondition() async {
+    final _prefs = await SharedPreferences.getInstance();
+    if (_prefs.getBool('intro') == null || _prefs.getBool('intro')!) {
+      // ignore: unawaited_futures
+      Get.offAll<void>(const OnboardingScreen());
+      return;
+    }
     if (isUserLoggedIn) {
       final appUser = await getCurrentUser();
 
@@ -59,6 +67,13 @@ class AuthProvider extends BaseProvider {
       Get.offAll<void>(() => const LoginScreen());
     }
     setIdle();
+  }
+
+  void saveKeyAndNavigate() async {
+    final _prefs = await SharedPreferences.getInstance();
+    await _prefs.setBool('intro', false);
+    // ignore: unawaited_futures
+    navigateBasedOnCondition();
   }
 
   Future<void> navigateToTabsPage(User firebaseUser) async {
