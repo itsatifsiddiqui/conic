@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../models/account_model.dart';
@@ -204,5 +205,19 @@ class FirestoreProvider {
     final mapped = docs.map((e) => AppUser.fromMap(e.data()!)).toList();
 
     yield mapped;
+  }
+
+  void makeMeVisible(GeoFirePoint myLocation) {
+    final myId = _read(appUserProvider)!.userId!;
+    _firestore.collection('users').doc(myId).update(
+      <String, dynamic>{'location': myLocation.data},
+    );
+  }
+
+  void makeMeInVisible() {
+    final myId = _read(appUserProvider)!.userId!;
+    _firestore.collection('users').doc(myId).update(
+      <String, dynamic>{'location': null},
+    );
   }
 }

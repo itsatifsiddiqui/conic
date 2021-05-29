@@ -1,3 +1,4 @@
+import 'package:conic/screens/tabs_view/find_nearby/find_nearby_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -54,7 +55,10 @@ class DashboardTab extends StatelessWidget {
             Row(
               children: [
                 _ItemCard(
-                  onTap: HapticFeedback.lightImpact,
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Get.to<void>(() => const FindNearbyScreen());
+                  },
                   icon: Icons.map,
                   title: 'Find Nearby',
                   subtitle: 'Nearby Users',

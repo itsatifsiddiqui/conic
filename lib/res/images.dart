@@ -9,4 +9,5 @@ class Images {
   static const String facebook = 'images/facebook.png';
   static const String apple = 'images/apple.png';
   static const String nextArrow = 'images/next_arrow_circle.png';
+  static const String findNearby = 'images/nearby.png';
 }

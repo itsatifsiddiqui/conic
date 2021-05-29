@@ -23,6 +23,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  open_settings:
+    git:
+      url: https://github.com/marcojoao/open_settings
+  ripple_animation:
+    git:
+      url: https://github.com/PoloLacoste/ripple_animation
   cached_network_image: ^3.0.0
   cloud_firestore: ^2.1.0
   cupertino_icons: ^1.0.2
@@ -33,6 +39,8 @@ dependencies:
   flutter_hooks: ^0.16.0
   flutter_login_facebook: ^1.0.1
   flutter_screenutil: ^5.0.0+2
+  geoflutterfire2: ^2.3.6
+  geolocator: ^7.0.3
   get: ^4.1.4
   google_sign_in: ^5.0.3
   hooks_riverpod: ^0.14.0+3
@@ -41,9 +49,7 @@ dependencies:
   intl: ^0.17.0
   loading_overlay: ^0.3.0
   nfc_manager: ^3.0.0+2
-  open_settings: 
-    git:
-      url: https://github.com/marcojoao/open_settings
+  permission_handler: ^8.0.0+2
   sign_in_with_apple: ^3.0.0
   url_launcher: ^6.0.4
   velocity_x: ^3.0.0
