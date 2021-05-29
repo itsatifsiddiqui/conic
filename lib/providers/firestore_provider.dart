@@ -178,7 +178,12 @@ class FirestoreProvider {
       'followRequestsRecieved': FieldValue.arrayRemove(<String>[requestedUserId]),
       'isFollowing': FieldValue.arrayUnion(<String>[requestedUserId]),
     };
+    final requestedUserDoc = usersCollection.doc(requestedUserId);
+    final requestedUserData = {
+      'followedBy': FieldValue.arrayUnion(<String>[myId]),
+    };
     batch.update(myDoc, removeData);
+    batch.update(requestedUserDoc, requestedUserData);
     batch.commit();
   }
 
