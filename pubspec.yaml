@@ -56,10 +56,17 @@ dependencies:
   url_launcher: ^6.0.4
   velocity_x: ^3.0.0
 
+flutter_native_splash:
+  color: "ffffff"
+  color_dark: "F6F8FB"
+  android_disable_fullscreen: true
+  android: true
+  ios: true
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  flutter_native_splash:
 flutter:
 
   uses-material-design: true

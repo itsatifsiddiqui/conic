@@ -40,7 +40,8 @@ final nearbyUsersProvider =
       );
 
   final mapped = stream.map(
-      (event) => event.map((e) => AppUser.fromMap(e.data()! as Map<String, dynamic>)).toList());
+    (event) => event.map((e) => AppUser.fromMap(e.data()! as Map<String, dynamic>)).toList(),
+  );
 
   return mapped;
 });
