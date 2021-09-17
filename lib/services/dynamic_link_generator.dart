@@ -3,47 +3,38 @@ import 'package:flutter/material.dart';
 
 import '../res/constants.dart';
 
+const _host = 'conic-688fe.web.app';
+
 @immutable
 class DynamicLinkGenerator {
   const DynamicLinkGenerator({required this.username, this.isAndroidLink = false});
   final String username;
   final bool isAndroidLink;
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is DynamicLinkGenerator &&
-        other.username == username &&
-        other.isAndroidLink == isAndroidLink;
-  }
-
-  @override
-  int get hashCode => username.hashCode ^ isAndroidLink.hashCode;
-
   Future<String> generateDynamicLink() async {
-    final uri = Uri(
+    final linkToOpen = Uri(
       scheme: 'https',
-      host: 'conic.page.link',
+      host: _host,
       path: '/$username',
     );
 
     final androidUri = Uri(
       scheme: 'https',
-      host: 'conic.page.link',
+      host: _host,
       path: '/android/$username',
     );
 
     final parameters = DynamicLinkParameters(
       uriPrefix: dynamicLinkPrefix,
-      link: uri,
+      //URL will Redirect to this link.
+      link: linkToOpen,
       androidParameters: AndroidParameters(
         packageName: 'com.fyp.conic',
-        fallbackUrl: isAndroidLink ? androidUri : uri,
+        fallbackUrl: isAndroidLink ? linkToOpen : androidUri,
       ),
       iosParameters: IosParameters(
         bundleId: 'com.fyp.conic',
-        fallbackUrl: uri,
+        fallbackUrl: linkToOpen,
       ),
       navigationInfoParameters: NavigationInfoParameters(
         forcedRedirectEnabled: true,

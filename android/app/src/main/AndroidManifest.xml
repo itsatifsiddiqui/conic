@@ -46,7 +46,7 @@
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="https"
-                        android:host="https://conic.page.link"
+                        android:host="conic.page.link"
                         />
             </intent-filter>
             <!-- android:pathPrefix="/link" -->
