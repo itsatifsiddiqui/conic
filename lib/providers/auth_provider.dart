@@ -241,14 +241,16 @@ class AuthProvider extends BaseProvider {
   Future<void> completeProfileSetup(String username) async {
     setBusy();
     try {
-      final link = DynamicLinkGenerator(username: username).generateDynamicLink();
-      final androidLink = DynamicLinkGenerator(
+      final link = DynamicLinkGenerator(
         username: username,
-        isAndroidLink: true,
+        userId: user.uid,
+      ).generateDynamicLink();
+      final androidLink = DynamicLinkGenerator.android(
+        username: username,
+        userId: user.uid,
       ).generateDynamicLink();
 
       final links = await Future.wait([link, androidLink]);
-      debugPrint(links.toString());
       ref.read(appUserProvider.notifier).updateUsername(
             username: username,
             link: links.first,
@@ -261,6 +263,7 @@ class AuthProvider extends BaseProvider {
       Get.offAll<void>(() => const ActivateNfcScreen());
     } catch (e) {
       setIdle();
+      rethrow;
       showExceptionDialog(e);
     }
   }

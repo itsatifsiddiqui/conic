@@ -1,4 +1,4 @@
-import './App.css';
+import HomePage from "./pages/HomePage";
 
 function App() {
   // const windowUrl = window.location.href;
@@ -20,11 +20,16 @@ function App() {
 
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>CONINC WEB APP</h1>
-      </header>
+    <div  >
+      <style jsx global>{`
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    `}</style>
+      < HomePage />
     </div>
+
   );
 }
 
