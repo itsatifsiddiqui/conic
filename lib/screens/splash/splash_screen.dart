@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:conic/providers/dynamic_link_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -18,7 +19,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     context.read(authProvider).checkAppleSignIn();
     context.read(allAccountsProvider).data;
-    Timer(1.seconds, context.read(authProvider).navigateBasedOnCondition);
+    // context.read(dynamicLinkProvider);
+    Timer(1.seconds, () => context.read(dynamicLinkProvider));
     super.initState();
   }
 

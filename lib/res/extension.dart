@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:conic/models/linked_account.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:velocity_x/velocity_x.dart' show IterableBasics, IterableBasics2;
 
 import '../models/account_model.dart';
+import '../models/linked_account.dart';
 
 extension BuildContextExtended on BuildContext {
   Color get adaptive8 => theme.dividerColor.withOpacity(0.08);

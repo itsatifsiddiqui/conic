@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -29,15 +30,42 @@ class FriendDetailScreen extends HookWidget {
       appBar: AppBar(
         centerTitle: true,
         title: '@${friend.username}'.text.xl.color(context.adaptive).make(),
-        actions: [
-          RequestStatusButton(
-            currentUserId: currentUserId,
-            requestedUserId: friend.userId!,
-          ).p8()
-        ],
+        // actions: [
+        //   // RequestStatusButton(
+        //   //   currentUserId: currentUserId,
+        //   //   requestedUserId: friend.userId!,
+        //   // ).p8()
+        // ],
       ),
       body: Column(
         children: [
+          24.heightBox,
+          if (friend.image != null)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: CachedNetworkImage(
+                imageUrl: friend.image ?? '',
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
+              ),
+            )
+          else
+            CircleAvatar(
+              backgroundColor: context.adaptive12,
+              maxRadius: 48,
+              child: Icon(
+                Icons.person,
+                size: 42,
+                color: context.adaptive54,
+              ),
+            ),
+          16.heightBox,
+          if (friend.name != null) friend.name!.text.xl.make(),
+          RequestStatusButton(
+            currentUserId: currentUserId,
+            requestedUserId: friend.userId!,
+          ).p8(),
           Row(
             children: [
               Column(
@@ -64,6 +92,7 @@ class FriendDetailScreen extends HookWidget {
               )
             ],
           ).px16(),
+          12.heightBox,
           Divider(height: 0, color: context.adaptive12),
           ListTile(
             selected: true,

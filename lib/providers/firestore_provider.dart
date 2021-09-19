@@ -31,6 +31,11 @@ class FirestoreProvider {
     return user.map((event) => AppUser.fromMap(event.data()!));
   }
 
+  Future<AppUser> getUserDataById(String userId) async {
+    final user = await _firestore.collection('users').doc(userId).get();
+    return AppUser.fromMap(user.data()!);
+  }
+
   Future<AppUser> createUser() async {
     final appUser = _read(appUserProvider.notifier).user!;
     try {

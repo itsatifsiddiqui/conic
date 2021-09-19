@@ -1,3 +1,8 @@
+import 'dart:developer';
+
+import 'package:conic/providers/auth_provider.dart';
+import 'package:conic/providers/dynamic_link_provider.dart';
+import 'package:conic/providers/firestore_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -5,14 +10,45 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../res/res.dart';
 import '../add_account/add_new_account_screen.dart';
 import 'dashboard/dashboard_tab.dart';
+import 'dashboard/my_connections/firend_detail.dart';
 import 'my_accounts/my_accounts_tab.dart';
 import 'my_cards/my_cards_tab.dart';
 import 'notifications/notifications_tab.dart';
 
 final tabsIndexProvider = StateProvider<int>((ref) => 0);
 
-class TabsView extends HookWidget {
-  const TabsView({Key? key}) : super(key: key);
+class TabsView extends StatefulHookWidget {
+  const TabsView({Key? key, this.showScannedUserProfile = false}) : super(key: key);
+  final bool showScannedUserProfile;
+
+  @override
+  _TabsViewState createState() => _TabsViewState();
+}
+
+class _TabsViewState extends State<TabsView> {
+  @override
+  void initState() {
+    WidgetsBinding.instance?.addPostFrameCallback(handleDynamicLink);
+
+    super.initState();
+  }
+
+  Future handleDynamicLink(dynamic _) async {
+    log('handleDynamicLink() ${widget.showScannedUserProfile}', name: 'TabsView');
+    if (widget.showScannedUserProfile && (!context.read(authProvider).linkOpened)) {
+      context.read(authProvider).linkOpened = true;
+      final linkShareUserId = context.read(dynamicLinkProvider).linkShareUserId;
+      log('linkShareUserId: $linkShareUserId', name: 'TabsView');
+      if (linkShareUserId == null) return;
+
+      final user = await context.read(firestoreProvider).getUserDataById(linkShareUserId);
+
+      // ignore: unawaited_futures
+      Get.to<void>(FriendDetailScreen(friend: user, fromFollowing: false));
+      context.read(dynamicLinkProvider).linkStatus = LinkStatus.noLink;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final index = useProvider(tabsIndexProvider).state;

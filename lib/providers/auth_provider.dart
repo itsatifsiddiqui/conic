@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
@@ -18,6 +20,7 @@ import '../screens/tabs_view/tabs_view.dart';
 import '../services/dynamic_link_generator.dart';
 import 'app_user_provider.dart';
 import 'base_provider.dart';
+import 'dynamic_link_provider.dart';
 import 'firestore_provider.dart';
 
 final authProvider = ChangeNotifierProvider<AuthProvider>((ref) {
@@ -31,9 +34,12 @@ class AuthProvider extends BaseProvider {
         _read(appUserProvider.notifier).subscibeToUserStream(user.uid);
       }
     });
+
+    onLinkStatusChanged.addListener(listenLinkStatusChange);
   }
   final Reader _read;
   final ProviderReference ref;
+  ValueNotifier<LinkStatus> onLinkStatusChanged = ValueNotifier<LinkStatus>(LinkStatus.noLink);
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool isAppleSignInAvailable = false;
@@ -47,6 +53,7 @@ class AuthProvider extends BaseProvider {
 
   Future navigateBasedOnCondition() async {
     final _prefs = await SharedPreferences.getInstance();
+    //Show onboarding on first install
     if (_prefs.getBool('intro') == null || _prefs.getBool('intro')!) {
       // ignore: unawaited_futures
       Get.offAll<void>(const OnboardingScreen());
@@ -78,7 +85,11 @@ class AuthProvider extends BaseProvider {
 
   Future<void> navigateToTabsPage(User firebaseUser) async {
     // ignore: unawaited_futures
-    Get.offAll<void>(() => const TabsView());
+    Get.offAll<void>(
+      () => TabsView(
+        showScannedUserProfile: onLinkStatusChanged.value == LinkStatus.loggedIn,
+      ),
+    );
   }
 
   Future<AppUser> getCurrentUser() async {
@@ -294,5 +305,26 @@ class AuthProvider extends BaseProvider {
     debugPrint('OVERRIDING USER TO NULL');
     _read(tabsIndexProvider).state = 0;
     _read(appUserProvider.notifier).overrideUser(null);
+  }
+
+  bool linkOpened = false;
+  Future<void> listenLinkStatusChange() async {
+    log('onLinkStatusChanged LISTENER CALLED ${onLinkStatusChanged.value}', name: 'AuthProvider');
+
+    if (onLinkStatusChanged.value == LinkStatus.noLink) return;
+    if (onLinkStatusChanged.value == LinkStatus.loggedIn) {
+      linkOpened = false;
+      // ignore: unawaited_futures
+      navigateBasedOnCondition();
+      return;
+    } else if (onLinkStatusChanged.value == LinkStatus.notLoggedIn) {
+      await showPlatformDialogue(
+        title: 'Login to continue',
+        content: const Text("Once logged in, you'll be redirected."),
+      );
+      await navigateBasedOnCondition();
+      onLinkStatusChanged.value = LinkStatus.loggedIn;
+      return;
+    }
   }
 }

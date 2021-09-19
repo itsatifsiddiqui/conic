@@ -43,7 +43,7 @@ class MyConnectionScreen extends StatelessWidget {
                     child: const [
                       FollowersTab(),
                       FollowingTab(),
-                    ][index.value],
+                    ].elementAt(index.value),
                   ),
                 ],
               ).expand();

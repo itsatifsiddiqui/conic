@@ -25,15 +25,29 @@ class UserListItem extends StatelessWidget {
       leading: image == null
           ? CircleAvatar(
               backgroundColor: context.adaptive12,
+              maxRadius: 24,
               child: Icon(
                 Icons.person,
                 color: context.adaptive54,
               ),
             )
-          : CachedNetworkImage(imageUrl: image!),
+          : ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: CachedNetworkImage(
+                imageUrl: image!,
+                width: 48,
+                height: 48,
+                fit: BoxFit.cover,
+              ),
+            ),
       title: '@$username'.text.make(),
       subtitle: name.text.make(),
-      trailing: trailing,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (trailing != null) trailing!,
+        ],
+      ),
     );
   }
 }
