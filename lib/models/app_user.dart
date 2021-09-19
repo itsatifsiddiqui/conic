@@ -13,6 +13,8 @@ class AppUser {
     this.link,
     this.androidLink,
     this.gridMode,
+    this.businessMode,
+    this.focusedMode,
     this.linkedAccounts,
     this.followRequestsRecieved,
     this.followedBy,
@@ -32,6 +34,8 @@ class AppUser {
       link: map['link'] as String?,
       androidLink: map['androidLink'] as String?,
       gridMode: map['gridMode'] as bool?,
+      businessMode: (map['businessMode'] ?? false) as bool?,
+      focusedMode: (map['focusedMode'] ?? false) as bool?,
       linkedAccounts: List<LinkedAccount>.from(
         linkedAccounts.map<LinkedAccount>((x) => LinkedAccount.fromMap(x)),
       ),
@@ -55,6 +59,8 @@ class AppUser {
   final String? link;
   final String? androidLink;
   final bool? gridMode;
+  final bool? businessMode;
+  final bool? focusedMode;
   final List<LinkedAccount>? linkedAccounts;
   final List<String>? followRequestsRecieved;
   final List<String>? followedBy;
@@ -69,6 +75,8 @@ class AppUser {
     String? link,
     String? androidLink,
     bool? gridMode,
+    bool? businessMode,
+    bool? focusedMode,
     List<LinkedAccount>? linkedAccounts,
     List<String>? followRequestsRecieved,
     List<String>? followedBy,
@@ -83,6 +91,8 @@ class AppUser {
       link: link ?? this.link,
       androidLink: androidLink ?? this.androidLink,
       gridMode: gridMode ?? this.gridMode,
+      focusedMode: focusedMode ?? this.focusedMode,
+      businessMode: businessMode ?? this.businessMode,
       linkedAccounts: linkedAccounts ?? this.linkedAccounts,
       followRequestsRecieved: followRequestsRecieved ?? this.followRequestsRecieved,
       followedBy: followedBy ?? this.followedBy,
@@ -100,6 +110,8 @@ class AppUser {
       'link': link,
       'androidLink': androidLink,
       'gridMode': gridMode,
+      'focusedMode': focusedMode,
+      'businessMode': businessMode,
       'linkedAccounts': (linkedAccounts ?? []).map((x) => x.toMap()).toList(),
       'followRequestsRecieved': followRequestsRecieved ?? [],
       'followedBy': followedBy ?? [],
@@ -109,7 +121,7 @@ class AppUser {
 
   @override
   String toString() {
-    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId, link: $link, androidLink: $androidLink, gridMode: $gridMode, linkedAccounts: $linkedAccounts, followRequestsRecieved: $followRequestsRecieved, followedBy: $followedBy, isFollowing: $isFollowing)';
+    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId, link: $link, androidLink: $androidLink, gridMode: $gridMode, focusedMode: $focusedMode, businessMode: $businessMode, linkedAccounts: $linkedAccounts, followRequestsRecieved: $followRequestsRecieved, followedBy: $followedBy, isFollowing: $isFollowing)';
   }
 
   @override
@@ -125,6 +137,8 @@ class AppUser {
         other.link == link &&
         other.androidLink == androidLink &&
         other.gridMode == gridMode &&
+        other.businessMode == businessMode &&
+        other.focusedMode == focusedMode &&
         listEquals(other.linkedAccounts, linkedAccounts) &&
         listEquals(other.followRequestsRecieved, followRequestsRecieved) &&
         listEquals(other.followedBy, followedBy) &&
@@ -141,6 +155,8 @@ class AppUser {
         link.hashCode ^
         androidLink.hashCode ^
         gridMode.hashCode ^
+        businessMode.hashCode ^
+        focusedMode.hashCode ^
         linkedAccounts.hashCode ^
         followRequestsRecieved.hashCode ^
         followedBy.hashCode ^

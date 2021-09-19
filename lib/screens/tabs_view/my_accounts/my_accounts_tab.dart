@@ -14,9 +14,13 @@ import '../../../widgets/context_action.dart';
 import '../../add_account/account_form_screen.dart';
 import '../../add_account/add_new_account_screen.dart';
 
-final businessModeProvider = StateProvider<bool>((ref) => false);
+// final businessModeProvider = StateProvider<bool>((ref) => false);
 final isListModeProvider = StateProvider<bool>((ref) {
   return ref.watch(appUserProvider)!.gridMode ?? true;
+});
+
+final isFocusedModeProvider = StateProvider<bool>((ref) {
+  return ref.watch(appUserProvider)!.focusedMode ?? false;
 });
 final queryProvider = StateProvider<String>((ref) => '');
 
@@ -108,6 +112,7 @@ class _Greetings extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final name = useProvider(appUserProvider.select((value) => value?.name ?? 'Conic user'));
+    final isFocusedMode = useProvider(isFocusedModeProvider).state;
     return Row(
       children: [
         Column(
@@ -118,25 +123,25 @@ class _Greetings extends HookWidget {
             // 'View My Profile'.text.base.color(context.adaptive75).make(),
           ],
         ).expand(),
-        // Column(
-        //   crossAxisAlignment: CrossAxisAlignment.end,
-        //   children: [
-        //     HookBuilder(
-        //       builder: (context) {
-        //         final isBusinesssMode = useProvider(businessModeProvider).state;
-        //         return CupertinoSwitch(
-        //           activeColor: context.primaryColor,
-        //           value: isBusinesssMode,
-        //           onChanged: (value) {
-        //             context.read(businessModeProvider).state = value;
-        //           },
-        //         );
-        //       },
-        //     ),
-        //     4.heightBox,
-        //     'Switch to business'.text.xs.color(context.adaptive87).make(),
-        //   ],
-        // )
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            CupertinoSwitch(
+              activeColor: context.primaryColor,
+              value: isFocusedMode,
+              onChanged: (value) {
+                context.read(appUserProvider.notifier).updateFocusedMode(value);
+                context.read(firestoreProvider).updateUser();
+              },
+            ),
+            4.heightBox,
+            '${isFocusedMode ? "Disable" : "Enable"} Focused Mode'
+                .text
+                .xs
+                .color(context.adaptive87)
+                .make(),
+          ],
+        )
       ],
     ).py8();
   }
@@ -146,8 +151,10 @@ class _MyAccountsBuilder extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final accounts = useProvider(filteredAccountsStateProvider).state;
+    final isFocusedMode = useProvider(isFocusedModeProvider).state;
+
     return LinkedAccountsBuilder(
-      accounts: accounts,
+      accounts: isFocusedMode ? accounts.where((element) => element.focused).toList() : accounts,
       longPressEnabled: true,
     );
   }
