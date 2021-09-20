@@ -1,7 +1,7 @@
-import 'package:conic/widgets/info_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../../res/res.dart';
+import '../../../widgets/info_widget.dart';
 
 class MyCardsTab extends StatelessWidget {
   const MyCardsTab({Key? key}) : super(key: key);

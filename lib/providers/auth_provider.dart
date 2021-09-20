@@ -274,7 +274,6 @@ class AuthProvider extends BaseProvider {
       Get.offAll<void>(() => const ActivateNfcScreen());
     } catch (e) {
       setIdle();
-      rethrow;
       showExceptionDialog(e);
     }
   }

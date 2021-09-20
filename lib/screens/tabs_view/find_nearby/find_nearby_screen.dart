@@ -1,25 +1,24 @@
 import 'dart:async';
-import 'dart:developer';
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:conic/models/app_user.dart';
-import 'package:conic/providers/app_user_provider.dart';
-import 'package:conic/providers/firestore_provider.dart';
-import 'package:conic/res/res.dart';
-import 'package:conic/screens/tabs_view/dashboard/my_connections/firend_detail.dart';
-import 'package:conic/screens/tabs_view/dashboard/my_connections/user_list_item.dart';
-import 'package:conic/screens/tabs_view/dashboard/search/search_users_screen.dart';
-import 'package:conic/widgets/adaptive_progress_indicator.dart';
-import 'package:conic/widgets/error_widet.dart';
-import 'package:conic/widgets/info_widget.dart';
-import 'package:conic/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ripple_animation/ripple_animation.dart';
+
+import '../../../models/app_user.dart';
+import '../../../providers/app_user_provider.dart';
+import '../../../providers/firestore_provider.dart';
+import '../../../res/res.dart';
+import '../../../widgets/adaptive_progress_indicator.dart';
+import '../../../widgets/error_widet.dart';
+import '../../../widgets/info_widget.dart';
+import '../../../widgets/primary_button.dart';
+import '../dashboard/my_connections/firend_detail.dart';
+import '../dashboard/my_connections/user_list_item.dart';
+import '../dashboard/search/search_users_screen.dart';
 
 final locationCheckerProvider = FutureProvider.autoDispose((ref) {
   return kCheckAndAskForLocationPermission();

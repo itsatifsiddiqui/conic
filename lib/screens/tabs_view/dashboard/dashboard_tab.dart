@@ -1,11 +1,11 @@
-import 'package:conic/providers/app_user_provider.dart';
-import 'package:conic/screens/tabs_view/find_nearby/find_nearby_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../providers/app_user_provider.dart';
 import '../../../res/res.dart';
 import '../../nfc/activate_nfc_screen.dart';
+import '../find_nearby/find_nearby_screen.dart';
 import 'my_connections/firend_detail.dart';
 import 'my_connections/my_connections_screen.dart';
 import 'my_profile/my_profile_screen.dart';

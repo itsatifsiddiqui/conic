@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:conic/widgets/info_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -12,6 +11,7 @@ import '../../../../res/platform_dialogue.dart';
 import '../../../../res/res.dart';
 import '../../../../widgets/adaptive_progress_indicator.dart';
 import '../../../../widgets/error_widet.dart';
+import '../../../../widgets/info_widget.dart';
 import 'firend_detail.dart';
 import 'user_list_item.dart';
 
