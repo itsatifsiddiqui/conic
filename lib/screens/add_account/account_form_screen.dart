@@ -152,7 +152,6 @@ class AccountFormScreen extends HookWidget {
                   focused: focused,
                   notify: notify,
                   hidden: hidden,
-                  media: const [],
                 );
 
                 if (isEditMode) {

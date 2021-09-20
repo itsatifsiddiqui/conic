@@ -1,17 +1,31 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pdf_render/pdf_render_widgets.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../models/linked_account.dart';
 import '../../../providers/app_user_provider.dart';
+import '../../../providers/firebase_storage_provider.dart';
 import '../../../providers/firestore_provider.dart';
 import '../../../res/res.dart';
 import '../../../widgets/accounts_builder.dart';
+import '../../../widgets/adaptive_progress_indicator.dart';
 import '../../../widgets/context_action.dart';
+import '../../../widgets/error_widet.dart';
 import '../../add_account/account_form_screen.dart';
 import '../../add_account/add_new_account_screen.dart';
+import 'add_media_sheet.dart';
+import 'image_viewer.dart';
+import 'pdf_viewer.dart';
+import 'video_viewer.dart';
 
 // final businessModeProvider = StateProvider<bool>((ref) => false);
 final isListModeProvider = StateProvider<bool>((ref) {
@@ -31,7 +45,7 @@ final filteredAccountsStateProvider = StateProvider<List<LinkedAccount>>((ref) {
   return allAccounts.where((element) => element.name.toLowerCase().contains(query)).toList();
 });
 
-class MyAccountsTab extends StatelessWidget {
+class MyAccountsTab extends HookWidget {
   const MyAccountsTab({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -64,6 +78,11 @@ class MyAccountsTab extends StatelessWidget {
           const _MyAccountsTextRow(),
           24.heightBox,
           _MyAccountsBuilder(),
+          24.heightBox,
+          const _MyMediasRow(),
+          8.heightBox,
+          const _MyMediasBuilder(),
+          32.heightBox,
         ],
       ).px16().scrollVertical(),
     );
@@ -213,5 +232,234 @@ class _MyAccountsBuilder extends HookWidget {
 
   void onAccountTap(LinkedAccount e) {
     kOpenLink(e.fullLink!);
+  }
+}
+
+class _MyMediasRow extends HookWidget {
+  const _MyMediasRow({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final isLoading = useProvider(firebaseStorageProvider.select((value) => value.isLoading));
+
+    return Column(
+      children: [
+        Row(
+          children: [
+            'My Medias'.text.xl2.semiBold.make().expand(),
+            HookBuilder(
+              builder: (context) {
+                return IconButton(
+                  icon: Icon(
+                    Icons.add,
+                    color: context.primaryColor,
+                  ),
+                  onPressed: () {
+                    AddMediaSheet.openMediaSheet(context);
+                  },
+                );
+              },
+            )
+          ],
+        ),
+        if (isLoading)
+          const LinearProgressIndicator(
+            minHeight: 2,
+          ).scale(scaleValue: 2)
+      ],
+    );
+  }
+}
+
+class _MyMediasBuilder extends HookWidget {
+  const _MyMediasBuilder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final medias = useProvider(appUserProvider)!
+        .linkedMedias!
+        .sortedByNum((element) => element.timestamp!)
+        .reversed
+        .toList();
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: medias.length,
+      separatorBuilder: (context, index) {
+        return const SizedBox(height: 12);
+      },
+      itemBuilder: (context, index) {
+        final media = medias[index];
+        if (media.isImage) {
+          return GestureDetector(
+            onTap: () {
+              Get.to<void>(() => ImageViewer(url: media.url));
+            },
+            child: Card(
+              elevation: 12,
+              shadowColor: context.adaptive12,
+              shape: Vx.withRounded(kBorderRadius),
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(kBorderRadius)),
+                    child: Hero(
+                      tag: media.url,
+                      child: CachedNetworkImage(
+                        imageUrl: media.url,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    title: 'Open image'.text.make(),
+                    trailing: const Icon(Icons.open_in_new),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+        if (media.isPdf) {
+          return PdfPreviewBuilder(url: media.url);
+        }
+        if (media.isVideo) {
+          return VideoPreviewBuilder(url: media.url);
+        }
+        return Container(
+          child: media.toString().text.make(),
+        );
+      },
+    );
+  }
+}
+
+final urlToFileProvider = FutureProvider.family<File, String>((ref, url) {
+  return DefaultCacheManager().getSingleFile(url);
+});
+
+class PdfPreviewBuilder extends HookWidget {
+  const PdfPreviewBuilder({Key? key, required this.url}) : super(key: key);
+
+  final String url;
+
+  @override
+  Widget build(BuildContext context) {
+    return useProvider(urlToFileProvider(url)).when(
+      data: (pdfFile) {
+        return GestureDetector(
+          onTap: () {
+            Get.to<void>(() => PdfFileViewer(
+                  url: url,
+                  pdfFile: pdfFile,
+                ));
+          },
+          child: Card(
+            elevation: 12,
+            shadowColor: context.adaptive12,
+            shape: Vx.withRounded(kBorderRadius),
+            child: Column(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(kBorderRadius)),
+                  child: PdfDocumentLoader.openFile(
+                    pdfFile.path,
+                    pageNumber: 1,
+                    pageBuilder: (context, textureBuilder, pageSize) => textureBuilder(),
+                  ),
+                ),
+                ListTile(
+                  title: 'Open document'.text.make(),
+                  trailing: const Icon(Icons.open_in_new),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+      loading: () => const AdaptiveProgressIndicator().p24(),
+      error: (e, s) => StreamErrorWidget(
+        error: e.toString(),
+        onTryAgain: () {
+          context.refresh(urlToFileProvider(url));
+        },
+      ),
+    );
+  }
+}
+
+final videoThumbnailProvider = FutureProvider.family<Uint8List?, File>((ref, videoFile) {
+  return VideoThumbnail.thumbnailData(
+    video: videoFile.path,
+    quality: 25,
+  );
+});
+
+class VideoPreviewBuilder extends HookWidget {
+  const VideoPreviewBuilder({
+    Key? key,
+    required this.url,
+  }) : super(key: key);
+  final String url;
+
+  @override
+  Widget build(BuildContext context) {
+    return useProvider(urlToFileProvider(url)).when(
+      data: (videoFile) {
+        return GestureDetector(
+          onTap: () {
+            Get.to<void>(() => VideoViewer(url: url));
+          },
+          child: Card(
+            elevation: 12,
+            shadowColor: context.adaptive12,
+            shape: Vx.withRounded(kBorderRadius),
+            child: Column(
+              children: [
+                ClipRRect(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(kBorderRadius)),
+                    child: HookBuilder(
+                      builder: (context) {
+                        return useProvider(videoThumbnailProvider(videoFile)).when(
+                          data: (thumbnail) {
+                            return Image.memory(thumbnail!);
+                          },
+                          loading: () => const AdaptiveProgressIndicator().p24(),
+                          error: (e, s) => StreamErrorWidget(
+                            error: e.toString(),
+                            onTryAgain: () {
+                              context.refresh(urlToFileProvider(url));
+                            },
+                          ),
+                        );
+                      },
+                    )
+
+                    //  VideoThumbnail.thumbnailData(video: video)(video: video),
+                    // child: PdfDocumentLoader.openFile(
+                    //   pdfFile.path,
+                    //   pageNumber: 1,
+                    //   pageBuilder: (context, textureBuilder, pageSize) => textureBuilder(),
+                    // ),
+                    ),
+                ListTile(
+                  title: 'Open Video'.text.make(),
+                  trailing: const Icon(Icons.open_in_new),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+      loading: () => const AdaptiveProgressIndicator().p24(),
+      error: (e, s) => StreamErrorWidget(
+        error: e.toString(),
+        onTryAgain: () {
+          context.refresh(urlToFileProvider(url));
+        },
+      ),
+    );
   }
 }

@@ -21,22 +21,19 @@ environment:
   sdk: '>=2.13.0 <3.0.0'
 
 dependencies:
-  flutter:
-    sdk: flutter
-  open_settings:
-    git:
-      url: https://github.com/marcojoao/open_settings
-  ripple_animation:
-    git:
-      url: https://github.com/PoloLacoste/ripple_animation
+  better_player: 
   cached_network_image: ^3.0.0
   cloud_firestore: ^2.1.0
   contacts_service: ^0.6.1
   cupertino_icons: ^1.0.2
+  file_picker: ^4.1.0
   firebase_auth: ^1.1.4
   firebase_core: ^1.1.1
   firebase_dynamic_links: ^2.0.3
   firebase_storage: ^8.0.6
+  flutter:
+    sdk: flutter
+  flutter_cache_manager: ^3.1.2
   flutter_hooks: ^0.16.0
   flutter_login_facebook: ^1.0.1
   flutter_screenutil: ^5.0.0+2
@@ -50,11 +47,19 @@ dependencies:
   intl: ^0.17.0
   loading_overlay: ^0.3.0
   nfc_manager: ^3.0.0+2
+  open_settings:
+    git:
+      url: https://github.com/marcojoao/open_settings
+  pdf_render: ^1.0.12
   permission_handler: ^8.0.0+2
+  ripple_animation:
+    git:
+      url: https://github.com/PoloLacoste/ripple_animation
   shared_preferences: ^2.0.6
   sign_in_with_apple: ^3.0.0
   url_launcher: ^6.0.4
   velocity_x: ^3.0.0
+  video_thumbnail: ^0.4.3
 
 flutter_native_splash:
   color: "ffffff"
@@ -64,9 +69,9 @@ flutter_native_splash:
   ios: true
 
 dev_dependencies:
+  flutter_native_splash: null
   flutter_test:
     sdk: flutter
-  flutter_native_splash:
 flutter:
 
   uses-material-design: true

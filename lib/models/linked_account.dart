@@ -12,7 +12,6 @@ class LinkedAccount {
     required this.focused,
     required this.notify,
     required this.hidden,
-    this.media,
   });
 
   factory LinkedAccount.fromMap(Map<String, dynamic> map) {
@@ -26,9 +25,6 @@ class LinkedAccount {
       focused: map['focused'] as bool,
       notify: map['notify'] as bool,
       hidden: map['hidden'] as bool,
-      media: List<String>.from(
-        map.containsKey('media') ? (map['media'] ?? <String>[]) as List : <String>[],
-      ),
     );
   }
 
@@ -42,7 +38,6 @@ class LinkedAccount {
   final bool focused;
   final bool notify;
   final bool hidden;
-  final List<String>? media;
 
   LinkedAccount copyWith({
     String? name,
@@ -66,7 +61,6 @@ class LinkedAccount {
       focused: focused ?? this.focused,
       notify: notify ?? this.notify,
       hidden: hidden ?? this.hidden,
-      media: media ?? this.media,
     );
   }
 
@@ -81,13 +75,12 @@ class LinkedAccount {
       'focused': focused,
       'notify': notify,
       'hidden': hidden,
-      'media': media,
     };
   }
 
   @override
   String toString() {
-    return 'LinkedAccount(name: $name, image: $image, title: $title, description: $description, enteredLink: $enteredLink, fullLink: $fullLink, focused: $focused, notify: $notify, hidden: $hidden, media: $media)';
+    return 'LinkedAccount(name: $name, image: $image, title: $title, description: $description, enteredLink: $enteredLink, fullLink: $fullLink, focused: $focused, notify: $notify, hidden: $hidden)';
   }
 
   @override
@@ -103,8 +96,7 @@ class LinkedAccount {
         other.fullLink == fullLink &&
         other.focused == focused &&
         other.notify == notify &&
-        other.hidden == hidden &&
-        listEquals(other.media, media);
+        other.hidden == hidden;
   }
 
   @override
@@ -117,7 +109,6 @@ class LinkedAccount {
         fullLink.hashCode ^
         focused.hashCode ^
         notify.hashCode ^
-        hidden.hashCode ^
-        media.hashCode;
+        hidden.hashCode;
   }
 }

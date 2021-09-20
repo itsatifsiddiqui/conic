@@ -35,7 +35,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.fyp.conic"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -50,6 +50,9 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    ndkVersion '21.3.6528147'
+
 }
 
 flutter {

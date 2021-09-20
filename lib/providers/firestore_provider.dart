@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../models/account_model.dart';
 import '../models/app_user.dart';
+import '../models/linked_media.dart';
 import '../res/constants.dart';
 import '../screens/add_account/add_new_account_screen.dart';
 import 'app_user_provider.dart';
@@ -223,6 +224,17 @@ class FirestoreProvider {
     final myId = _read(appUserProvider)!.userId!;
     _firestore.collection('users').doc(myId).update(
       <String, dynamic>{'location': null},
+    );
+  }
+
+  void addMedia(LinkedMedia media) {
+    final myId = _read(appUserProvider)!.userId!;
+    _firestore.collection('users').doc(myId).update(
+      <String, dynamic>{
+        'linkedMedias': FieldValue.arrayUnion(
+          <Map<String, dynamic>>[media.toMap()],
+        ),
+      },
     );
   }
 }
