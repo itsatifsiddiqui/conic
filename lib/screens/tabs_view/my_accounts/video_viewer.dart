@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:better_player/better_player.dart';
+import 'package:conic/res/res.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,7 +28,7 @@ class _VideoViewerState extends State<VideoViewer> {
       widget.url,
       betterPlayerConfiguration: BetterPlayerConfiguration(
         allowedScreenSleep: false,
-        fullScreenByDefault: true,
+        fullScreenByDefault: Platform.isAndroid,
         autoPlay: true,
         autoDetectFullscreenDeviceOrientation: true,
         fit: BoxFit.contain,
@@ -48,9 +51,13 @@ class _VideoViewerState extends State<VideoViewer> {
         backgroundColor: Colors.transparent,
         // leading: const BackButton(color: Colors.white),
       ),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [betterPlayer],
+      body: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            betterPlayer.expand(),
+          ],
+        ),
       ),
     );
   }
