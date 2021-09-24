@@ -1,7 +1,7 @@
-import 'package:conic/screens/tabs_view/my_accounts/add_media_sheet.dart';
 import 'package:flutter/material.dart';
 
 import '../res/res.dart';
+import '../screens/tabs_view/my_accounts/add_media_sheet.dart';
 import 'primary_button.dart';
 
 class NoMediasWidget extends StatelessWidget {

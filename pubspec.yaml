@@ -21,7 +21,7 @@ environment:
   sdk: '>=2.13.0 <3.0.0'
 
 dependencies:
-  better_player: 
+  better_player: null
   cached_network_image: ^3.0.0
   cloud_firestore: ^2.1.0
   contacts_service: ^0.6.1
@@ -35,6 +35,7 @@ dependencies:
     sdk: flutter
   flutter_cache_manager: ^3.1.2
   flutter_hooks: ^0.16.0
+  flutter_launcher_icons: null
   flutter_login_facebook: ^1.0.1
   flutter_screenutil: ^5.0.0+2
   geoflutterfire2: ^2.3.6
@@ -43,6 +44,7 @@ dependencies:
   google_sign_in: ^5.0.3
   hooks_riverpod: ^0.14.0+3
   image_cropper: ^1.4.0
+  image_gallery_saver: ^1.7.0
   image_picker: ^0.7.5+3
   intl: ^0.17.0
   loading_overlay: ^0.3.0
@@ -52,17 +54,17 @@ dependencies:
       url: https://github.com/marcojoao/open_settings
   pdf_render: ^1.0.12
   permission_handler: ^8.0.0+2
+  pretty_qr_code: ^2.0.2
   ripple_animation:
     git:
       url: https://github.com/PoloLacoste/ripple_animation
+  screenshot: ^1.2.3
+  share_plus: ^2.1.4
   shared_preferences: ^2.0.6
   sign_in_with_apple: ^3.1.0
   url_launcher: ^6.0.4
   velocity_x: ^3.0.0
   video_thumbnail: ^0.4.3
-  flutter_launcher_icons:
-
-
 
 flutter_icons:
   android: "launcher_icon"

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:conic/res/constants.dart';
 import 'package:flutter/material.dart';
+
+import '../res/constants.dart';
 
 class ProfileCircle extends StatelessWidget {
   const ProfileCircle({

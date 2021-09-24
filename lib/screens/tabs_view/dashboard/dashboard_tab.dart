@@ -6,6 +6,7 @@ import '../../../providers/app_user_provider.dart';
 import '../../../res/res.dart';
 import '../../nfc/activate_nfc_screen.dart';
 import '../find_nearby/find_nearby_screen.dart';
+import 'my_code/my_code_screen.dart';
 import 'my_connections/firend_detail.dart';
 import 'my_connections/my_connections_screen.dart';
 import 'my_profile/my_profile_screen.dart';
@@ -86,7 +87,9 @@ class DashboardTab extends StatelessWidget {
             Row(
               children: [
                 _ItemCard(
-                  onTap: HapticFeedback.lightImpact,
+                  onTap: () {
+                    Get.to<void>(() => const MyCodeScreen());
+                  },
                   icon: Icons.qr_code_outlined,
                   title: 'My Code',
                   subtitle: 'View My QRcode',

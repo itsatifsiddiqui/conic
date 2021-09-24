@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:better_player/better_player.dart';
-import 'package:conic/res/res.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../res/res.dart';
 import '../../../widgets/error_widet.dart';
 
 class VideoViewer extends StatefulWidget {
