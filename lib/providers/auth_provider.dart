@@ -56,7 +56,7 @@ class AuthProvider extends BaseProvider {
     //Show onboarding on first install
     if (_prefs.getBool('intro') == null || _prefs.getBool('intro')!) {
       // ignore: unawaited_futures
-      Get.offAll<void>(const OnboardingScreen());
+      Get.offAll<void>(() => const OnboardingScreen());
       return;
     }
     if (isUserLoggedIn) {
