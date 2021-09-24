@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:open_settings/open_settings.dart';
@@ -13,6 +14,7 @@ import 'platform_dialogue.dart';
 
 double kBorderRadius = 6;
 const dynamicLinkPrefix = 'https://conic.page.link';
+Widget kImagePlaceHodler(dynamic _, dynamic __) => const CupertinoActivityIndicator();
 
 Future<void> kOpenLink(String url) async {
   debugPrint('OPENING URL: $url');

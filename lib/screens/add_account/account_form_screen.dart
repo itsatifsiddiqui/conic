@@ -215,6 +215,7 @@ class _ImageBuilder extends HookWidget {
                   imageUrl: image,
                   width: 0.1.sh,
                   height: 0.1.sh,
+                  placeholder: kImagePlaceHodler,
                 ),
               ),
             ),

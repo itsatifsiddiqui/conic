@@ -38,6 +38,7 @@ class UserListItem extends StatelessWidget {
                 width: 48,
                 height: 48,
                 fit: BoxFit.cover,
+                placeholder: kImagePlaceHodler,
               ),
             ),
       title: '@$username'.text.make(),

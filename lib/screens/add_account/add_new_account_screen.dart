@@ -124,6 +124,7 @@ class _AccountsBuilder extends HookWidget {
                         imageUrl: e.image,
                         width: 36,
                         height: 36,
+                        placeholder: kImagePlaceHodler,
                       ),
                     ),
                   ),
@@ -149,7 +150,10 @@ class _AccountsBuilder extends HookWidget {
             tag: e.image,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: CachedNetworkImage(imageUrl: e.image),
+              child: CachedNetworkImage(
+                imageUrl: e.image,
+                placeholder: kImagePlaceHodler,
+              ),
             ),
           ),
         );

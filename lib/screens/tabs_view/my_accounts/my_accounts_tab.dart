@@ -2,8 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:conic/widgets/no_accounts_widget.dart';
-import 'package:conic/widgets/no_medias_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,9 +17,9 @@ import '../../../providers/firebase_storage_provider.dart';
 import '../../../providers/firestore_provider.dart';
 import '../../../res/res.dart';
 import '../../../widgets/accounts_builder.dart';
-import '../../../widgets/adaptive_progress_indicator.dart';
 import '../../../widgets/context_action.dart';
-import '../../../widgets/error_widet.dart';
+import '../../../widgets/no_accounts_widget.dart';
+import '../../../widgets/no_medias_widget.dart';
 import '../../add_account/account_form_screen.dart';
 import '../../add_account/add_new_account_screen.dart';
 import 'add_media_sheet.dart';
@@ -296,55 +294,72 @@ class _MyMediasBuilder extends HookWidget {
     if (medias.isEmpty) {
       return const NoMediasWidget();
     }
-    return ListView.separated(
+
+    return GridView.count(
+      crossAxisCount: 3,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: medias.length,
-      separatorBuilder: (context, index) {
-        return const SizedBox(height: 12);
-      },
-      itemBuilder: (context, index) {
-        final media = medias[index];
+      childAspectRatio: 0.9,
+      mainAxisSpacing: 12,
+      crossAxisSpacing: 12,
+      children: medias.map((media) {
         if (media.isImage) {
-          return GestureDetector(
-            onTap: () {
-              Get.to<void>(() => ImageViewer(url: media.url));
-            },
-            child: Card(
-              elevation: 12,
-              shadowColor: context.adaptive12,
-              shape: Vx.withRounded(kBorderRadius),
-              child: Column(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(kBorderRadius)),
-                    child: Hero(
-                      tag: media.url,
-                      child: CachedNetworkImage(
-                        imageUrl: media.url,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  ListTile(
-                    title: 'Open image'.text.make(),
-                    trailing: const Icon(Icons.open_in_new),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-        if (media.isPdf) {
-          return PdfPreviewBuilder(url: media.url);
+          return ImagePreviewBuilder(url: media.url);
         }
         if (media.isVideo) {
           return VideoPreviewBuilder(url: media.url);
         }
-        return Container(
-          child: media.toString().text.make(),
-        );
+        if (media.isPdf) {
+          return PdfPreviewBuilder(url: media.url);
+        }
+        return Container();
+      }).toList(),
+    );
+  }
+}
+
+class ImagePreviewBuilder extends StatelessWidget {
+  const ImagePreviewBuilder({
+    Key? key,
+    required this.url,
+  }) : super(key: key);
+  final String url;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Get.to<void>(() => ImageViewer(url: url));
       },
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(kBorderRadius),
+            child: CachedNetworkImage(
+              imageUrl: url,
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.cover,
+              placeholder: kImagePlaceHodler,
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.black26,
+              borderRadius: BorderRadius.circular(kBorderRadius),
+            ),
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Icon(
+              Icons.image,
+              color: context.canvasColor.withOpacity(0.9),
+            ),
+          ).p4()
+        ],
+      ),
     );
   }
 }
@@ -364,41 +379,39 @@ class PdfPreviewBuilder extends HookWidget {
       data: (pdfFile) {
         return GestureDetector(
           onTap: () {
-            Get.to<void>(() => PdfFileViewer(
-                  url: url,
-                  pdfFile: pdfFile,
-                ));
+            Get.to<void>(() => PdfFileViewer(url: url, pdfFile: pdfFile));
           },
-          child: Card(
-            elevation: 12,
-            shadowColor: context.adaptive12,
-            shape: Vx.withRounded(kBorderRadius),
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(kBorderRadius)),
-                  child: PdfDocumentLoader.openFile(
-                    pdfFile.path,
-                    pageNumber: 1,
-                    pageBuilder: (context, textureBuilder, pageSize) => textureBuilder(),
-                  ),
+          child: Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(kBorderRadius),
+                child: PdfDocumentLoader.openFile(
+                  pdfFile.path,
+                  pageNumber: 1,
+                  pageBuilder: (context, textureBuilder, pageSize) => textureBuilder(),
                 ),
-                ListTile(
-                  title: 'Open document'.text.make(),
-                  trailing: const Icon(Icons.open_in_new),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.black26,
+                  borderRadius: BorderRadius.circular(kBorderRadius),
                 ),
-              ],
-            ),
+                width: double.infinity,
+                height: double.infinity,
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Icon(
+                  Icons.picture_as_pdf,
+                  color: context.canvasColor.withOpacity(0.9),
+                ),
+              ).p4()
+            ],
           ),
         );
       },
-      loading: () => const AdaptiveProgressIndicator().p24(),
-      error: (e, s) => StreamErrorWidget(
-        error: e.toString(),
-        onTryAgain: () {
-          context.refresh(urlToFileProvider(url));
-        },
-      ),
+      loading: () => const CupertinoActivityIndicator(),
+      error: (e, s) => e.toString().text.red400.makeCentered(),
     );
   }
 }
@@ -425,54 +438,46 @@ class VideoPreviewBuilder extends HookWidget {
           onTap: () {
             Get.to<void>(() => VideoViewer(url: url));
           },
-          child: Card(
-            elevation: 12,
-            shadowColor: context.adaptive12,
-            shape: Vx.withRounded(kBorderRadius),
-            child: Column(
-              children: [
-                ClipRRect(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(kBorderRadius)),
-                    child: HookBuilder(
-                      builder: (context) {
-                        return useProvider(videoThumbnailProvider(videoFile)).when(
-                          data: (thumbnail) {
-                            return Image.memory(thumbnail!);
-                          },
-                          loading: () => const AdaptiveProgressIndicator().p24(),
-                          error: (e, s) => StreamErrorWidget(
-                            error: e.toString(),
-                            onTryAgain: () {
-                              context.refresh(urlToFileProvider(url));
-                            },
-                          ),
-                        );
-                      },
-                    )
-
-                    //  VideoThumbnail.thumbnailData(video: video)(video: video),
-                    // child: PdfDocumentLoader.openFile(
-                    //   pdfFile.path,
-                    //   pageNumber: 1,
-                    //   pageBuilder: (context, textureBuilder, pageSize) => textureBuilder(),
-                    // ),
+          child: HookBuilder(builder: (context) {
+            return useProvider(videoThumbnailProvider(videoFile)).when(
+              data: (thumbnail) {
+                return Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(kBorderRadius),
+                      child: Image.memory(
+                        thumbnail!,
+                        width: double.infinity,
+                        height: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                ListTile(
-                  title: 'Open Video'.text.make(),
-                  trailing: const Icon(Icons.open_in_new),
-                ),
-              ],
-            ),
-          ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black26,
+                        borderRadius: BorderRadius.circular(kBorderRadius),
+                      ),
+                      width: double.infinity,
+                      height: double.infinity,
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Icon(
+                        Icons.video_collection_rounded,
+                        color: context.canvasColor.withOpacity(0.9),
+                      ),
+                    ).p4()
+                  ],
+                );
+              },
+              loading: () => const CupertinoActivityIndicator(),
+              error: (e, s) => e.toString().text.red400.makeCentered(),
+            );
+          }),
         );
       },
-      loading: () => const AdaptiveProgressIndicator().p24(),
-      error: (e, s) => StreamErrorWidget(
-        error: e.toString(),
-        onTryAgain: () {
-          context.refresh(urlToFileProvider(url));
-        },
-      ),
+      loading: () => const CupertinoActivityIndicator(),
+      error: (e, s) => e.toString().text.red400.makeCentered(),
     );
   }
 }

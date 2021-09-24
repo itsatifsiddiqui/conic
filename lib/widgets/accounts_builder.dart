@@ -55,6 +55,7 @@ class LinkedAccountsBuilder extends HookWidget {
                           imageUrl: e.image,
                           width: 36,
                           height: 36,
+                          placeholder: kImagePlaceHodler,
                         ),
                       ),
                     ),
@@ -181,6 +182,7 @@ class AccountImage extends StatelessWidget {
         imageUrl: url,
         width: 120,
         height: 120,
+        placeholder: kImagePlaceHodler,
       ),
     );
   }

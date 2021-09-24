@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:conic/res/constants.dart';
 import 'package:flutter/material.dart';
 
 class ProfileCircle extends StatelessWidget {
@@ -37,6 +38,7 @@ class ProfileCircle extends StatelessWidget {
 
             return CachedNetworkImage(
               imageUrl: imagePath,
+              placeholder: kImagePlaceHodler,
             );
           },
         ),

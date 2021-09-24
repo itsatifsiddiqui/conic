@@ -48,6 +48,7 @@ class FriendDetailScreen extends HookWidget {
                 width: 100,
                 height: 100,
                 fit: BoxFit.cover,
+                placeholder: kImagePlaceHodler,
               ),
             )
           else
