@@ -285,8 +285,7 @@ class _MyMediasBuilder extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final medias = useProvider(appUserProvider)!
-        .linkedMedias!
+    final medias = useProvider(appUserProvider.select((value) => value!.linkedMedias))!
         .sortedByNum((element) => element.timestamp!)
         .reversed
         .toList();
