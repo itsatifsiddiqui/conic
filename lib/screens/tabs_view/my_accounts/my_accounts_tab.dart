@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:conic/widgets/no_accounts_widget.dart';
+import 'package:conic/widgets/no_medias_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -171,8 +173,15 @@ class _MyAccountsBuilder extends HookWidget {
     final accounts = useProvider(filteredAccountsStateProvider).state;
     final isFocusedMode = useProvider(isFocusedModeProvider).state;
 
+    if (accounts.isEmpty) {
+      return const NoAccountsWidget();
+    }
+
+    final filteredAccounts =
+        isFocusedMode ? accounts.where((element) => element.focused).toList() : accounts;
+
     return LinkedAccountsBuilder(
-      accounts: isFocusedMode ? accounts.where((element) => element.focused).toList() : accounts,
+      accounts: filteredAccounts,
       longPressEnabled: true,
     );
   }
@@ -283,6 +292,10 @@ class _MyMediasBuilder extends HookWidget {
         .sortedByNum((element) => element.timestamp!)
         .reversed
         .toList();
+
+    if (medias.isEmpty) {
+      return const NoMediasWidget();
+    }
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),

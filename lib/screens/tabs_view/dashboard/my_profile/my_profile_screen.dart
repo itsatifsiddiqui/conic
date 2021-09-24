@@ -46,40 +46,42 @@ class MyProfileScreen extends HookWidget {
             }).make(),
           ],
         ),
-        body: Column(
-          children: [
-            Column(
-              children: [
-                24.heightBox,
-                FilledTextField(
-                  disabled: true,
-                  controller: TextEditingController(text: user.username),
-                  title: 'Username',
-                ),
-                12.heightBox,
-                FilledTextField(
-                  disabled: true,
-                  controller: TextEditingController(text: user.email),
-                  title: 'Email',
-                ),
-                12.heightBox,
-                FilledTextField(
-                  controller: nameController,
-                  title: 'Name',
-                  suffixIcon: const Icon(
-                    Icons.edit,
-                    color: AppColors.primaryColor,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Column(
+                children: [
+                  24.heightBox,
+                  FilledTextField(
+                    disabled: true,
+                    controller: TextEditingController(text: user.username),
+                    title: 'Username',
                   ),
-                ),
-              ],
-            ).px16().scrollVertical().expand(),
-            PrimaryButton(
-              onTap: () {
-                context.read(authProvider).signOut();
-              },
-              text: 'Log out',
-            ).p16()
-          ],
+                  12.heightBox,
+                  FilledTextField(
+                    disabled: true,
+                    controller: TextEditingController(text: user.email),
+                    title: 'Email',
+                  ),
+                  12.heightBox,
+                  FilledTextField(
+                    controller: nameController,
+                    title: 'Name',
+                    suffixIcon: const Icon(
+                      Icons.edit,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
+                ],
+              ).px16().scrollVertical().expand(),
+              PrimaryButton(
+                onTap: () {
+                  context.read(authProvider).signOut();
+                },
+                text: 'Log out',
+              ).p16()
+            ],
+          ),
         ),
       ),
     );
