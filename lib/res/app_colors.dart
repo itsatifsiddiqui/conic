@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primaryColor = Color(0xffD32F2F);
+  static const Color primaryColor = Colors.indigo;
   static const Color accentColor = Color(0xffD32F2F);
   static const Color teal = Color(0xff03D4BF);
   static const Color facebookBlue = Color(0xff547AAD);
