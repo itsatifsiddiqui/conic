@@ -44,7 +44,7 @@ class _TabsViewState extends State<TabsView> {
       final user = await context.read(firestoreProvider).getUserDataById(linkShareUserId);
 
       // ignore: unawaited_futures
-      Get.to<void>(FriendDetailScreen(friend: user, fromFollowing: false));
+      Get.to<void>(() => FriendDetailScreen(friend: user, fromFollowing: false));
       context.read(dynamicLinkProvider).linkStatus = LinkStatus.noLink;
     }
   }

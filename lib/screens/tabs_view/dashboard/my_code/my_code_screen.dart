@@ -57,6 +57,7 @@ class MyCodeScreen extends HookWidget {
                   key: const ValueKey('PrettyQr'),
                   controller: screenshotController,
                   child: PrettyQr(
+                    elementColor: context.adaptive,
                     image: image == null ? null : CachedNetworkImageProvider(image),
                     data: link,
                     roundEdges: true,

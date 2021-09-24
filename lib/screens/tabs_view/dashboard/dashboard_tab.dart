@@ -10,6 +10,7 @@ import 'my_code/my_code_screen.dart';
 import 'my_connections/firend_detail.dart';
 import 'my_connections/my_connections_screen.dart';
 import 'my_profile/my_profile_screen.dart';
+import 'qr_code_scanner/qr_code_scanner_screen.dart';
 import 'search/search_users_screen.dart';
 
 class DashboardTab extends StatelessWidget {
@@ -89,6 +90,7 @@ class DashboardTab extends StatelessWidget {
                 _ItemCard(
                   onTap: () {
                     Get.to<void>(() => const MyCodeScreen());
+                    HapticFeedback.lightImpact();
                   },
                   icon: Icons.qr_code_outlined,
                   title: 'My Code',
@@ -96,7 +98,10 @@ class DashboardTab extends StatelessWidget {
                   gradient: AppColors.greenGradient,
                 ),
                 _ItemCard(
-                  onTap: HapticFeedback.lightImpact,
+                  onTap: () {
+                    Get.to<void>(() => const QrCodeScannerScreen());
+                    HapticFeedback.lightImpact();
+                  },
                   icon: Icons.qr_code_scanner_outlined,
                   title: 'QR Scanner',
                   subtitle: 'Scan QRcode',
