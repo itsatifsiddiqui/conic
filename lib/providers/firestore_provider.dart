@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:conic/models/linked_account.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../models/account_model.dart';
 import '../models/app_user.dart';
+import '../models/linked_account.dart';
 import '../models/linked_media.dart';
 import '../res/constants.dart';
 import '../screens/add_account/add_new_account_screen.dart';
@@ -268,5 +268,15 @@ class FirestoreProvider {
     await _firestore.collection('users').doc(userId).update(<String, dynamic>{
       'tokens': FieldValue.arrayRemove(<String>[token])
     });
+  }
+
+  Stream<QuerySnapshot> getNotifications() {
+    final userId = _read(appUserProvider)!.userId!;
+    return _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('notifications')
+        .orderBy('timestamp', descending: true)
+        .snapshots();
   }
 }

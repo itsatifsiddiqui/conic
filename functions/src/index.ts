@@ -1,5 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import { FieldValue } from '@google-cloud/firestore';
 
 
 admin.initializeApp(
@@ -41,6 +42,16 @@ export const sendAccountInformationChangeNotification = functions.firestore
         usersData.forEach(userDoc => {
             console.log(`SENDING NOTIFICATION TO ${userDoc.get('name') ?? userDoc.get('username')}`);
             const tokens: string[] = userDoc.get('tokens');
+
+            const recieverId = userDoc.id;
+
+            db.collection('users').doc(recieverId).collection('notifications').doc().set({
+                'senderId': userId,
+                'senderName': userName,
+                'message': newAccount ? `${userName} has added ${accountName}` : `${userName} has changed ${accountName} information`,
+                'type': 'account',
+                'timestamp': FieldValue.serverTimestamp(),
+            });
 
 
             const notification: admin.messaging.NotificationMessagePayload = {

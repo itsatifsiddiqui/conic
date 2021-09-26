@@ -1,13 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../providers/app_user_provider.dart';
+import '../../../providers/firestore_provider.dart';
 import '../../../res/res.dart';
-import '../../../widgets/info_widget.dart';
+import '../../../widgets/adaptive_progress_indicator.dart';
+import '../../../widgets/error_widet.dart';
 import 'follow_requests_screen.dart';
 
-class NotificationsTab extends StatelessWidget {
+final notificatiosnProvider = StreamProvider.autoDispose<QuerySnapshot>((ref) {
+  return ref.watch(firestoreProvider).getNotifications();
+});
+
+class NotificationsTab extends HookWidget {
   const NotificationsTab({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -28,10 +35,42 @@ class NotificationsTab extends StatelessWidget {
           Divider(height: 0, color: context.adaptive12),
           _FollowRequests(),
           Divider(height: 0, color: context.adaptive12),
-          const InfoWidget(
-            text: 'Work in progress',
-            subText: 'Notifications will be implemented in later module',
-          ).expand(),
+          useProvider(notificatiosnProvider)
+              .when(
+                data: (value) {
+                  final docs = value.docs;
+                  return ListView.separated(
+                    separatorBuilder: (_, __) => Divider(height: 0, color: context.adaptive12),
+                    itemCount: docs.length,
+                    itemBuilder: (context, index) {
+                      final doc = docs[index].data()! as Map<String, dynamic>;
+                      final userId = doc['senderId'] as String;
+                      final name = doc['senderName'] as String;
+                      final message = doc['message'] as String;
+                      return ListTile(
+                        onTap: () {
+                          debugPrint(userId);
+                        },
+                        title: name.text.make(),
+                        subtitle: message.text.make(),
+                        trailing: const Icon(Icons.chevron_right, size: 16),
+                      );
+                    },
+                  );
+                },
+                loading: () => const AdaptiveProgressIndicator(),
+                error: (e, s) => StreamErrorWidget(
+                  error: e.toString(),
+                  onTryAgain: () {
+                    context.refresh(notificatiosnProvider);
+                  },
+                ),
+              )
+              .expand(),
+          // const InfoWidget(
+          //   text: 'Work in progress',
+          //   subText: 'Notifications will be implemented in later module',
+          // ).expand(),
         ],
       ),
     );
