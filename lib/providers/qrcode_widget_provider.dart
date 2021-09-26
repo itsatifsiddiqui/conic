@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_widgetkit/flutter_widgetkit.dart';
@@ -18,7 +19,9 @@ final qrcodeWidgetProvider = ChangeNotifierProvider<QRCodeWidgetProvider>((ref) 
 
 class QRCodeWidgetProvider extends BaseProvider {
   QRCodeWidgetProvider(this._read) {
-    setQrCodeWidget();
+    if (Platform.isIOS) {
+      setQrCodeWidget();
+    }
   }
 
   final Reader _read;
@@ -26,6 +29,7 @@ class QRCodeWidgetProvider extends BaseProvider {
   static Future<void> init() async {}
 
   Future<void> setQrCodeWidget() async {
+    if (Platform.isAndroid) return;
     final link = _read(appUserProvider)?.link;
     if (link == null) return;
     final data = FlutterWidgetData(link);
@@ -43,6 +47,7 @@ class QRCodeWidgetProvider extends BaseProvider {
   }
 
   Future<void> removeQrCodeWidget() async {
+    if (Platform.isAndroid) return;
     await WidgetKit.removeItem(kQrCodeId, kGroupId);
     _log('Link is removed from widget');
     WidgetKit.reloadAllTimelines();

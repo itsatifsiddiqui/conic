@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../providers/auth_provider.dart';
 import '../../providers/dynamic_link_provider.dart';
+import '../../providers/firebase_messaging_provider.dart';
 import '../../providers/firestore_provider.dart';
 import '../../providers/qrcode_widget_provider.dart';
 import '../../res/res.dart';
@@ -30,8 +31,8 @@ class _TabsViewState extends State<TabsView> {
   @override
   void initState() {
     WidgetsBinding.instance?.addPostFrameCallback(handleDynamicLink);
+    context.read(firebaseMessagingProvider).initFCM();
     context.read(qrcodeWidgetProvider).setQrCodeWidget();
-
     super.initState();
   }
 
