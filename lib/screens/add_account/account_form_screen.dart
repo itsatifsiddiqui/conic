@@ -160,11 +160,19 @@ class AccountFormScreen extends HookWidget {
                       .editAccount(newlinkedAccount, linkedAccount!);
                   // ignore: unawaited_futures
                   context.read(firestoreProvider).updateUser();
+                  //Send Notification
+                  context.read(firestoreProvider).sendAccountChangeNotification(
+                        newlinkedAccount,
+                        newAccount: false,
+                      );
                   Get.back<void>();
                 } else {
                   context.read(appUserProvider.notifier).addAccount(newlinkedAccount);
                   // ignore: unawaited_futures
                   context.read(firestoreProvider).updateUser();
+                  //Send Notification
+                  context.read(firestoreProvider).sendAccountChangeNotification(newlinkedAccount);
+
                   Get.back<void>();
                 }
               },

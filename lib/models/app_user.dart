@@ -21,6 +21,7 @@ class AppUser {
     this.followRequestsRecieved,
     this.followedBy,
     this.isFollowing,
+    this.tokens,
   });
 
   factory AppUser.fromMap(Map<String, dynamic> map) {
@@ -56,6 +57,9 @@ class AppUser {
       isFollowing: map.containsKey('isFollowing')
           ? List<String>.from((map['isFollowing'] as List).cast<String>())
           : <String>[],
+      tokens: map.containsKey('tokens')
+          ? List<String>.from((map['tokens'] as List).cast<String>())
+          : <String>[],
     );
   }
 
@@ -74,6 +78,7 @@ class AppUser {
   final List<String>? followRequestsRecieved;
   final List<String>? followedBy;
   final List<String>? isFollowing;
+  final List<String>? tokens;
 
   AppUser copyWith({
     String? name,
@@ -91,6 +96,7 @@ class AppUser {
     List<String>? followRequestsRecieved,
     List<String>? followedBy,
     List<String>? isFollowing,
+    List<String>? tokens,
   }) {
     return AppUser(
       name: name ?? this.name,
@@ -108,6 +114,7 @@ class AppUser {
       followRequestsRecieved: followRequestsRecieved ?? this.followRequestsRecieved,
       followedBy: followedBy ?? this.followedBy,
       isFollowing: isFollowing ?? this.isFollowing,
+      tokens: tokens ?? this.tokens,
     );
   }
 
@@ -128,12 +135,13 @@ class AppUser {
       'followRequestsRecieved': followRequestsRecieved ?? [],
       'followedBy': followedBy ?? [],
       'isFollowing': isFollowing ?? [],
+      'tokens': tokens ?? [],
     };
   }
 
   @override
   String toString() {
-    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId, link: $link, androidLink: $androidLink, gridMode: $gridMode, focusedMode: $focusedMode, businessMode: $businessMode, linkedAccounts: $linkedAccounts, linkedMedias: $linkedMedias followRequestsRecieved: $followRequestsRecieved, followedBy: $followedBy, isFollowing: $isFollowing)';
+    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId, link: $link, androidLink: $androidLink, gridMode: $gridMode, focusedMode: $focusedMode, businessMode: $businessMode, linkedAccounts: $linkedAccounts, linkedMedias: $linkedMedias followRequestsRecieved: $followRequestsRecieved, followedBy: $followedBy, isFollowing: $isFollowing, tokens: $tokens)';
   }
 
   @override
@@ -155,6 +163,7 @@ class AppUser {
         listEquals(other.linkedMedias, linkedMedias) &&
         listEquals(other.followRequestsRecieved, followRequestsRecieved) &&
         listEquals(other.followedBy, followedBy) &&
+        listEquals(other.tokens, tokens) &&
         listEquals(other.isFollowing, isFollowing);
   }
 
@@ -174,6 +183,7 @@ class AppUser {
         linkedMedias.hashCode ^
         followRequestsRecieved.hashCode ^
         followedBy.hashCode ^
+        tokens.hashCode ^
         isFollowing.hashCode;
   }
 }

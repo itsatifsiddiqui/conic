@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:conic/models/linked_account.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -236,5 +237,36 @@ class FirestoreProvider {
         ),
       },
     );
+  }
+
+  void sendAccountChangeNotification(LinkedAccount? linkedAccount, {bool newAccount = true}) {
+    if (!(linkedAccount?.notify ?? false)) return;
+
+    final userId = _read(appUserProvider)!.userId!;
+    final userName = _read(appUserProvider)!.name;
+    final followedBy = _read(appUserProvider)!.followedBy;
+    final docRef =
+        _firestore.collection('users').doc(userId).collection('sent_notifications').doc();
+    docRef.set(<String, dynamic>{
+      'userId': userId,
+      'userName': userName ?? 'user',
+      'accountName': linkedAccount?.name ?? 'Profile',
+      'newAccount': newAccount,
+      'followedBy': followedBy,
+    });
+  }
+
+  Future<void> addDeviceToken(String token) async {
+    final userId = _read(appUserProvider)!.userId!;
+    await _firestore.collection('users').doc(userId).update(<String, dynamic>{
+      'tokens': FieldValue.arrayUnion(<String>[token])
+    });
+  }
+
+  Future<void> removeDeviceToken(String token) async {
+    final userId = _read(appUserProvider)!.userId!;
+    await _firestore.collection('users').doc(userId).update(<String, dynamic>{
+      'tokens': FieldValue.arrayRemove(<String>[token])
+    });
   }
 }

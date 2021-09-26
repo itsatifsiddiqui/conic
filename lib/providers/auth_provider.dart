@@ -21,6 +21,7 @@ import '../services/dynamic_link_generator.dart';
 import 'app_user_provider.dart';
 import 'base_provider.dart';
 import 'dynamic_link_provider.dart';
+import 'firebase_messaging_provider.dart';
 import 'firestore_provider.dart';
 import 'qrcode_widget_provider.dart';
 
@@ -112,7 +113,8 @@ class AuthProvider extends BaseProvider {
       final userCredential =
           await _auth.signInWithEmailAndPassword(email: email, password: password);
       _read(appUserProvider.notifier).overrideFromFirebaseUser(userCredential.user!);
-
+      final deviceToken = (await _read(firebaseMessagingProvider).getToken()) ?? '';
+      await _read(firestoreProvider).addDeviceToken(deviceToken);
       await navigateBasedOnCondition();
     } catch (e) {
       setIdle();
@@ -135,6 +137,8 @@ class AuthProvider extends BaseProvider {
       );
       final userCredential = await _auth.signInWithCredential(credential);
       final currentUser = await _read(firestoreProvider).getCurrentUser(userCredential.user!.uid);
+      final deviceToken = (await _read(firebaseMessagingProvider).getToken()) ?? '';
+      await _read(firestoreProvider).addDeviceToken(deviceToken);
       if (currentUser == null) {
         _read(appUserProvider.notifier).overrideFromFirebaseUser(userCredential.user!);
         await _read(firestoreProvider).createUser();
@@ -160,8 +164,11 @@ class AuthProvider extends BaseProvider {
             }
             final credential = FacebookAuthProvider.credential(result.accessToken!.token);
             final userCredential = await _auth.signInWithCredential(credential);
+
             final currentUser =
                 await _read(firestoreProvider).getCurrentUser(userCredential.user!.uid);
+            final deviceToken = (await _read(firebaseMessagingProvider).getToken()) ?? '';
+            await _read(firestoreProvider).addDeviceToken(deviceToken);
             if (currentUser == null) {
               _read(appUserProvider.notifier).overrideFromFirebaseUser(userCredential.user!);
               await _read(firestoreProvider).createUser();
@@ -201,6 +208,8 @@ class AuthProvider extends BaseProvider {
       await userCredential.user?.updateProfile(displayName: name);
 
       final currentUser = await _read(firestoreProvider).getCurrentUser(userCredential.user!.uid);
+      final deviceToken = (await _read(firebaseMessagingProvider).getToken()) ?? '';
+      await _read(firestoreProvider).addDeviceToken(deviceToken);
       if (currentUser == null) {
         _read(appUserProvider.notifier).overrideFromAppleUser(
           userCredential.user!.uid,
@@ -242,6 +251,8 @@ class AuthProvider extends BaseProvider {
 
       _read(appUserProvider.notifier).overrideUser(user);
       await _read(firestoreProvider).createUser();
+      final deviceToken = (await _read(firebaseMessagingProvider).getToken()) ?? '';
+      await _read(firestoreProvider).addDeviceToken(deviceToken);
       setIdle();
       await navigateBasedOnCondition();
     } catch (e) {
@@ -298,6 +309,8 @@ class AuthProvider extends BaseProvider {
   Future<void> signOut() async {
     // ignore: unawaited_futures
     Get.offAll<void>(() => const LoginScreen());
+    final deviceToken = (await _read(firebaseMessagingProvider).getToken()) ?? '';
+    await _read(firestoreProvider).removeDeviceToken(deviceToken);
     await _auth.signOut();
     await GoogleSignIn().signOut();
     await FacebookLogin().logOut();
