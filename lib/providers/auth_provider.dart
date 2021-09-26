@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:conic/providers/qrcode_widget_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
@@ -300,6 +301,7 @@ class AuthProvider extends BaseProvider {
     await _auth.signOut();
     await GoogleSignIn().signOut();
     await FacebookLogin().logOut();
+    await _read(qrcodeWidgetProvider).removeQrCodeWidget();
     await Future<void>.delayed(500.milliseconds);
     debugPrint('OVERRIDING USER TO NULL');
     _read(tabsIndexProvider).state = 0;
