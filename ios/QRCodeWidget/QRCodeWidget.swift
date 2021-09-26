@@ -65,19 +65,30 @@ struct Provider: TimelineProvider {
 
 
 struct QRCodeWidgetEntryView : View {
+   
     var entry: Provider.Entry
     
     private var FlutterDataView: some View {
+        ZStack{
+            Color("WidgetBackground")
+            QRCodeView(code: entry.flutterData!.text).padding(12)
+        }
         
-        QRCodeView(code: entry.flutterData!.text)
     }
     
     private var NoDataView: some View {
-      Text("Go to the Conic app to setup your profile!")
+        ZStack{
+            Color("WidgetBackground")
+            Text("Open Conic app to setup your profile")
+                .multilineTextAlignment(.center)
+                .font(.subheadline).padding(4)
+        }
+        
     }
     
 
     var body: some View {
+        
       if(entry.flutterData == nil) {
         NoDataView
       } else {
@@ -101,7 +112,13 @@ struct QRCodeWidget: Widget {
 
 struct QRCodeWidget_Previews: PreviewProvider {
     static var previews: some View {
-        QRCodeWidgetEntryView(entry: SimpleEntry(date: Date(), flutterData: nil ))
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
+        Group {
+            QRCodeWidgetEntryView(entry: SimpleEntry(date: Date(), flutterData: nil ))
+                .previewContext(WidgetPreviewContext(family: .systemSmall))
+            QRCodeWidgetEntryView(entry: SimpleEntry(date: Date(), flutterData: nil ))
+                .preferredColorScheme(.dark)
+                .previewContext(WidgetPreviewContext(family: .systemSmall))
+           
+        }
     }
 }

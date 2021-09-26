@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:conic/providers/qrcode_widget_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
@@ -23,6 +22,7 @@ import 'app_user_provider.dart';
 import 'base_provider.dart';
 import 'dynamic_link_provider.dart';
 import 'firestore_provider.dart';
+import 'qrcode_widget_provider.dart';
 
 final authProvider = ChangeNotifierProvider<AuthProvider>((ref) {
   return AuthProvider(ref.read, ref);

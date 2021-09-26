@@ -1,9 +1,5 @@
 import 'dart:io';
 
-import 'package:conic/providers/firestore_provider.dart';
-import 'package:conic/res/platform_dialogue.dart';
-import 'package:conic/res/res.dart';
-import 'package:conic/screens/tabs_view/dashboard/my_connections/firend_detail.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +7,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../providers/firestore_provider.dart';
+import '../../../../res/platform_dialogue.dart';
+import '../../../../res/res.dart';
+import '../my_connections/firend_detail.dart';
 
 class QrCodeScannerScreen extends StatefulHookWidget {
   const QrCodeScannerScreen({Key? key}) : super(key: key);

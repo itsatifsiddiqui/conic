@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:conic/providers/app_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widgetkit/flutter_widgetkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'app_user_provider.dart';
 import 'base_provider.dart';
 
 const kGroupId = 'group.com.conicqrcode';
