@@ -44,16 +44,16 @@ class NotificationsTab extends HookWidget {
                     itemCount: docs.length,
                     itemBuilder: (context, index) {
                       final doc = docs[index].data()! as Map<String, dynamic>;
-                      final userId = doc['senderId'] as String;
+                      // final userId = doc['senderId'] as String;
                       final name = doc['senderName'] as String;
                       final message = doc['message'] as String;
                       return ListTile(
-                        onTap: () {
-                          debugPrint(userId);
-                        },
+                        // onTap: () {
+                        //   // debugPrint(userId);
+                        // },
                         title: name.text.make(),
                         subtitle: message.text.make(),
-                        trailing: const Icon(Icons.chevron_right, size: 16),
+                        // trailing: const Icon(Icons.chevron_right, size: 16),
                       );
                     },
                   );

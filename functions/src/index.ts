@@ -94,3 +94,93 @@ export const sendAccountInformationChangeNotification = functions.firestore
         // return fcm.sendToDevice(tokens, payload);
     });
 
+export const sendFollowRequestNotification = functions.firestore
+    .document('users/{userId}/follow_requests_sent/{notification}')
+    .onCreate(async (snapshot, context) => {
+        console.log("sendFollowRequestNotification() Called");
+
+        const currentUserId = snapshot.get('currentUserId');
+        const otherUserId = snapshot.get('otherUserId');
+        const currentUserData = await db.collection('users').doc(currentUserId).get();
+        const otherUserData = await db.collection('users').doc(otherUserId).get();
+
+        const tokens: string[] = currentUserData.get('tokens');
+
+        const currentUserName = currentUserData.get('name') ?? currentUserData.get('username');
+
+
+
+        const notification: admin.messaging.NotificationMessagePayload = {
+            title: 'You recieved a follow request',
+            body: `${currentUserName} has sent you a follow request`,
+        }
+
+        const data: admin.messaging.DataMessagePayload = {
+            'userId': otherUserData.get('userId'),
+            'username': otherUserData.get('username'),
+        }
+
+
+        const payload: admin.messaging.MessagingPayload = {
+            notification: notification,
+            data: data
+        };
+
+        db.collection('users').doc(currentUserId).collection('notifications').doc().set({
+            'senderId': currentUserId,
+            'senderName': currentUserName,
+            'message': `${currentUserName} has sent you a follow request`,
+            'type': 'followrequest',
+            'timestamp': FieldValue.serverTimestamp(),
+        });
+
+        return fcm.sendToDevice(tokens, payload);
+
+
+    });
+export const followRequestConfirmedNotification = functions.firestore
+    .document('users/{userId}/follow_requests_confirmed/{notification}')
+    .onCreate(async (snapshot, context) => {
+        console.log("followRequestConfirmedNotification() Called");
+
+        //User accepting follow request
+        const currentUserId = snapshot.get('otherUserId');
+        //Send notification to this user
+        const otherUserId = snapshot.get('currentUserId');
+        const currentUserData = await db.collection('users').doc(currentUserId).get();
+        const otherUserData = await db.collection('users').doc(otherUserId).get();
+
+        const tokens: string[] = otherUserData.get('tokens');
+
+        const otherUserName = currentUserData.get('name') ?? currentUserData.get('username');
+
+
+
+        const notification: admin.messaging.NotificationMessagePayload = {
+            title: 'Follow request accepted',
+            body: `You're now follwoing ${otherUserName}`,
+        }
+
+        const data: admin.messaging.DataMessagePayload = {
+            'userId': currentUserData.get('userId'),
+            'username': currentUserData.get('username'),
+        }
+
+
+        const payload: admin.messaging.MessagingPayload = {
+            notification: notification,
+            data: data
+        };
+
+        db.collection('users').doc(otherUserId).collection('notifications').doc().set({
+            'senderId': otherUserId,
+            'senderName': otherUserName,
+            'message': `${otherUserName} has accpted your follow request`,
+            'type': 'followrequestconfirmed',
+            'timestamp': FieldValue.serverTimestamp(),
+        });
+
+        return fcm.sendToDevice(tokens, payload);
+
+
+    });

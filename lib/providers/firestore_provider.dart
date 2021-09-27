@@ -145,6 +145,7 @@ class FirestoreProvider {
   }
 
   ///Append Currently Signed in user's id to searched users followRequestsRecieved list
+  ///Also send the notification
   void sendFollowRequest(String userId) {
     final currentUserId = _read(appUserProvider)!.userId!;
     final batch = _firestore.batch();
@@ -153,6 +154,13 @@ class FirestoreProvider {
     final sendRequestData = {
       'followRequestsRecieved': FieldValue.arrayUnion(<String>[currentUserId]),
     };
+    final followRequestsCollection =
+        _firestore.collection('users').doc(userId).collection('follow_requests_sent').doc();
+    final followRequestData = <String, dynamic>{
+      'currentUserId': currentUserId,
+      'otherUserId': userId,
+    };
+    batch.set(followRequestsCollection, followRequestData);
     batch.update(otherUserDoc, sendRequestData);
     batch.commit();
   }
@@ -182,6 +190,14 @@ class FirestoreProvider {
     final requestedUserData = {
       'followedBy': FieldValue.arrayUnion(<String>[myId]),
     };
+    final followRequestsConfirmed =
+        _firestore.collection('users').doc(myId).collection('follow_requests_confirmed').doc();
+    final followRequestsConfirmedData = <String, dynamic>{
+      'currentUserId': requestedUserId,
+      'otherUserId': myId,
+    };
+
+    batch.set(followRequestsConfirmed, followRequestsConfirmedData);
     batch.update(myDoc, removeData);
     batch.update(requestedUserDoc, requestedUserData);
     batch.commit();

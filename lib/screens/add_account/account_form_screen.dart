@@ -35,7 +35,7 @@ class AccountFormScreen extends HookWidget {
     final titleController = useTextEditingController(text: linkedAccount?.title);
     final titleNode = useFocusNode();
     final descriptionController = useTextEditingController(text: linkedAccount?.description);
-    final descriptionNode = useFocusNode();
+    // final descriptionNode = useFocusNode();
     final formKey = GlobalObjectKey<FormState>(context);
     final isEditMode = linkedAccount != null;
     final isLoading = useProvider(firebaseStorageProvider.select((value) => value.isLoading));
@@ -96,22 +96,21 @@ class AccountFormScreen extends HookWidget {
                   12.heightBox,
                   FilledTextField(
                     focusNode: titleNode,
-                    nextNode: descriptionNode,
+                    textInputAction: TextInputAction.done,
                     controller: titleController,
                     title: 'Title',
                     hintText: '${account.title} (Optional)',
-                    textInputAction: TextInputAction.next,
                   ),
-                  12.heightBox,
-                  FilledTextField(
-                    minLines: 2,
-                    maxLines: 4,
-                    focusNode: descriptionNode,
-                    controller: descriptionController,
-                    title: 'Description',
-                    hintText: '${account.description} (Optional)',
-                    textInputAction: TextInputAction.done,
-                  ),
+                  // 12.heightBox,
+                  // FilledTextField(
+                  //   minLines: 2,
+                  //   maxLines: 4,
+                  //   focusNode: descriptionNode,
+                  //   controller: descriptionController,
+                  //   title: 'Description',
+                  //   hintText: '${account.description} (Optional)',
+                  //   textInputAction: TextInputAction.done,
+                  // ),
                   12.heightBox,
                   _FocusedTile(account: linkedAccount),
                   8.heightBox,
