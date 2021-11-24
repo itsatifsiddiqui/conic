@@ -273,14 +273,16 @@ class FirestoreProvider {
   }
 
   Future<void> addDeviceToken(String token) async {
-    final userId = _read(appUserProvider)!.userId!;
+    final userId = _read(appUserProvider)?.userId;
+    if (userId == null) return;
     await _firestore.collection('users').doc(userId).update(<String, dynamic>{
       'tokens': FieldValue.arrayUnion(<String>[token])
     });
   }
 
   Future<void> removeDeviceToken(String token) async {
-    final userId = _read(appUserProvider)!.userId!;
+    final userId = _read(appUserProvider)?.userId;
+    if (userId == null) return;
     await _firestore.collection('users').doc(userId).update(<String, dynamic>{
       'tokens': FieldValue.arrayRemove(<String>[token])
     });

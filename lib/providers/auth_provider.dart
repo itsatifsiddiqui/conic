@@ -136,13 +136,14 @@ class AuthProvider extends BaseProvider {
         idToken: googleAuth.idToken,
       );
       final userCredential = await _auth.signInWithCredential(credential);
-      final currentUser = await _read(firestoreProvider).getCurrentUser(userCredential.user!.uid);
-      final deviceToken = (await _read(firebaseMessagingProvider).getToken()) ?? '';
-      await _read(firestoreProvider).addDeviceToken(deviceToken);
+      var currentUser = await _read(firestoreProvider).getCurrentUser(userCredential.user!.uid);
+
       if (currentUser == null) {
         _read(appUserProvider.notifier).overrideFromFirebaseUser(userCredential.user!);
-        await _read(firestoreProvider).createUser();
+        currentUser = await _read(firestoreProvider).createUser();
       }
+      final deviceToken = (await _read(firebaseMessagingProvider).getToken()) ?? '';
+      await _read(firestoreProvider).addDeviceToken(deviceToken);
       setIdle();
       await navigateBasedOnCondition();
     } catch (e) {
@@ -165,14 +166,15 @@ class AuthProvider extends BaseProvider {
             final credential = FacebookAuthProvider.credential(result.accessToken!.token);
             final userCredential = await _auth.signInWithCredential(credential);
 
-            final currentUser =
+            var currentUser =
                 await _read(firestoreProvider).getCurrentUser(userCredential.user!.uid);
-            final deviceToken = (await _read(firebaseMessagingProvider).getToken()) ?? '';
-            await _read(firestoreProvider).addDeviceToken(deviceToken);
+
             if (currentUser == null) {
               _read(appUserProvider.notifier).overrideFromFirebaseUser(userCredential.user!);
-              await _read(firestoreProvider).createUser();
+              currentUser = await _read(firestoreProvider).createUser();
             }
+            final deviceToken = (await _read(firebaseMessagingProvider).getToken()) ?? '';
+            await _read(firestoreProvider).addDeviceToken(deviceToken);
             setIdle();
             await navigateBasedOnCondition();
             break;
@@ -207,17 +209,18 @@ class AuthProvider extends BaseProvider {
       final userCredential = await _auth.signInWithCredential(credential);
       await userCredential.user?.updateProfile(displayName: name);
 
-      final currentUser = await _read(firestoreProvider).getCurrentUser(userCredential.user!.uid);
-      final deviceToken = (await _read(firebaseMessagingProvider).getToken()) ?? '';
-      await _read(firestoreProvider).addDeviceToken(deviceToken);
+      var currentUser = await _read(firestoreProvider).getCurrentUser(userCredential.user!.uid);
+
       if (currentUser == null) {
         _read(appUserProvider.notifier).overrideFromAppleUser(
           userCredential.user!.uid,
           userCredential.user!.email ?? appleResult.email ?? '',
           name,
         );
-        await _read(firestoreProvider).createUser();
+        currentUser = await _read(firestoreProvider).createUser();
       }
+      final deviceToken = (await _read(firebaseMessagingProvider).getToken()) ?? '';
+      await _read(firestoreProvider).addDeviceToken(deviceToken);
       setIdle();
       await navigateBasedOnCondition();
 
