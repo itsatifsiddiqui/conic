@@ -292,3 +292,6 @@ void globalAccountsUploader() {
       .doc('all_accounts')
       .set(<String, dynamic>{'all_accounts': allAccountsMap});
 }
+
+
+

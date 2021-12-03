@@ -65,3 +65,5 @@ class LinkedMedia {
   bool get isVideo => type == 'video';
   bool get isPdf => type == 'pdf';
 }
+
+

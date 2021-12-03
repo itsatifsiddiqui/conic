@@ -9,6 +9,7 @@ class AppColors {
   static const Color orange = Color(0xffFF9F00);
   static const Color lightGrey = Color(0xffeeeeee);
   static const Color link = Color(0xff3D60BF);
+  static const Color grey = Color(0xff707070);
 
   static LinearGradient blueGradient = const LinearGradient(
     begin: Alignment.topLeft,

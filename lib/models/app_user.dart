@@ -187,3 +187,5 @@ class AppUser {
         isFollowing.hashCode;
   }
 }
+
+
