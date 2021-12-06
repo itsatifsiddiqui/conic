@@ -12,6 +12,7 @@ import '../../models/linked_account.dart';
 import '../../providers/app_user_provider.dart';
 import '../../providers/firebase_storage_provider.dart';
 import '../../providers/firestore_provider.dart';
+import '../../res/platform_dialogue.dart';
 import '../../res/res.dart';
 import '../../services/image_picker_service.dart';
 import '../../widgets/custom_widgets.dart';
@@ -126,13 +127,25 @@ class AccountFormScreen extends HookWidget {
               onTap: () async {
                 if (!formKey.currentState!.validate()) return;
                 FocusScope.of(context).unfocus();
+                final enteredLink = fieldController.text.trim();
+                final fullLink = account.getLink(enteredLink);
+                final alreadyAddedAccounts = (context.read(appUserProvider)!.linkedAccounts ?? [])
+                    .map((e) => e.fullLink)
+                    .toList();
+
+                if (!isEditMode && alreadyAddedAccounts.contains(fullLink)) {
+                  await showPlatformDialogue(
+                    title: "You've already added this account",
+                    content: const Text('You can edit the account if you want any changes.'),
+                  );
+                  return;
+                }
+
                 final focused = context.read(focusedProvider(linkedAccount)).state;
                 final notify = context.read(notifyFollowersProvider(linkedAccount)).state;
                 final hidden = context.read(isHiddenProvider(linkedAccount)).state;
                 final title = titleController.text.trim();
                 final desc = descriptionController.text.trim();
-                final enteredLink = fieldController.text.trim();
-                final fullLink = account.getLink(enteredLink);
 
                 final file = context.read(imageFileProvider).state;
                 var image = account.image;
@@ -171,6 +184,8 @@ class AccountFormScreen extends HookWidget {
                   context.read(firestoreProvider).updateUser();
                   //Send Notification
                   context.read(firestoreProvider).sendAccountChangeNotification(newlinkedAccount);
+
+                  VxToast.show(context, msg: 'Account Added');
 
                   Get.back<void>();
                 }

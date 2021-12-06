@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:conic/screens/tabs_view/dashboard/my_profile/my_profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -63,28 +64,34 @@ class MyAccountsTab extends HookWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _Greetings(),
-          12.heightBox,
-          CupertinoSearchTextField(
-            borderRadius: BorderRadius.circular(kBorderRadius),
-            placeholder: 'Search account',
-            prefixInsets: const EdgeInsets.all(8),
-            style: TextStyle(color: context.adaptive),
-            onChanged: (value) {
-              context.read(queryProvider).state = value;
-            },
-          ),
-          20.heightBox,
-          const _MyAccountsTextRow(),
-          24.heightBox,
-          _MyAccountsBuilder(),
-          24.heightBox,
-          const _MyMediasRow(),
-          8.heightBox,
-          const _MyMediasBuilder(),
-          32.heightBox,
+          const _HideModeBuilder(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const _Greetings(),
+              12.heightBox,
+              CupertinoSearchTextField(
+                borderRadius: BorderRadius.circular(kBorderRadius),
+                placeholder: 'Search account',
+                prefixInsets: const EdgeInsets.all(8),
+                style: TextStyle(color: context.adaptive),
+                onChanged: (value) {
+                  context.read(queryProvider).state = value;
+                },
+              ),
+              20.heightBox,
+              const _MyAccountsTextRow(),
+              24.heightBox,
+              _MyAccountsBuilder(),
+              24.heightBox,
+              const _MyMediasRow(),
+              8.heightBox,
+              const _MyMediasBuilder(),
+              32.heightBox,
+            ],
+          ).px16().scrollVertical().expand(),
         ],
-      ).px16().scrollVertical(),
+      ),
     );
   }
 }
@@ -478,5 +485,34 @@ class VideoPreviewBuilder extends HookWidget {
       loading: () => const CupertinoActivityIndicator(),
       error: (e, s) => e.toString().text.red400.makeCentered(),
     );
+  }
+}
+
+class _HideModeBuilder extends HookWidget {
+  const _HideModeBuilder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final hidden = useProvider(appUserProvider)?.hiddenMode ?? false;
+    if (hidden) {
+      return GestureDetector(
+        onTap: () {
+          Get.to<void>(() => const MyProfileScreen());
+        },
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          color: context.primaryColor,
+          child: Row(
+            children: [
+              'Hide Mode is enabled'.text.color(Colors.white).make().expand(),
+              const Icon(Icons.info_outline, color: Colors.white)
+            ],
+          ),
+        ),
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 }

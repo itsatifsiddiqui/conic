@@ -26,6 +26,7 @@ class LinkedAccountsBuilder extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isListMode = useProvider(isListModeProvider).state;
+    final hiddenMode = useProvider(appUserProvider)?.hiddenMode ?? false;
     // final accounts = useProvider(filteredAccountsStateProvider).state;
 
     if (isListMode) {
@@ -47,16 +48,13 @@ class LinkedAccountsBuilder extends HookWidget {
                 child: Row(
                   children: [
                     4.widthBox,
-                    Hero(
-                      tag: e.image,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: CachedNetworkImage(
-                          imageUrl: e.image,
-                          width: 36,
-                          height: 36,
-                          placeholder: kImagePlaceHodler,
-                        ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: CachedNetworkImage(
+                        imageUrl: e.image,
+                        width: 36,
+                        height: 36,
+                        placeholder: kImagePlaceHodler,
                       ),
                     ),
                     12.widthBox,
@@ -84,7 +82,10 @@ class LinkedAccountsBuilder extends HookWidget {
               );
             },
             actions: buildContextActions(context, e),
-            child: child,
+            child: Opacity(
+              opacity: hiddenMode && e.hidden ? 0.54 : 1,
+              child: child,
+            ),
           );
         }).toList(),
       );
@@ -106,7 +107,10 @@ class LinkedAccountsBuilder extends HookWidget {
           actions: buildContextActions(context, e),
           child: GestureDetector(
             onTap: () => onAccountTap(e),
-            child: AccountImage(url: e.image),
+            child: Opacity(
+              opacity: hiddenMode && e.hidden ? 0.54 : 1,
+              child: AccountImage(url: e.image),
+            ),
           ),
         );
       }).toList(),
