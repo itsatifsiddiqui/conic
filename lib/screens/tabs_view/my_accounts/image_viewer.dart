@@ -36,7 +36,6 @@ class ImageViewer extends HookWidget {
               imageUrl: url,
               height: double.infinity,
               placeholder: kImagePlaceHodler,
-
               // fit: BoxFit.cover,
             ),
           ),
