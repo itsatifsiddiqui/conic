@@ -92,8 +92,17 @@ class AppUserProvider extends StateNotifier<AppUser?> {
     state = state!.copyWith(name: value);
   }
 
+  void updateProfileImage(String? value) {
+    state = state!.copyWith(image: value);
+  }
+
   // ignore: avoid_positional_boolean_parameters
   void updateFocusedMode(bool value) {
     state = state!.copyWith(focusedMode: value);
+  }
+
+  // ignore: avoid_positional_boolean_parameters
+  void updateHiddentMode(bool value) {
+    state = state!.copyWith(hiddenMode: value);
   }
 }

@@ -14,7 +14,7 @@ class AppUser {
     this.link,
     this.androidLink,
     this.gridMode,
-    this.businessMode,
+    this.hiddenMode,
     this.focusedMode,
     this.linkedAccounts,
     this.linkedMedias,
@@ -40,7 +40,7 @@ class AppUser {
       link: map['link'] as String?,
       androidLink: map['androidLink'] as String?,
       gridMode: map['gridMode'] as bool?,
-      businessMode: (map['businessMode'] ?? false) as bool?,
+      hiddenMode: (map['hiddenMode'] ?? false) as bool?,
       focusedMode: (map['focusedMode'] ?? false) as bool?,
       linkedAccounts: List<LinkedAccount>.from(
         linkedAccounts.map<LinkedAccount>((x) => LinkedAccount.fromMap(x)),
@@ -71,7 +71,7 @@ class AppUser {
   final String? link;
   final String? androidLink;
   final bool? gridMode;
-  final bool? businessMode;
+  final bool? hiddenMode;
   final bool? focusedMode;
   final List<LinkedAccount>? linkedAccounts;
   final List<LinkedMedia>? linkedMedias;
@@ -89,7 +89,7 @@ class AppUser {
     String? link,
     String? androidLink,
     bool? gridMode,
-    bool? businessMode,
+    bool? hiddenMode,
     bool? focusedMode,
     List<LinkedAccount>? linkedAccounts,
     List<LinkedMedia>? linkedMedias,
@@ -108,7 +108,7 @@ class AppUser {
       androidLink: androidLink ?? this.androidLink,
       gridMode: gridMode ?? this.gridMode,
       focusedMode: focusedMode ?? this.focusedMode,
-      businessMode: businessMode ?? this.businessMode,
+      hiddenMode: hiddenMode ?? this.hiddenMode,
       linkedAccounts: linkedAccounts ?? this.linkedAccounts,
       linkedMedias: linkedMedias ?? this.linkedMedias,
       followRequestsRecieved: followRequestsRecieved ?? this.followRequestsRecieved,
@@ -129,7 +129,7 @@ class AppUser {
       'androidLink': androidLink,
       'gridMode': gridMode,
       'focusedMode': focusedMode,
-      'businessMode': businessMode,
+      'hiddenMode': hiddenMode ?? false,
       'linkedAccounts': (linkedAccounts ?? []).map((x) => x.toMap()).toList(),
       'linkedMedias': (linkedMedias ?? []).map((x) => x.toMap()).toList(),
       'followRequestsRecieved': followRequestsRecieved ?? [],
@@ -141,7 +141,7 @@ class AppUser {
 
   @override
   String toString() {
-    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId, link: $link, androidLink: $androidLink, gridMode: $gridMode, focusedMode: $focusedMode, businessMode: $businessMode, linkedAccounts: $linkedAccounts, linkedMedias: $linkedMedias followRequestsRecieved: $followRequestsRecieved, followedBy: $followedBy, isFollowing: $isFollowing, tokens: $tokens)';
+    return 'AppUser(name: $name, username: $username, email: $email, image: $image, userId: $userId, link: $link, androidLink: $androidLink, gridMode: $gridMode, focusedMode: $focusedMode, businessMode: $hiddenMode, linkedAccounts: $linkedAccounts, linkedMedias: $linkedMedias followRequestsRecieved: $followRequestsRecieved, followedBy: $followedBy, isFollowing: $isFollowing, tokens: $tokens)';
   }
 
   @override
@@ -157,7 +157,7 @@ class AppUser {
         other.link == link &&
         other.androidLink == androidLink &&
         other.gridMode == gridMode &&
-        other.businessMode == businessMode &&
+        other.hiddenMode == hiddenMode &&
         other.focusedMode == focusedMode &&
         listEquals(other.linkedAccounts, linkedAccounts) &&
         listEquals(other.linkedMedias, linkedMedias) &&
@@ -177,7 +177,7 @@ class AppUser {
         link.hashCode ^
         androidLink.hashCode ^
         gridMode.hashCode ^
-        businessMode.hashCode ^
+        hiddenMode.hashCode ^
         focusedMode.hashCode ^
         linkedAccounts.hashCode ^
         linkedMedias.hashCode ^
@@ -187,5 +187,3 @@ class AppUser {
         isFollowing.hashCode;
   }
 }
-
-
