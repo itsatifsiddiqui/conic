@@ -29,7 +29,6 @@ class _AddSocialAccountScreenState extends State<AddSocialAccountScreen> {
               GestureDetector(
                 onTap: () {
                   context.read(addAccountsList).state = selectedAcconts;
-                  print(context.read(addAccountsList).state);
                   Get.back();
                 },
                 child: Center(

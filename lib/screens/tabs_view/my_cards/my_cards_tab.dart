@@ -20,6 +20,8 @@ class MyCardsTab extends HookWidget {
     return Consumer(
       builder: (context, watch, child) {
         final user = watch(appUserProvider);
+        watch(selectedCard).state;
+        watch(addAccountsList).state;
         watch(queryProvider);
         return Scaffold(
           appBar: AppBar(
@@ -39,7 +41,6 @@ class MyCardsTab extends HookWidget {
           ),
           body: Column(
             children: [
-              // 15.heightBox,
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                 child: CupertinoSearchTextField(
@@ -60,14 +61,14 @@ class MyCardsTab extends HookWidget {
                   builder: (context, snapshot) {
                     return ListView.builder(
                       itemBuilder: (context, index) {
-                        if (snapshot.data!.docs.length == 0) {
-                          return Center(
-                            child: 'No Cards Added'.text.bold.size(20).color(Theme.of(context).dividerColor).make(),
-                          );
-                        }
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return Center(
                             child: CircularProgressIndicator(),
+                          );
+                        }
+                        if (snapshot.data!.docs.length == 0) {
+                          return Center(
+                            child: 'No Cards Added'.text.bold.size(20).color(Theme.of(context).dividerColor).make(),
                           );
                         }
                         final card = CardModel.fromMap(snapshot.data!.docs[index].data() as Map<String, dynamic>);
@@ -209,41 +210,46 @@ class CardDisplayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        context.read(selectedCard).state = card;
-        Get.to<void>(
-          () => ViewCardScreen(),
+    return Consumer(
+      builder: (context, watch, child) {
+        return GestureDetector(
+          onTap: () async {
+            context.read(selectedCard).state = card;
+            context.read(addAccountsList).state = card.accounts ?? [];
+            await Get.to<void>(
+              () => ViewCardScreen(),
+            );
+          },
+          child: Card(
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Padding(
+              padding: const EdgeInsets.all(3),
+              child: Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Image.network(
+                      card.photo!,
+                      height: size.height * 0.13,
+                      width: size.width * 0.22,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  20.widthBox,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      card.name!.text.size(22).semiBold.color(context.adaptive).make(),
+                      '${card.accounts!.length} Linked Accounts'.text.size(14).color(AppColors.grey).make(),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
         );
       },
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Padding(
-          padding: const EdgeInsets.all(3),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                child: Image.network(
-                  card.photo!,
-                  height: size.height * 0.13,
-                  width: size.width * 0.22,
-                  fit: BoxFit.fill,
-                ),
-              ),
-              20.widthBox,
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  card.name!.text.size(22).semiBold.color(context.adaptive).make(),
-                  '${card.accounts!.length} Linked Accounts'.text.size(14).color(AppColors.grey).make(),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

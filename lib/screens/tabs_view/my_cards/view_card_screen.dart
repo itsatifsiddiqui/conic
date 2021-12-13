@@ -1,14 +1,21 @@
 import 'package:conic/providers/app_user_provider.dart';
 import 'package:conic/screens/tabs_view/my_cards/edit_card_screen.dart';
+import 'package:conic/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../res/res.dart';
 import 'my_cards_tab.dart';
 
-class ViewCardScreen extends StatelessWidget {
+class ViewCardScreen extends StatefulWidget {
   const ViewCardScreen({
     Key? key,
   }) : super(key: key);
+
+  @override
+  _ViewCardScreenState createState() => _ViewCardScreenState();
+}
+
+class _ViewCardScreenState extends State<ViewCardScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -17,16 +24,20 @@ class ViewCardScreen extends StatelessWidget {
         final user = watch(appUserProvider);
         final card = watch(selectedCard).state;
         return Scaffold(
+          backgroundColor: Colors.white,
           appBar: AppBar(
             title: card!.name!.text.semiBold.color(context.adaptive).make(),
+            backgroundColor: Colors.white,
             centerTitle: true,
             actions: [
               Center(
                 child: GestureDetector(
                     onTap: () {
-                      Get.to<void>(() => EditCardScreen(
-                            cardModel: card,
-                          ));
+                      Get.to<void>(
+                        () => EditCardScreen(
+                          cardModel: card,
+                        ),
+                      );
                     },
                     child: 'Edit'.text.size(16).semiBold.color(AppColors.primaryColor).make()),
               ),
@@ -101,6 +112,55 @@ class ViewCardScreen extends StatelessWidget {
                         },
                       ).toList(),
                     ),
+                    Container(
+                      width: double.infinity,
+                      margin: EdgeInsets.symmetric(vertical: 40),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: PrimaryButton(
+                              onTap: () {},
+                              color: card.theme == 'red'
+                                  ? Colors.red
+                                  : card.theme == 'green'
+                                      ? Colors.green
+                                      : card.theme == 'purple'
+                                          ? Colors.purple
+                                          : card.theme == 'pink'
+                                              ? Colors.pink
+                                              : card.theme == 'yehllow'
+                                                  ? Colors.yellow
+                                                  : card.theme == 'blue'
+                                                      ? Colors.blue
+                                                      : null,
+                              width: size.width * 0.5,
+                              text: 'Share',
+                            ),
+                          ),
+                          20.widthBox,
+                          Expanded(
+                            child: PrimaryButton(
+                              onTap: () {},
+                              color: card.theme == 'red'
+                                  ? Colors.red
+                                  : card.theme == 'green'
+                                      ? Colors.green
+                                      : card.theme == 'purple'
+                                          ? Colors.purple
+                                          : card.theme == 'pink'
+                                              ? Colors.pink
+                                              : card.theme == 'yehllow'
+                                                  ? Colors.yellow
+                                                  : card.theme == 'blue'
+                                                      ? Colors.blue
+                                                      : null,
+                              width: size.width * 0.5,
+                              text: 'Save',
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
