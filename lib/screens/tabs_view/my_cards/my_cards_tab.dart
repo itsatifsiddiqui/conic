@@ -10,6 +10,7 @@ import '../../../res/res.dart';
 import 'add_card_screen.dart';
 
 final queryProvider = StateProvider<String>((ref) => '');
+final selectedCard = StateProvider<CardModel?>((ref) => null);
 
 class MyCardsTab extends HookWidget {
   const MyCardsTab({Key? key}) : super(key: key);
@@ -76,7 +77,6 @@ class MyCardsTab extends HookWidget {
                               key: Key(card.docId!),
                               confirmDismiss: (direction) async {
                                 print(true);
-
                                 bool delete = false;
                                 await showDialog(
                                   context: context,
@@ -211,10 +211,9 @@ class CardDisplayWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        context.read(selectedCard).state = card;
         Get.to<void>(
-          () => ViewCardScreen(
-            cardModel: card,
-          ),
+          () => ViewCardScreen(),
         );
       },
       child: Card(

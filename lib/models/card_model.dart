@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 class CardModel {
-  final List<String>? accounts;
-  final String? description;
+  List<String>? accounts;
+  String? description;
   final String? docId;
   final String? link;
-  final String? name;
-  final String? photo;
-  final String? theme;
+  String? name;
+  String? photo;
+  String? theme;
   CardModel({
     this.accounts,
     this.description,
@@ -76,25 +76,25 @@ class CardModel {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is CardModel &&
-      listEquals(other.accounts, accounts) &&
-      other.description == description &&
-      other.docId == docId &&
-      other.link == link &&
-      other.name == name &&
-      other.photo == photo &&
-      other.theme == theme;
+        listEquals(other.accounts, accounts) &&
+        other.description == description &&
+        other.docId == docId &&
+        other.link == link &&
+        other.name == name &&
+        other.photo == photo &&
+        other.theme == theme;
   }
 
   @override
   int get hashCode {
     return accounts.hashCode ^
-      description.hashCode ^
-      docId.hashCode ^
-      link.hashCode ^
-      name.hashCode ^
-      photo.hashCode ^
-      theme.hashCode;
+        description.hashCode ^
+        docId.hashCode ^
+        link.hashCode ^
+        name.hashCode ^
+        photo.hashCode ^
+        theme.hashCode;
   }
 }
