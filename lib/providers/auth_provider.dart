@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:conic/screens/auth/email_verification_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
@@ -61,8 +62,16 @@ class AuthProvider extends BaseProvider {
       Get.offAll<void>(() => const OnboardingScreen());
       return;
     }
+
     if (isUserLoggedIn) {
       final appUser = await getCurrentUser();
+      final passwordProvider = user.providerData.map((e) => e.providerId).contains("password");
+      if (!user.emailVerified && passwordProvider) {
+        Get.to(() => EmailVerificationScreen());
+        setIdle();
+
+        return;
+      }
 
       if (appUser.username?.isEmpty ?? true) {
         // ignore: unawaited_futures
@@ -256,7 +265,6 @@ class AuthProvider extends BaseProvider {
       await _read(firestoreProvider).createUser();
       final deviceToken = (await _read(firebaseMessagingProvider).getToken()) ?? '';
       await _read(firestoreProvider).addDeviceToken(deviceToken);
-      setIdle();
       await navigateBasedOnCondition();
     } catch (e) {
       setIdle();
