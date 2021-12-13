@@ -48,10 +48,10 @@ class _LoginForm extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final emailController = useTextEditingController(
-      text: kDebugMode ? 'atif@gmail.com' : '',
+      text: kDebugMode ? 'itsatifsiddiqui@gmail.com' : '',
     );
     final passwordController = useTextEditingController(
-      text: kDebugMode ? '123456' : '',
+      text: kDebugMode ? 'Atif@123' : '',
     );
     final _formKey = GlobalObjectKey<FormState>(context);
     final formState = useState<bool>(true);

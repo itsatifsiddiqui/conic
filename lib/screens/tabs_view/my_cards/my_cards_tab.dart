@@ -184,7 +184,7 @@ class MyCardsTab extends HookWidget {
                           );
                         }
                       },
-                      itemCount: snapshot.data!.docs.length,
+                      itemCount: snapshot.data?.docs.length??0,
                     );
                   },
                 ),

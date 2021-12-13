@@ -79,6 +79,7 @@ class FilledTextField extends StatelessWidget {
                 textInputAction: textInputAction ??
                     (nextNode == null ? TextInputAction.done : TextInputAction.next),
                 decoration: InputDecoration(
+                  errorMaxLines: 2,
                   fillColor: context.adaptive8,
                   filled: true,
                   border: InputBorder.none,

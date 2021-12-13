@@ -38,8 +38,12 @@ class Validators {
       return 'Please fill in the password';
     }
 
-    if (password.length < 6) {
-      return 'Password length must be atleast 6 chrachters.';
+    const p = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$';
+
+    final regExp = RegExp(p);
+
+    if (!regExp.hasMatch(password.trim())) {
+      return 'Please must be at least 8 chracters, one uppercase, one lowercase, one number and one special chracter.';
     }
     return null;
   }
