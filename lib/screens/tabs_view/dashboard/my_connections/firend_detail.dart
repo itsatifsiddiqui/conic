@@ -212,10 +212,7 @@ class AccountsMediaAndCardsBuilder extends HookWidget {
           ],
         ),
         [
-          LinkedAccountsBuilder(
-            accounts: friend.linkedAccounts ?? [],
-            longPressEnabled: false,
-          ),
+          LinkedAccountsBuilder(accounts: friend.linkedAccounts ?? [], friend: friend),
           MyMediasBuilder(
             medias: (friend.linkedMedias ?? [])
                 .sortedByNum((element) => element.timestamp!)

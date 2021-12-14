@@ -37,6 +37,7 @@ class MyCodeScreen extends HookWidget {
             onTap: () async {
               try {
                 final imageBytes = await screenshotController.capture();
+                print(imageBytes);
                 if (imageBytes == null) return;
                 final result = await ImageGallerySaver.saveImage(imageBytes) as Object?;
                 if (result is Map && (result['isSuccess'] as bool)) {
@@ -54,15 +55,18 @@ class MyCodeScreen extends HookWidget {
                 'Tap to save'.text.bold.makeCentered().py12(),
                 12.heightBox,
                 Screenshot<Object>(
-                  key: const ValueKey('PrettyQr'),
+                  key: UniqueKey(),
                   controller: screenshotController,
-                  child: PrettyQr(
-                    elementColor: context.adaptive,
-                    image: image == null ? null : CachedNetworkImageProvider(image),
-                    data: link,
-                    roundEdges: true,
-                    size: context.height * 0.25,
-                  ).centered(),
+                  child: Container(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    child: PrettyQr(
+                      elementColor: context.adaptive,
+                      image: image == null ? null : CachedNetworkImageProvider(image),
+                      data: link,
+                      roundEdges: true,
+                      size: context.height * 0.25,
+                    ).centered(),
+                  ),
                 ),
                 12.heightBox,
               ],

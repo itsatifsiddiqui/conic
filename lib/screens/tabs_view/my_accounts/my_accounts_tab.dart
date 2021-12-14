@@ -180,10 +180,7 @@ class _MyAccountsBuilder extends HookWidget {
     final filteredAccounts =
         isFocusedMode ? accounts.where((element) => element.focused).toList() : accounts;
 
-    return LinkedAccountsBuilder(
-      accounts: filteredAccounts,
-      longPressEnabled: true,
-    );
+    return LinkedAccountsBuilder(accounts: filteredAccounts, friend: null);
   }
 
   List<Widget> buildContextActions(BuildContext context, LinkedAccount linkedAccount) => [
