@@ -16,6 +16,13 @@ import '../../../res/res.dart';
 import 'my_cards_tab.dart';
 
 class ViewCardScreen extends HookWidget {
+  final bool fromFriend;
+
+  const ViewCardScreen({
+    Key? key,
+    this.fromFriend = false,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     late ScreenshotController screenshotController;
@@ -34,17 +41,18 @@ class ViewCardScreen extends HookWidget {
             backgroundColor: Colors.white,
             centerTitle: true,
             actions: [
-              Center(
-                child: GestureDetector(
-                    onTap: () {
-                      Get.to<void>(
-                        () => EditCardScreen(
-                          cardModel: card,
-                        ),
-                      );
-                    },
-                    child: 'Edit'.text.size(16).semiBold.color(AppColors.primaryColor).make()),
-              ),
+              if (!fromFriend)
+                Center(
+                  child: GestureDetector(
+                      onTap: () {
+                        Get.to<void>(
+                          () => EditCardScreen(
+                            cardModel: card,
+                          ),
+                        );
+                      },
+                      child: 'Edit'.text.size(16).semiBold.color(AppColors.primaryColor).make()),
+                ),
               const SizedBox(
                 width: 15,
               ),
@@ -137,7 +145,8 @@ class ViewCardScreen extends HookWidget {
                                     .then((Uint8List? image) async {
                                   if (image != null) {
                                     final directory = await getApplicationDocumentsDirectory();
-                                    final imagePath = await File('${directory.path}/image.png').create();
+                                    final imagePath =
+                                        await File('${directory.path}/image.png').create();
                                     await imagePath.writeAsBytes(image);
 
                                     /// Share Plugin
@@ -189,7 +198,8 @@ class ViewCardScreen extends HookWidget {
                                   final imageBytes = await screenshotController.capture();
                                   print(imageBytes == null);
                                   if (imageBytes == null) return;
-                                  final result = await ImageGallerySaver.saveImage(imageBytes) as Object?;
+                                  final result =
+                                      await ImageGallerySaver.saveImage(imageBytes) as Object?;
                                   if (result is Map && (result['isSuccess'] as bool)) {
                                     await showPlatformDialogue(
                                       title: 'Image Saved',

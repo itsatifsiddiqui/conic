@@ -55,8 +55,11 @@ class MyCardsTab extends HookWidget {
               ),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
-                  stream:
-                      FirebaseFirestore.instance.collection('users').doc(user!.userId).collection('cards').snapshots(),
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(user!.userId)
+                      .collection('cards')
+                      .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
@@ -66,14 +69,22 @@ class MyCardsTab extends HookWidget {
                     if (snapshot.data!.docs.length == 0 || !snapshot.hasData) {
                       print(true);
                       return Center(
-                        child: 'No Cards Added'.text.bold.size(20).color(Theme.of(context).dividerColor).make(),
+                        child: 'No Cards Added'
+                            .text
+                            .bold
+                            .size(20)
+                            .color(Theme.of(context).dividerColor)
+                            .make(),
                       );
                     }
                     return ListView.builder(
                       itemBuilder: (context, index) {
-                        final card = CardModel.fromMap(snapshot.data!.docs[index].data() as Map<String, dynamic>);
+                        final card = CardModel.fromMap(
+                            snapshot.data!.docs[index].data() as Map<String, dynamic>);
                         if (context.read(queryProvider).state.isNotEmpty) {
-                          if (card.name!.toLowerCase().contains(context.read(queryProvider).state)) {
+                          if (card.name!
+                              .toLowerCase()
+                              .contains(context.read(queryProvider).state)) {
                             return Dismissible(
                               key: Key(card.docId!),
                               confirmDismiss: (direction) async {
@@ -88,14 +99,24 @@ class MyCardsTab extends HookWidget {
                                             onPressed: () {
                                               Get.back();
                                             },
-                                            child: 'No'.text.color(AppColors.primaryColor).size(16).bold.make()),
+                                            child: 'No'
+                                                .text
+                                                .color(AppColors.primaryColor)
+                                                .size(16)
+                                                .bold
+                                                .make()),
                                         15.widthBox,
                                         TextButton(
                                             onPressed: () {
                                               delete = true;
                                               Get.back();
                                             },
-                                            child: 'Yes'.text.color(AppColors.primaryColor).size(16).bold.make()),
+                                            child: 'Yes'
+                                                .text
+                                                .color(AppColors.primaryColor)
+                                                .size(16)
+                                                .bold
+                                                .make()),
                                       ],
                                       title: 'Delete Card'
                                           .text
@@ -145,14 +166,24 @@ class MyCardsTab extends HookWidget {
                                             onPressed: () {
                                               Get.back();
                                             },
-                                            child: 'No'.text.color(AppColors.primaryColor).size(16).bold.make()),
+                                            child: 'No'
+                                                .text
+                                                .color(AppColors.primaryColor)
+                                                .size(16)
+                                                .bold
+                                                .make()),
                                         15.widthBox,
                                         TextButton(
                                             onPressed: () {
                                               delete = true;
                                               Get.back();
                                             },
-                                            child: 'Yes'.text.color(AppColors.primaryColor).size(16).bold.make()),
+                                            child: 'Yes'
+                                                .text
+                                                .color(AppColors.primaryColor)
+                                                .size(16)
+                                                .bold
+                                                .make()),
                                       ],
                                       title: 'Delete Card'
                                           .text
@@ -203,10 +234,12 @@ class CardDisplayWidget extends StatelessWidget {
     Key? key,
     required this.card,
     required this.size,
+    this.fromFriend = false,
   }) : super(key: key);
 
   final CardModel card;
   final Size size;
+  final bool fromFriend;
 
   @override
   Widget build(BuildContext context) {
@@ -218,7 +251,7 @@ class CardDisplayWidget extends StatelessWidget {
             context.read(selectedCard).state = card;
             context.read(addAccountsList).state = card.accounts ?? [];
             await Get.to<void>(
-              () => ViewCardScreen(),
+              () => ViewCardScreen(fromFriend: fromFriend),
             );
           },
           child: Card(

@@ -172,6 +172,9 @@ class LinkedAccountsBuilder extends HookWidget {
 
   void onAccountTap(LinkedAccount e) {
     kOpenLink(e.fullLink!);
+    if (longPressEnabled == false) {
+      // TODO: ADD TAP ANALYTICS HERE
+    }
   }
 }
 

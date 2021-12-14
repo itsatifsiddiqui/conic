@@ -67,6 +67,7 @@ class DynamicLinkProvider {
 
         linkStatus = LinkStatus.loggedIn;
         _read(authProvider).onLinkStatusChanged.value = linkStatus;
+        //TODO ADD NFC TAP HERE
 
         log('LINKSTATUS CHAGED TO $linkStatus', name: 'DynamicLinkProvider');
       }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:conic/models/card_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -296,5 +297,11 @@ class FirestoreProvider {
         .collection('notifications')
         .orderBy('timestamp', descending: true)
         .snapshots();
+  }
+
+  Stream<List<CardModel>> getFriendCards({required String id}) {
+    return _firestore.collection('users').doc(id).collection('cards').snapshots().map(
+          (event) => event.docs.map((e) => CardModel.fromMap(e.data())).toList(),
+        );
   }
 }
