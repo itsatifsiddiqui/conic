@@ -5,8 +5,6 @@ import 'package:conic/models/card_model.dart';
 import 'package:conic/providers/app_user_provider.dart';
 import 'package:conic/providers/firebase_storage_provider.dart';
 import 'package:conic/res/validators.dart';
-import 'package:conic/screens/add_account/account_form_screen.dart';
-import 'package:conic/screens/add_account/add_new_account_screen.dart';
 import 'package:conic/screens/tabs_view/my_cards/add_social_account_screen.dart';
 import 'package:conic/services/dynamic_link_generator.dart';
 import 'package:conic/services/image_picker_service.dart';

@@ -35,7 +35,7 @@ class LinkedAccountsBuilder extends HookWidget {
         shrinkWrap: true,
         children: accounts.map((e) {
           final child = GestureDetector(
-            onTap: () => onAccountTap(e),
+            onTap: () => onAccountTap(e, context),
             child: Material(
               type: MaterialType.transparency,
               child: Container(
@@ -58,13 +58,7 @@ class LinkedAccountsBuilder extends HookWidget {
                       ),
                     ),
                     12.widthBox,
-                    (e.title.isEmptyOrNull ? e.name : e.title)
-                        .text
-                        .lg
-                        .medium
-                        .color(context.adaptive87)
-                        .make()
-                        .expand()
+                    (e.title.isEmptyOrNull ? e.name : e.title).text.lg.medium.color(context.adaptive87).make().expand()
                   ],
                 ),
               ),
@@ -99,14 +93,14 @@ class LinkedAccountsBuilder extends HookWidget {
       children: accounts.map((e) {
         if (!longPressEnabled) {
           return GestureDetector(
-            onTap: () => onAccountTap(e),
+            onTap: () => onAccountTap(e, context),
             child: AccountImage(url: e.image),
           );
         }
         return CupertinoContextMenu(
           actions: buildContextActions(context, e),
           child: GestureDetector(
-            onTap: () => onAccountTap(e),
+            onTap: () => onAccountTap(e, context),
             child: Opacity(
               opacity: hiddenMode && e.hidden ? 0.54 : 1,
               child: AccountImage(url: e.image),
@@ -170,10 +164,10 @@ class LinkedAccountsBuilder extends HookWidget {
         ),
       ];
 
-  void onAccountTap(LinkedAccount e) {
+  void onAccountTap(LinkedAccount e, BuildContext context) {
     kOpenLink(e.fullLink!);
     if (longPressEnabled == false) {
-      // TODO: ADD TAP ANALYTICS HERE
+      context.read(firestoreProvider).updateAccountTap(e);
     }
   }
 }

@@ -29,6 +29,7 @@
                 android:name="io.flutter.embedding.android.NormalTheme"
                 android:resource="@style/NormalTheme"
                 />
+            
             <!-- Displays an Android View that continues showing the launch screen
                     Drawable until Flutter paints its first frame, then this splash
                     screen fades out. A splash screen is useful to avoid any visual
@@ -61,7 +62,7 @@
         <!-- FACEBOOK CONFIGURATION -->
         <meta-data android:name="com.facebook.sdk.ApplicationId"  
         android:value="@string/facebook_app_id"/>
-
+        
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=
                     "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -81,7 +82,10 @@
 
 
 
-        
+        <meta-data 
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyDRsBUDXnG3qwngJyWX3XPgzjuqZ21rocg"
+                />
 
 
         <!-- Don't delete the meta-data below.

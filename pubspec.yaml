@@ -42,7 +42,7 @@ dependencies:
   flutter_widgetkit: ^1.0.3
   geoflutterfire2: ^2.3.6
   geolocator: ^7.0.3
-  get: ^4.1.4
+  get: 4.1.4
   google_sign_in: ^5.0.3
   hooks_riverpod: ^0.14.0+3
   image_cropper: ^1.4.0
@@ -57,6 +57,7 @@ dependencies:
   path_provider:
   pdf_render: ^1.0.12
   permission_handler: ^8.0.0+2
+  google_maps_flutter:
   pretty_qr_code: ^2.0.2
   qr_code_scanner: ^0.5.2
   ripple_animation:

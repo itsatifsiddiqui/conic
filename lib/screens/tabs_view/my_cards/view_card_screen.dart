@@ -70,66 +70,69 @@ class ViewCardScreen extends HookWidget {
                     Screenshot<Object>(
                       key: const ValueKey('Image'),
                       controller: screenshotController,
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 30,
-                            width: double.infinity,
-                          ),
-                          Center(
-                            child: Container(
-                              child: Image.network(
-                                card.photo!,
-                                height: size.height * 0.2,
-                                width: size.width * 0.34,
-                                fit: BoxFit.fill,
+                      child: Container(
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 30,
+                              width: double.infinity,
+                            ),
+                            Center(
+                              child: Container(
+                                child: Image.network(
+                                  card.photo!,
+                                  height: size.height * 0.2,
+                                  width: size.width * 0.34,
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            width: double.infinity,
-                            height: 20,
-                          ),
-                          DisplayInformationWidget(
-                            subTitle: card.name ?? '',
-                            title: 'Title',
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          DisplayInformationWidget(
-                            subTitle: card.description ?? '',
-                            title: 'Description',
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          'Linked Accounts'.text.size(22).semiBold.color(context.adaptive).make(),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Wrap(
-                            spacing: 6,
-                            runSpacing: 10,
-                            children: user!.linkedAccounts!.map(
-                              (e) {
-                                if (card.accounts!.contains(e.fullLink))
-                                  return Container(
-                                    height: 60,
-                                    width: 60,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage(e.image),
-                                        fit: BoxFit.fill,
+                            const SizedBox(
+                              width: double.infinity,
+                              height: 20,
+                            ),
+                            DisplayInformationWidget(
+                              subTitle: card.name ?? '',
+                              title: 'Title',
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            DisplayInformationWidget(
+                              subTitle: card.description ?? '',
+                              title: 'Description',
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            'Linked Accounts'.text.size(22).semiBold.color(context.adaptive).make(),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Wrap(
+                              spacing: 6,
+                              runSpacing: 10,
+                              children: user!.linkedAccounts!.map(
+                                (e) {
+                                  if (card.accounts!.contains(e.fullLink))
+                                    return Container(
+                                      height: 60,
+                                      width: 60,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: NetworkImage(e.image),
+                                          fit: BoxFit.fill,
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                else
-                                  return Container(width: 0, height: 0);
-                              },
-                            ).toList(),
-                          ),
-                        ],
+                                    );
+                                  else
+                                    return Container(width: 0, height: 0);
+                                },
+                              ).toList(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Container(
@@ -145,8 +148,7 @@ class ViewCardScreen extends HookWidget {
                                     .then((Uint8List? image) async {
                                   if (image != null) {
                                     final directory = await getApplicationDocumentsDirectory();
-                                    final imagePath =
-                                        await File('${directory.path}/image.png').create();
+                                    final imagePath = await File('${directory.path}/image.png').create();
                                     await imagePath.writeAsBytes(image);
 
                                     /// Share Plugin
@@ -198,8 +200,7 @@ class ViewCardScreen extends HookWidget {
                                   final imageBytes = await screenshotController.capture();
                                   print(imageBytes == null);
                                   if (imageBytes == null) return;
-                                  final result =
-                                      await ImageGallerySaver.saveImage(imageBytes) as Object?;
+                                  final result = await ImageGallerySaver.saveImage(imageBytes) as Object?;
                                   if (result is Map && (result['isSuccess'] as bool)) {
                                     await showPlatformDialogue(
                                       title: 'Image Saved',

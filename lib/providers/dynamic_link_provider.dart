@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
-
+import 'package:conic/providers/firestore_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'auth_provider.dart';
@@ -67,8 +69,10 @@ class DynamicLinkProvider {
 
         linkStatus = LinkStatus.loggedIn;
         _read(authProvider).onLinkStatusChanged.value = linkStatus;
-        //TODO ADD NFC TAP HERE
-
+        _read(firestoreProvider).updateNfcValue(userId);
+        var position = await GeolocatorPlatform.instance.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+        _read(firestoreProvider).addingLocation(userId, LatLng(position.latitude, position.longitude));
+        _read(firestoreProvider).updateStreak();
         log('LINKSTATUS CHAGED TO $linkStatus', name: 'DynamicLinkProvider');
       }
     } catch (e) {

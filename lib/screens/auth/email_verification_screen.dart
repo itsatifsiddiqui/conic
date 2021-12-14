@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:conic/providers/app_user_provider.dart';
 import 'package:conic/providers/auth_provider.dart';
 import 'package:conic/res/res.dart';
 import 'package:conic/widgets/auth_header.dart';

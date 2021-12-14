@@ -155,7 +155,7 @@ class _SaveContactTile extends StatelessWidget {
               label: e.name,
               value: e.enteredLink,
             ),
-          ),
+          ).toList(),
           phones: [
             if (phone != null) Item(label: 'Mobile', value: phone.enteredLink),
             if (whatsappNumber != null) Item(label: 'Whatsapp', value: whatsappNumber.enteredLink),

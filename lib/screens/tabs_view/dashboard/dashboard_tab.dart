@@ -6,6 +6,7 @@ import '../../../providers/app_user_provider.dart';
 import '../../../res/res.dart';
 import '../../nfc/activate_nfc_screen.dart';
 import '../find_nearby/find_nearby_screen.dart';
+import 'analytics/analytics_screen.dart';
 import 'my_code/my_code_screen.dart';
 import 'my_connections/firend_detail.dart';
 import 'my_connections/my_connections_screen.dart';
@@ -113,7 +114,10 @@ class DashboardTab extends StatelessWidget {
             Row(
               children: [
                 _ItemCard(
-                  onTap: HapticFeedback.lightImpact,
+                  onTap: () {
+                    Get.to<void>(() => AnalyticsScreen());
+                    HapticFeedback.lightImpact();
+                  },
                   icon: Icons.analytics_outlined,
                   title: 'Analytics',
                   subtitle: 'Accounts Stats',
@@ -189,12 +193,7 @@ class _ItemCard extends StatelessWidget {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            subtitle.text.white
-                                .size(15.sp)
-                                .maxLines(1)
-                                .make()
-                                .pOnly(top: 3)
-                                .expand(),
+                            subtitle.text.white.size(15.sp).maxLines(1).make().pOnly(top: 3).expand(),
                             Image.asset(
                               Images.nextArrow,
                               width: 24,

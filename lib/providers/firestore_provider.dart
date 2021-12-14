@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conic/models/card_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../models/account_model.dart';
@@ -66,11 +67,8 @@ class FirestoreProvider {
 
   Future<bool> isUsernameAvailable(String username) async {
     try {
-      final docs = await FirebaseFirestore.instance
-          .collection('users')
-          .where('username', isEqualTo: username)
-          .limit(1)
-          .get();
+      final docs =
+          await FirebaseFirestore.instance.collection('users').where('username', isEqualTo: username).limit(1).get();
       if (docs.docs.isEmpty) {
         return true;
       }
@@ -82,11 +80,8 @@ class FirestoreProvider {
 
   Future<AppUser?> searchUserByUsername(String username) async {
     try {
-      final docs = await FirebaseFirestore.instance
-          .collection('users')
-          .where('username', isEqualTo: username)
-          .limit(1)
-          .get();
+      final docs =
+          await FirebaseFirestore.instance.collection('users').where('username', isEqualTo: username).limit(1).get();
       if (docs.docs.isNotEmpty) {
         return AppUser.fromMap(docs.docs.first.data());
       }
@@ -113,14 +108,12 @@ class FirestoreProvider {
 
   //Ahmed followed by Atif and faisal.
   Stream<List<AppUser>> getMyFollowers(String myId) {
-    final snaps =
-        _firestore.collection('users').where('followedBy', arrayContains: myId).snapshots();
+    final snaps = _firestore.collection('users').where('followedBy', arrayContains: myId).snapshots();
     return snaps.map((event) => event.docs.map((e) => AppUser.fromMap(e.data())).toList());
   }
 
   Stream<List<AppUser>> getUsersIFollow(String userId) {
-    final snaps =
-        _firestore.collection('users').where('isFollowing', arrayContains: userId).snapshots();
+    final snaps = _firestore.collection('users').where('isFollowing', arrayContains: userId).snapshots();
     return snaps.map((event) => event.docs.map((e) => AppUser.fromMap(e.data())).toList());
   }
 
@@ -212,10 +205,8 @@ class FirestoreProvider {
   }
 
   Stream<List<AppUser>> getFollowRequestsLessThan10(List<String> followRequestsRecieved) {
-    final snaps = _firestore
-        .collection('users')
-        .where('followRequestsRecieved', whereIn: followRequestsRecieved)
-        .snapshots();
+    final snaps =
+        _firestore.collection('users').where('followRequestsRecieved', whereIn: followRequestsRecieved).snapshots();
     return snaps.map((event) => event.docs.map((e) => AppUser.fromMap(e.data())).toList());
   }
 
@@ -262,8 +253,7 @@ class FirestoreProvider {
     final userId = _read(appUserProvider)!.userId!;
     final userName = _read(appUserProvider)!.name;
     final followedBy = _read(appUserProvider)!.followedBy;
-    final docRef =
-        _firestore.collection('users').doc(userId).collection('sent_notifications').doc();
+    final docRef = _firestore.collection('users').doc(userId).collection('sent_notifications').doc();
     docRef.set(<String, dynamic>{
       'userId': userId,
       'userName': userName ?? 'user',
@@ -303,5 +293,55 @@ class FirestoreProvider {
     return _firestore.collection('users').doc(id).collection('cards').snapshots().map(
           (event) => event.docs.map((e) => CardModel.fromMap(e.data())).toList(),
         );
+  }
+
+  updateNfcValue(String userId) {
+    _firestore.collection('users').doc(userId).update(<String, dynamic>{
+      'nfcTaps': FieldValue.increment(1),
+    });
+  }
+
+  addingLocation(String userId, LatLng position) {
+    _firestore.collection('users').doc(userId).update(<String, dynamic>{
+      'customLatLons': FieldValue.arrayUnion([
+        CustomLatLon(lat: position.latitude, lon: position.longitude).toMap(),
+      ]),
+    });
+  }
+
+  updateAccountTap(LinkedAccount e) async {
+    print(e.taps);
+    int taps = e.taps ?? 0;
+    final appUser = _read(appUserProvider.notifier).user!;
+    final linkedAcounts = appUser.linkedAccounts;
+    linkedAcounts![linkedAcounts.indexOf(e)] = linkedAcounts[linkedAcounts.indexOf(e)].copyWith(
+      taps: taps + 1,
+    );
+    appUser.linkedAccounts = linkedAcounts;
+    await _firestore.collection('users').doc(appUser.userId).set(
+          appUser.toMap(),
+        );
+  }
+
+  updateStreak() {
+    final appUser = _read(appUserProvider.notifier).user!;
+    final DateTime lastDate = DateTime.fromMillisecondsSinceEpoch(appUser.lastTapDate ?? 0);
+    final DateTime today = DateTime.now();
+    if (today.day == lastDate.day && today.month == lastDate.month) {
+    } else if (DateTime.now().isAfter(lastDate)) {
+      _firestore.collection('users').doc(appUser.userId).update({
+        'dayStreak': FieldValue.increment(1),
+      });
+      _firestore.collection('users').doc(appUser.userId).update({
+        'lastTapDate': DateTime.now().millisecondsSinceEpoch,
+      });
+    } else {
+      _firestore.collection('users').doc(appUser.userId).update({
+        'dayStreak': 0,
+      });
+      _firestore.collection('users').doc(appUser.userId).update({
+        'lastTapDate': DateTime.now().millisecondsSinceEpoch,
+      });
+    }
   }
 }
