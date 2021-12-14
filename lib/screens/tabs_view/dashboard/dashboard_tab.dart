@@ -21,15 +21,15 @@ class DashboardTab extends StatelessWidget {
       appBar: AppBar(
         title: 'Dashboard'.text.semiBold.color(context.adaptive).make(),
         actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.help_outline_rounded,
-            ),
-            onPressed: () {
-              final user = context.read(appUserProvider);
-              Get.to<void>(FriendDetailScreen(friend: user!, fromFollowing: false));
-            },
-          )
+          // IconButton(
+          //   icon: const Icon(
+          //     Icons.help_outline_rounded,
+          //   ),
+          //   onPressed: () {
+          //     final user = context.read(appUserProvider);
+          //     Get.to<void>(FriendDetailScreen(friend: user!, fromFollowing: false));
+          //   },
+          // )
         ],
       ),
       body: SafeArea(

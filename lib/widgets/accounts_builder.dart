@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:conic/models/app_user.dart';
+import 'package:conic/widgets/info_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,26 +18,61 @@ import '../screens/add_account/add_new_account_screen.dart';
 import '../screens/tabs_view/my_accounts/my_accounts_tab.dart';
 import 'context_action.dart';
 
-class LinkedAccountsBuilder extends HookWidget {
+class LinkedAccountsBuilder extends StatefulHookWidget {
   const LinkedAccountsBuilder({
     Key? key,
     required this.accounts,
-    required this.longPressEnabled,
+    this.friend,
   }) : super(key: key);
   final List<LinkedAccount> accounts;
-  final bool longPressEnabled;
+  final AppUser? friend;
+
+  @override
+  _LinkedAccountsBuilderState createState() => _LinkedAccountsBuilderState();
+}
+
+class _LinkedAccountsBuilderState extends State<LinkedAccountsBuilder> {
+  @override
+  void initState() {
+    final focusedModeOn = widget.friend?.focusedMode ?? false;
+    if (widget.friend != null && focusedModeOn) {
+      final focusedAccount =
+          widget.accounts.where((element) => !element.hidden && element.focused).toList();
+      if (focusedAccount.isNotEmpty) {
+        final account = focusedAccount.first;
+        kOpenLink(account.fullLink!);
+        Timer(500.milliseconds, () {
+          Navigator.of(context).pop();
+        });
+      }
+    }
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final isListMode = useProvider(isListModeProvider).state;
-    final hiddenMode = useProvider(appUserProvider)?.hiddenMode ?? false;
+    final hiddenMode =
+        widget.friend?.hiddenMode ?? useProvider(appUserProvider)?.hiddenMode ?? false;
     // final accounts = useProvider(filteredAccountsStateProvider).state;
+
+    final longPressEnabled = widget.friend == null;
+
+    //FILTER ACCOUNTS ONLY FOR FRIENDS SCREEN
+    final filteredAccounts = widget.accounts
+        .where((e) => (e.hidden && hiddenMode && !longPressEnabled) == false)
+        .toList();
+
+    if (filteredAccounts.isEmpty && !longPressEnabled) {
+      return InfoWidget(text: "No Accounts").pOnly(top: 32);
+    }
 
     if (isListMode) {
       return ListView(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        children: accounts.map((e) {
+        children: filteredAccounts.map((e) {
           final child = GestureDetector(
             onTap: () => onAccountTap(e),
             child: Material(
@@ -96,7 +135,7 @@ class LinkedAccountsBuilder extends HookWidget {
       crossAxisCount: 4,
       mainAxisSpacing: 16,
       crossAxisSpacing: 8,
-      children: accounts.map((e) {
+      children: filteredAccounts.map((e) {
         if (!longPressEnabled) {
           return GestureDetector(
             onTap: () => onAccountTap(e),
@@ -172,6 +211,8 @@ class LinkedAccountsBuilder extends HookWidget {
 
   void onAccountTap(LinkedAccount e) {
     kOpenLink(e.fullLink!);
+    final longPressEnabled = widget.friend == null;
+
     if (longPressEnabled == false) {
       // TODO: ADD TAP ANALYTICS HERE
     }
