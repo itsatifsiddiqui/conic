@@ -32,17 +32,15 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
         final emailVerified = context.read(authProvider).user.emailVerified;
         if (emailVerified) {
           await context.read(authProvider).navigateBasedOnCondition();
-          VxToast.show(
-            context,
-            msg: 'Thank you for verifying your email.',
-            showTime: 3000,
-          );
+          VxToast.show(context,
+              msg: 'Thank you for verifying your email.',
+              showTime: 3000,
+              bgColor: Theme.of(context).scaffoldBackgroundColor);
         } else {
-          VxToast.show(
-            context,
-            msg: 'Please verify your email address.\nIf already verified, click on inbox',
-            showTime: 3000,
-          );
+          VxToast.show(context,
+              msg: 'Please verify your email address.\nIf already verified, click on inbox',
+              showTime: 3000,
+              bgColor: Theme.of(context).scaffoldBackgroundColor);
         }
       },
       child: WillPopScope(
@@ -61,17 +59,15 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               final emailVerified = context.read(authProvider).user.emailVerified;
               if (emailVerified) {
                 await context.read(authProvider).navigateBasedOnCondition();
-                VxToast.show(
-                  context,
-                  msg: 'Thank you for verifying your email.',
-                  showTime: 3000,
-                );
+                VxToast.show(context,
+                    msg: 'Thank you for verifying your email.',
+                    showTime: 3000,
+                    bgColor: Theme.of(context).scaffoldBackgroundColor);
               } else {
-                VxToast.show(
-                  context,
-                  msg: 'Please verify your email address.\nIf already verified, click on inbox',
-                  showTime: 3000,
-                );
+                VxToast.show(context,
+                    msg: 'Please verify your email address.\nIf already verified, click on inbox',
+                    showTime: 3000,
+                    bgColor: Theme.of(context).scaffoldBackgroundColor);
               }
             },
             child: Column(

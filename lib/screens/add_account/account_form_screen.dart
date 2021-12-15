@@ -46,7 +46,12 @@ class AccountFormScreen extends HookWidget {
         appBar: AppBar(
           centerTitle: true,
           title: FittedBox(
-            child: '${isEditMode ? "" : "Edit"} ${account.name}'.text.xl.semiBold.color(context.adaptive).make(),
+            child: '${isEditMode ? "" : "Edit"} ${account.name}'
+                .text
+                .xl
+                .semiBold
+                .color(context.adaptive)
+                .make(),
           ),
         ),
         body: SafeArea(
@@ -124,8 +129,9 @@ class AccountFormScreen extends HookWidget {
                 FocusScope.of(context).unfocus();
                 final enteredLink = fieldController.text.trim();
                 final fullLink = account.getLink(enteredLink);
-                final alreadyAddedAccounts =
-                    (context.read(appUserProvider)!.linkedAccounts ?? []).map((e) => e.fullLink).toList();
+                final alreadyAddedAccounts = (context.read(appUserProvider)!.linkedAccounts ?? [])
+                    .map((e) => e.fullLink)
+                    .toList();
 
                 if (!isEditMode && alreadyAddedAccounts.contains(fullLink)) {
                   await showPlatformDialogue(
@@ -145,7 +151,8 @@ class AccountFormScreen extends HookWidget {
                 var image = account.image;
                 if (file != null) {
                   final path = account.name;
-                  image = (await context.read(firebaseStorageProvider).uploadFile(file, path)) ?? account.image;
+                  image = (await context.read(firebaseStorageProvider).uploadFile(file, path)) ??
+                      account.image;
                 }
                 final newlinkedAccount = LinkedAccount(
                   name: account.name,
@@ -161,7 +168,9 @@ class AccountFormScreen extends HookWidget {
                 );
 
                 if (isEditMode) {
-                  context.read(appUserProvider.notifier).editAccount(newlinkedAccount, linkedAccount!);
+                  context
+                      .read(appUserProvider.notifier)
+                      .editAccount(newlinkedAccount, linkedAccount!);
                   // ignore: unawaited_futures
                   context.read(firestoreProvider).updateUser();
                   //Send Notification
@@ -177,7 +186,8 @@ class AccountFormScreen extends HookWidget {
                   //Send Notification
                   context.read(firestoreProvider).sendAccountChangeNotification(newlinkedAccount);
 
-                  VxToast.show(context, msg: 'Account Added');
+                  VxToast.show(context,
+                      msg: 'Account Added', bgColor: Theme.of(context).scaffoldBackgroundColor);
 
                   Get.back<void>();
                 }
@@ -241,7 +251,8 @@ class _ImageBuilder extends HookWidget {
   }
 }
 
-final focusedProvider = StateProvider.family<bool, LinkedAccount?>((ref, account) => account?.focused ?? false);
+final focusedProvider =
+    StateProvider.family<bool, LinkedAccount?>((ref, account) => account?.focused ?? false);
 
 class _FocusedTile extends HookWidget {
   const _FocusedTile({Key? key, required this.account}) : super(key: key);
@@ -253,12 +264,13 @@ class _FocusedTile extends HookWidget {
     return SwitchListTile.adaptive(
       contentPadding: EdgeInsets.zero,
       title: 'Focused'.text.base.bold.make(),
-      subtitle: 'Add this to focus mode accounts. This account Will be available when focused mode is active.'
-          .text
-          .sm
-          .color(context.adaptive75)
-          .make()
-          .pOnly(top: 4),
+      subtitle:
+          'Add this to focus mode accounts. This account Will be available when focused mode is active.'
+              .text
+              .sm
+              .color(context.adaptive75)
+              .make()
+              .pOnly(top: 4),
       value: isFocused,
       onChanged: (value) {
         context.read(focusedProvider(account)).state = value;
@@ -267,7 +279,8 @@ class _FocusedTile extends HookWidget {
   }
 }
 
-final notifyFollowersProvider = StateProvider.family<bool, LinkedAccount?>((ref, account) => account?.notify ?? true);
+final notifyFollowersProvider =
+    StateProvider.family<bool, LinkedAccount?>((ref, account) => account?.notify ?? true);
 
 class _NotifyFollowersTile extends HookWidget {
   const _NotifyFollowersTile({Key? key, required this.account}) : super(key: key);
@@ -279,12 +292,13 @@ class _NotifyFollowersTile extends HookWidget {
     return SwitchListTile.adaptive(
       contentPadding: EdgeInsets.zero,
       title: 'Notify Followers'.text.base.bold.make(),
-      subtitle: 'This will send a notification to your followers that you’ve added this account to your profile.'
-          .text
-          .sm
-          .color(context.adaptive75)
-          .make()
-          .pOnly(top: 4),
+      subtitle:
+          'This will send a notification to your followers that you’ve added this account to your profile.'
+              .text
+              .sm
+              .color(context.adaptive75)
+              .make()
+              .pOnly(top: 4),
       value: notify,
       onChanged: (value) {
         context.read(notifyFollowersProvider(account)).state = value;
@@ -293,7 +307,8 @@ class _NotifyFollowersTile extends HookWidget {
   }
 }
 
-final isHiddenProvider = StateProvider.family<bool, LinkedAccount?>((ref, account) => account?.hidden ?? false);
+final isHiddenProvider =
+    StateProvider.family<bool, LinkedAccount?>((ref, account) => account?.hidden ?? false);
 
 class _HiddenTile extends HookWidget {
   const _HiddenTile({Key? key, required this.account}) : super(key: key);
@@ -305,12 +320,13 @@ class _HiddenTile extends HookWidget {
     return SwitchListTile.adaptive(
       contentPadding: EdgeInsets.zero,
       title: 'Hidden'.text.base.bold.make(),
-      subtitle: 'Hidden accounts will not be shown on your Homepage, but still can be added to cards Or shared.'
-          .text
-          .sm
-          .color(context.adaptive75)
-          .make()
-          .pOnly(top: 4),
+      subtitle:
+          'Hidden accounts will not be shown on your Homepage, but still can be added to cards Or shared.'
+              .text
+              .sm
+              .color(context.adaptive75)
+              .make()
+              .pOnly(top: 4),
       value: isHidden,
       onChanged: (value) {
         context.read(isHiddenProvider(account)).state = value;

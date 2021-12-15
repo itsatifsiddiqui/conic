@@ -195,7 +195,7 @@ class _MyAccountsBuilder extends HookWidget {
           onPressed: () {
             Navigator.pop(context);
             Clipboard.setData(ClipboardData(text: linkedAccount.fullLink));
-            VxToast.show(context, msg: 'Link Copied', showTime: 1000);
+            VxToast.show(context, msg: 'Link Copied', showTime: 1000, bgColor: Theme.of(context).scaffoldBackgroundColor);
           },
           trailingIcon: Icons.content_copy_outlined,
           child: const Text('Copy'),

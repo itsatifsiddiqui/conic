@@ -150,12 +150,14 @@ class _SaveContactTile extends StatelessWidget {
           androidAccountType: AndroidAccountType.other,
           displayName: friend.name,
           givenName: friend.name,
-          emails: allEmails.map(
-            (e) => Item(
-              label: e.name,
-              value: e.enteredLink,
-            ),
-          ).toList(),
+          emails: allEmails
+              .map(
+                (e) => Item(
+                  label: e.name,
+                  value: e.enteredLink,
+                ),
+              )
+              .toList(),
           phones: [
             if (phone != null) Item(label: 'Mobile', value: phone.enteredLink),
             if (whatsappNumber != null) Item(label: 'Whatsapp', value: whatsappNumber.enteredLink),
@@ -168,7 +170,8 @@ class _SaveContactTile extends StatelessWidget {
           log('Add First');
           await ContactsService.addContact(newContact);
           log(newContact.toMap().toString());
-          VxToast.show(context, msg: 'Contact Added');
+          VxToast.show(context,
+              msg: 'Contact Added', bgColor: Theme.of(context).scaffoldBackgroundColor);
           return;
         } else {
           final fullSearch =
@@ -176,10 +179,12 @@ class _SaveContactTile extends StatelessWidget {
           if (fullSearch.isEmpty) {
             await ContactsService.addContact(newContact);
             log(newContact.toMap().toString());
-            VxToast.show(context, msg: 'Contact Added');
+            VxToast.show(context,
+                msg: 'Contact Added', bgColor: Theme.of(context).scaffoldBackgroundColor);
             return;
           } else {
-            VxToast.show(context, msg: 'Contact Already Exist');
+            VxToast.show(context,
+                msg: 'Contact Already Exist', bgColor: Theme.of(context).scaffoldBackgroundColor);
           }
         }
       },
