@@ -11,4 +11,5 @@ class Images {
   static const String nextArrow = 'images/next_arrow_circle.png';
   static const String findNearby = 'images/nearby.png';
   static const String heatMap = 'images/heat_map.png';
+  static const String heatMapApple = 'images/heat_map_apple.png';
 }

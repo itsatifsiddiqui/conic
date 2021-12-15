@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:conic/models/app_user.dart';
 import 'package:conic/providers/app_user_provider.dart';
@@ -21,8 +22,11 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   LatLng? currentPostion;
 
   void _getUserLocation() async {
-    var position = await GeolocatorPlatform.instance.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    await BitmapDescriptor.fromAssetImage(ImageConfiguration(size: Size(12, 12)), Images.heatMap).then((d) {
+    var position = await GeolocatorPlatform.instance
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    final image = Platform.isAndroid ? Images.heatMap : Images.heatMapApple;
+    print("IMAGE: $image");
+    await BitmapDescriptor.fromAssetImage(ImageConfiguration(size: Size(12, 12)), image).then((d) {
       customIcon = d;
     });
     setState(() {
@@ -86,14 +90,19 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                             child: CircularProgressIndicator(),
                           )
                         : GoogleMapsWidget(
-                            currentPostion: LatLng(37.4219983, -122.084),
+                            currentPostion: currentPostion,
                             controller: _controller,
                             customIcon: customIcon!,
                             user: user,
                           ),
                   ),
                   30.heightBox,
-                  'Top Accounts'.text.size(24).semiBold.color(Theme.of(context).dividerColor).make(),
+                  'Top Accounts'
+                      .text
+                      .size(24)
+                      .semiBold
+                      .color(Theme.of(context).dividerColor)
+                      .make(),
                   20.heightBox,
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -159,9 +168,8 @@ class _GoogleMapsWidgetState extends State<GoogleMapsWidget> {
         print(widget.user.customLatLons![i].lon);
         markers.add(
           Marker(
-            markerId: MarkerId(
-              i.toString(),
-            ),
+            draggable: false,
+            markerId: MarkerId(i.toString()),
             position: LatLng(
               widget.user.customLatLons![i].lat,
               widget.user.customLatLons![i].lon,

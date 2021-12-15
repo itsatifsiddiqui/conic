@@ -97,7 +97,13 @@ class _LinkedAccountsBuilderState extends State<LinkedAccountsBuilder> {
                       ),
                     ),
                     12.widthBox,
-                    (e.title.isEmptyOrNull ? e.name : e.title).text.lg.medium.color(context.adaptive87).make().expand()
+                    (e.title.isEmptyOrNull ? e.name : e.title)
+                        .text
+                        .lg
+                        .medium
+                        .color(context.adaptive87)
+                        .make()
+                        .expand()
                   ],
                 ),
               ),
@@ -208,7 +214,7 @@ class _LinkedAccountsBuilderState extends State<LinkedAccountsBuilder> {
     final longPressEnabled = widget.friend == null;
 
     if (longPressEnabled == false) {
-      context.read(firestoreProvider).updateAccountTap(e);
+      context.read(firestoreProvider).updateAccountTap(e, widget.friend!);
     }
   }
 }

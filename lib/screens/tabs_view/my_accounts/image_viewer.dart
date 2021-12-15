@@ -35,6 +35,7 @@ class ImageViewer extends HookWidget {
             child: CachedNetworkImage(
               imageUrl: url,
               height: double.infinity,
+              width: double.infinity,
               placeholder: kImagePlaceHodler,
               // fit: BoxFit.cover,
             ),

@@ -139,12 +139,12 @@ class AccountModel {
     final regexString = this.regex;
     if (regexString == null || regexString.isEmpty) return value;
     final isLink = value.contains('http') && value.contains('://');
+
     if (isValidLink(value) && isLink) {
       return value;
     }
 
     final regex = RegExp(regexString);
-    debugPrint(regex.hasMatch(value).toString());
     if (regex.hasMatch(value)) {
       var merged = value;
       if (prefix != null && prefix!.isNotEmpty) {
@@ -292,6 +292,3 @@ void globalAccountsUploader() {
       .doc('all_accounts')
       .set(<String, dynamic>{'all_accounts': allAccountsMap});
 }
-
-
-
