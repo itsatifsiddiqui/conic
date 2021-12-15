@@ -70,7 +70,7 @@ class _EditCardScreenState extends State<EditCardScreen> with SingleTickerProvid
     context.read(selectedCard).state = selectedCardModel;
     isLoading = false;
     setState(() {});
-    // Get.back();
+    Get.back();
   }
 
   @override
@@ -175,8 +175,9 @@ class _EditCardScreenState extends State<EditCardScreen> with SingleTickerProvid
                                               height: 150,
                                               width: 150,
                                               decoration: BoxDecoration(
-                                                image:
-                                                    DecorationImage(image: FileImage(selectedImage!), fit: BoxFit.fill),
+                                                image: DecorationImage(
+                                                    image: FileImage(selectedImage!),
+                                                    fit: BoxFit.fill),
                                               ),
                                             ),
                                           )
@@ -186,7 +187,8 @@ class _EditCardScreenState extends State<EditCardScreen> with SingleTickerProvid
                                                 width: 150,
                                                 decoration: BoxDecoration(
                                                   image: DecorationImage(
-                                                      image: NetworkImage(selectedCardModel.photo!), fit: BoxFit.fill),
+                                                      image: NetworkImage(selectedCardModel.photo!),
+                                                      fit: BoxFit.fill),
                                                 ),
                                               )
                                             : const Icon(
@@ -255,7 +257,8 @@ class _EditCardScreenState extends State<EditCardScreen> with SingleTickerProvid
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 20),
-                              child: FilledTextField(controller: _descriptionController, title: 'Description'),
+                              child: FilledTextField(
+                                  controller: _descriptionController, title: 'Description'),
                             ),
                             const SizedBox(
                               height: 35,
@@ -333,7 +336,9 @@ class _EditCardScreenState extends State<EditCardScreen> with SingleTickerProvid
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
                                       width: 5,
-                                      color: selectedCardModel.theme == e ? Colors.green : Colors.transparent,
+                                      color: selectedCardModel.theme == e
+                                          ? Colors.green
+                                          : Colors.transparent,
                                     ),
                                   ),
                                   child: Padding(

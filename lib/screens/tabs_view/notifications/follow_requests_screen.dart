@@ -1,3 +1,4 @@
+import 'package:conic/widgets/info_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -53,6 +54,9 @@ class FollowRequestsScreen extends HookWidget {
       ),
       body: useProvider(followRequestsRecievedProvider).when(
         data: (requests) {
+          if (requests.isEmpty) {
+            return InfoWidget(text: "No Pending Requests :(");
+          }
           return ListView.builder(
             itemCount: requests.length,
             itemBuilder: (context, index) {

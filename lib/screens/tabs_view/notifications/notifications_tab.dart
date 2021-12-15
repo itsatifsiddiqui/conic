@@ -51,8 +51,8 @@ class NotificationsTab extends HookWidget {
                         // onTap: () {
                         //   // debugPrint(userId);
                         // },
-                        title: name.text.make(),
-                        subtitle: message.text.make(),
+                        title: name.firstLetterUpperCase().text.make(),
+                        subtitle: message.firstLetterUpperCase().text.make(),
                         // trailing: const Icon(Icons.chevron_right, size: 16),
                       );
                     },

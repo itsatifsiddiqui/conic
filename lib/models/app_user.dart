@@ -55,7 +55,6 @@ class CustomLatLon {
   int get hashCode => lat.hashCode ^ lon.hashCode;
 }
 
-@immutable
 class AppUser {
   AppUser({
     this.name,

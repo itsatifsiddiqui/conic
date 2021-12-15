@@ -116,13 +116,16 @@ class ViewCardScreen extends HookWidget {
                               children: user!.linkedAccounts!.map(
                                 (e) {
                                   if (card.accounts!.contains(e.fullLink))
-                                    return Container(
-                                      height: 60,
-                                      width: 60,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage(e.image),
-                                          fit: BoxFit.fill,
+                                    return GestureDetector(
+                                      onTap: () => kOpenLink(e.fullLink!),
+                                      child: Container(
+                                        height: 60,
+                                        width: 60,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: NetworkImage(e.image),
+                                            fit: BoxFit.fill,
+                                          ),
                                         ),
                                       ),
                                     );
@@ -148,7 +151,8 @@ class ViewCardScreen extends HookWidget {
                                     .then((Uint8List? image) async {
                                   if (image != null) {
                                     final directory = await getApplicationDocumentsDirectory();
-                                    final imagePath = await File('${directory.path}/image.png').create();
+                                    final imagePath =
+                                        await File('${directory.path}/image.png').create();
                                     await imagePath.writeAsBytes(image);
 
                                     /// Share Plugin
@@ -200,7 +204,8 @@ class ViewCardScreen extends HookWidget {
                                   final imageBytes = await screenshotController.capture();
                                   print(imageBytes == null);
                                   if (imageBytes == null) return;
-                                  final result = await ImageGallerySaver.saveImage(imageBytes) as Object?;
+                                  final result =
+                                      await ImageGallerySaver.saveImage(imageBytes) as Object?;
                                   if (result is Map && (result['isSuccess'] as bool)) {
                                     await showPlatformDialogue(
                                       title: 'Image Saved',
