@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conic/providers/app_user_provider.dart';
 import 'package:conic/res/platform_dialogue.dart';
 import 'package:conic/screens/tabs_view/my_cards/edit_card_screen.dart';
@@ -35,10 +36,9 @@ class ViewCardScreen extends HookWidget {
         final user = watch(appUserProvider);
         final card = watch(selectedCard).state;
         return Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
             title: card!.name!.text.semiBold.color(context.adaptive).make(),
-            backgroundColor: Colors.white,
             centerTitle: true,
             actions: [
               if (!fromFriend)
@@ -71,7 +71,7 @@ class ViewCardScreen extends HookWidget {
                       key: const ValueKey('Image'),
                       controller: screenshotController,
                       child: Container(
-                        color: Colors.white,
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         child: Column(
                           children: [
                             const SizedBox(
@@ -80,8 +80,8 @@ class ViewCardScreen extends HookWidget {
                             ),
                             Center(
                               child: Container(
-                                child: Image.network(
-                                  card.photo!,
+                                child: CachedNetworkImage(
+                                  imageUrl: card.photo!,
                                   height: size.height * 0.2,
                                   width: size.width * 0.34,
                                   fit: BoxFit.fill,

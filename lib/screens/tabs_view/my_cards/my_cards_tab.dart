@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conic/models/card_model.dart';
 import 'package:conic/providers/app_user_provider.dart';
@@ -275,8 +276,8 @@ class CardDisplayWidget extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(5),
-                    child: Image.network(
-                      card.photo!,
+                    child: CachedNetworkImage(
+                      imageUrl: card.photo!,
                       height: size.height * 0.13,
                       width: size.width * 0.22,
                       fit: BoxFit.fill,
@@ -290,7 +291,7 @@ class CardDisplayWidget extends StatelessWidget {
                       card.name!.text
                           .size(22)
                           .semiBold
-                          .color(card.theme == '' ? context.adaptive : Colors.white)
+                          .color(card.theme?.trim() == '' ? Colors.black : Colors.white)
                           .make(),
                       '${card.accounts!.length} Linked Accounts'
                           .text
