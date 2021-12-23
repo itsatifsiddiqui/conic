@@ -60,11 +60,9 @@ class MyCodeScreen extends HookWidget {
                   child: Container(
                     color: Theme.of(context).scaffoldBackgroundColor,
                     child: PrettyQr(
-                      elementColor: context.adaptive,
-                      image: image == null ? null : CachedNetworkImageProvider(image),
                       data: link,
                       roundEdges: true,
-                      size: context.height * 0.25,
+                      size: context.height * 0.35,
                     ).centered(),
                   ),
                 ),
