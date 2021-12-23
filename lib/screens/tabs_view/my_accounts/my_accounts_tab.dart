@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conic/screens/tabs_view/dashboard/my_profile/my_profile_screen.dart';
 import 'package:conic/widgets/medias_builder.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,6 +18,7 @@ import '../../../widgets/no_accounts_widget.dart';
 import '../../add_account/account_form_screen.dart';
 import '../../add_account/add_new_account_screen.dart';
 import 'add_media_sheet.dart';
+
 // final businessModeProvider = StateProvider<bool>((ref) => false);
 final isListModeProvider = StateProvider<bool>((ref) {
   return ref.watch(appUserProvider)!.gridMode ?? true;
@@ -195,14 +197,15 @@ class _MyAccountsBuilder extends HookWidget {
           onPressed: () {
             Navigator.pop(context);
             Clipboard.setData(ClipboardData(text: linkedAccount.fullLink));
-            VxToast.show(context, msg: 'Link Copied', showTime: 1000, bgColor: Theme.of(context).scaffoldBackgroundColor);
+            VxToast.show(context,
+                msg: 'Link Copied', showTime: 1000, textColor: context.backgroundColor);
           },
           trailingIcon: Icons.content_copy_outlined,
           child: const Text('Copy'),
         ),
         ContextActionWidget(
           onPressed: () {
-            kOpenLink(linkedAccount.fullLink!);
+            kOpenLink(linkedAccount.fullLink!, linkedAccount.name);
             Navigator.pop(context);
           },
           trailingIcon: Icons.open_in_new_outlined,
@@ -237,7 +240,7 @@ class _MyAccountsBuilder extends HookWidget {
       ];
 
   void onAccountTap(LinkedAccount e) {
-    kOpenLink(e.fullLink!);
+    kOpenLink(e.fullLink!, e.name);
   }
 }
 

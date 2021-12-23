@@ -106,6 +106,7 @@ class FirestoreProvider {
         final accountsListD = event.data()!['all_accounts'] as List<dynamic>;
         final accountsList = accountsListD.cast<Map<String, dynamic>>();
         allAccounts = accountsList.map((e) => AccountModel.fromMap(e)).toList();
+        allAccounts.sort((a, b) => a.position.compareTo(b.position));
       }
       _read(allAccountsStateProvider).state = allAccounts;
       return allAccounts;

@@ -35,12 +35,12 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
           VxToast.show(context,
               msg: 'Thank you for verifying your email.',
               showTime: 3000,
-              bgColor: Theme.of(context).scaffoldBackgroundColor);
+              textColor: context.backgroundColor);
         } else {
           VxToast.show(context,
               msg: 'Please verify your email address.\nIf already verified, click on inbox',
               showTime: 3000,
-              bgColor: Theme.of(context).scaffoldBackgroundColor);
+              textColor: context.backgroundColor);
         }
       },
       child: WillPopScope(
@@ -62,12 +62,12 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 VxToast.show(context,
                     msg: 'Thank you for verifying your email.',
                     showTime: 3000,
-                    bgColor: Theme.of(context).scaffoldBackgroundColor);
+                    textColor: context.backgroundColor);
               } else {
                 VxToast.show(context,
                     msg: 'Please verify your email address.\nIf already verified, click on inbox',
                     showTime: 3000,
-                    bgColor: Theme.of(context).scaffoldBackgroundColor);
+                    textColor: context.backgroundColor);
               }
             },
             child: Column(

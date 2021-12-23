@@ -90,7 +90,7 @@ class AccountFormScreen extends HookWidget {
                         FocusScope.of(context).unfocus();
                         final link = account.getLink(fieldController.text.trim());
                         log('Opening Link $link');
-                        kOpenLink(link);
+                        kOpenLink(link, account.name);
                       },
                     ),
                   ),
@@ -186,8 +186,7 @@ class AccountFormScreen extends HookWidget {
                   //Send Notification
                   context.read(firestoreProvider).sendAccountChangeNotification(newlinkedAccount);
 
-                  VxToast.show(context,
-                      msg: 'Account Added', bgColor: Theme.of(context).scaffoldBackgroundColor);
+                  VxToast.show(context, msg: 'Account Added', textColor: context.backgroundColor);
 
                   Get.back<void>();
                 }

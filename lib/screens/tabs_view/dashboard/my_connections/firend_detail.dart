@@ -170,8 +170,7 @@ class _SaveContactTile extends StatelessWidget {
           log('Add First');
           await ContactsService.addContact(newContact);
           log(newContact.toMap().toString());
-          VxToast.show(context,
-              msg: 'Contact Added', bgColor: Theme.of(context).scaffoldBackgroundColor);
+          VxToast.show(context, msg: 'Contact Added', textColor: context.backgroundColor);
           return;
         } else {
           final fullSearch =
@@ -179,12 +178,10 @@ class _SaveContactTile extends StatelessWidget {
           if (fullSearch.isEmpty) {
             await ContactsService.addContact(newContact);
             log(newContact.toMap().toString());
-            VxToast.show(context,
-                msg: 'Contact Added', bgColor: Theme.of(context).scaffoldBackgroundColor);
+            VxToast.show(context, msg: 'Contact Added', textColor: context.backgroundColor);
             return;
           } else {
-            VxToast.show(context,
-                msg: 'Contact Already Exist', bgColor: Theme.of(context).scaffoldBackgroundColor);
+            VxToast.show(context, msg: 'Contact Already Exist', textColor: context.backgroundColor);
           }
         }
       },

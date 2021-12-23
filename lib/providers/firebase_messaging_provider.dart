@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -33,8 +34,11 @@ class FirebaseMessagingProvider {
   }
 
   Future<void> initFCM() async {
-    final settings = await messaging.requestPermission();
-    _log('User granted permission: ${settings.authorizationStatus}');
+    if (Platform.isIOS) {
+      final settings = await messaging.requestPermission();
+      _log('User granted permission: ${settings.authorizationStatus}');
+    }
+
     FirebaseMessaging.onMessageOpenedApp.listen((message) async {
       _log('onMessageOpenedApp');
       _log('Message data: ${message.data}');

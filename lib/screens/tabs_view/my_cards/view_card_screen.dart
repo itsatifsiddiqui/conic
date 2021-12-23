@@ -117,7 +117,7 @@ class ViewCardScreen extends HookWidget {
                                 (e) {
                                   if (card.accounts!.contains(e.fullLink))
                                     return GestureDetector(
-                                      onTap: () => kOpenLink(e.fullLink!),
+                                      onTap: () => kOpenLink(e.fullLink!, e.name),
                                       child: Container(
                                         height: 60,
                                         width: 60,

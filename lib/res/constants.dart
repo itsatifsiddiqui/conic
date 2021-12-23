@@ -1,9 +1,11 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:conic/res/res.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -11,12 +13,13 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'platform_dialogue.dart';
+import 'res.dart';
 
 double kBorderRadius = 6;
 const dynamicLinkPrefix = 'https://conic.page.link';
 Widget kImagePlaceHodler(dynamic _, dynamic __) => const CupertinoActivityIndicator();
 
-Future<void> kOpenLink(String url) async {
+Future<void> kOpenLink(String url, String title, [bool focused = false]) async {
   debugPrint('OPENING URL: $url');
   if (await canLaunch(url)) {
     try {
@@ -34,8 +37,29 @@ Future<void> kOpenLink(String url) async {
     }
   } else {
     // ignore: unawaited_futures
-    launch(url);
-    debugPrint('UNABLE TO OPEN');
+    if (focused) {
+      Get.context!.pop();
+    }
+    showPlatformDialogue(
+      title: "$title ${title == "Address" ? "" : "Account"}",
+      action1Text: "Done",
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SelectableText(url),
+          IconButton(
+            icon: Icon(Icons.copy),
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: url));
+              if (Get.overlayContext != null) {
+                VxToast.show(Get.overlayContext!,
+                    msg: "Copied To Clipboard", textColor: Get.context!.backgroundColor);
+              }
+            },
+          )
+        ],
+      ),
+    );
   }
 }
 

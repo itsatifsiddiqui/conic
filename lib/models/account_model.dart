@@ -292,3 +292,209 @@ void globalAccountsUploader() {
       .doc('all_accounts')
       .set(<String, dynamic>{'all_accounts': allAccountsMap});
 }
+// ll_accounts
+// 0
+// description
+// "This is my personal phone number"
+// field
+// "Phone Number"
+// fieldHint
+// "0333333333"
+// image
+// "https://firebasestorage.googleapis.com/v0/b/conic-688fe.appspot.com/o/accounts%2Fcall.png?alt=media&token=e6b4f832-eb12-4172-89b3-c89f79f25d72"
+// name
+// "Phone Number"
+// position
+// 1
+// prefix
+// "tel:"
+// regex
+// "^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$"
+// title
+// "My Phone Number"
+// 1
+// description
+// "This is my business whatsapp number"
+// field
+// "WhatsApp Number"
+// fieldHint
+// "0333333333"
+// image
+// "https://firebasestorage.googleapis.com/v0/b/conic-688fe.appspot.com/o/accounts%2Fwhatsapp.png?alt=media&token=2d76f477-67a2-44d9-b0a8-7410f35990fc"
+// name
+// "WhatsApp"
+// position
+// 2
+// prefix
+// "https://wa.me/"
+// regex
+// "^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$"
+// title
+// "My WhatsApp"
+// 2
+// description
+// "This is my personal email address"
+// field
+// "Email Address"
+// fieldHint
+// "your-email@email.com, "
+// image
+// "https://firebasestorage.googleapis.com/v0/b/conic-688fe.appspot.com/o/accounts%2Fmail.png?alt=media&token=bc64ad46-97d2-413a-9ddf-1e670b6a44f0"
+// name
+// "Email"
+// position
+// 3
+// prefix
+// "mailto:"
+// regex
+// "^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$"
+// title
+// "My Email"
+// 3
+// description
+// "This is my personal account"
+// field
+// "Facebook URL"
+// fieldHint
+// "facebook.com/"
+// image
+// "https://firebasestorage.googleapis.com/v0/b/conic-688fe.appspot.com/o/accounts%2Ffacebook.png?alt=media&token=3ce80c15-331a-42a1-927c-fe4d4b19c1bf"
+// name
+// "Facebook"
+// position
+// 4
+// prefix
+// "https://www.facebook.com/"
+// regex
+// "(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w\-]*\/)?(?:profile.php\?id=(?=\d.*))?([\w\-]*)?"
+// title
+// "My Facebook"
+// 4
+// description
+// "This is my personal account"
+// field
+// "Instagram Username or URL"
+// fieldHint
+// "itsatifsiddiqui or instagram.com/your-username"
+// image
+// "https://firebasestorage.googleapis.com/v0/b/conic-688fe.appspot.com/o/accounts%2Finstagram.png?alt=media&token=83895e5a-4444-4055-bffe-cead63af409c"
+// name
+// "Instagram"
+// position
+// 5
+// prefix
+// "https://instagram.com/"
+// regex
+// "(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/([A-Za-z0-9-_\.]+)"
+// title
+// "My Instagram"
+// 5
+// description
+// "This is my personal account"
+// field
+// "LinkedIn Username or URL"
+// fieldHint
+// "itsatifsiddiqui or linkedin.com/your-username"
+// image
+// "https://firebasestorage.googleapis.com/v0/b/conic-688fe.appspot.com/o/accounts%2Flinkedin.png?alt=media&token=cf62bd1c-c036-43a4-b928-15fc2c0ed2a7"
+// name
+// "LinkedIn"
+// position
+// 6
+// prefix
+// "https://www.linkedin.com/in/"
+// regex
+// "^(http(s)?:\/\/)?([\w]+\.)?linkedin\.com\/(pub|in|profile)"
+// title
+// "My LinkedIn"
+// 6
+// description
+// "This is my personal account"
+// field
+// "Snapchat Username or URL"
+// fieldHint
+// "itsatifsiddiqui or snapchat.com/your-username"
+// image
+// "https://firebasestorage.googleapis.com/v0/b/conic-688fe.appspot.com/o/accounts%2Fsnapchat.png?alt=media&token=9450759f-ee6e-4064-bc92-764eea54ad7d"
+// name
+// "Snapchat"
+// position
+// 7
+// prefix
+// "https://www.snapchat.com/add/"
+// regex
+// "^(http(s)?:\/\/)?([\w]+\.)?snapchat\.com\/(add|in|profile)\/([A-Za-z0-9-_\.]+)"
+// title
+// "My Snapchat"
+// 7
+// description
+// "This is my personal account"
+// field
+// "Tik Tok Username or URL"
+// fieldHint
+// "itsatifsiddiqui or ticktok.com/@your-username"
+// image
+// "https://firebasestorage.googleapis.com/v0/b/conic-688fe.appspot.com/o/accounts%2Ftiktok.png?alt=media&token=8d7c2e3d-c1eb-4e3c-9b1e-c5bcc50feb6e"
+// name
+// "Tik Tok"
+// position
+// 8
+// prefix
+// "https://www.tiktok.com/@"
+// regex
+// "^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$"
+// title
+// "My Tik Tok"
+// 8
+// description
+// "This is my personal account"
+// field
+// "Twitter Username or URL"
+// fieldHint
+// "itsatifsiddiqui or twitter.com/your-username"
+// image
+// "https://firebasestorage.googleapis.com/v0/b/conic-688fe.appspot.com/o/accounts%2Ftwitter.png?alt=media&token=86a9fffa-12a1-4b50-b466-b9519775a0c1"
+// name
+// "Twitter"
+// position
+// 9
+// prefix
+// "https://twitter.com/"
+// regex
+// "http(?:s)?:\/\/(?:www\.)?twitter\.com\/([a-zA-Z0-9_]+)"
+// title
+// "My Twitter"
+// 9
+// description
+// "This is my personal youtube channel"
+// field
+// "Youtube URL"
+// fieldHint
+// "youtube.com/"
+// image
+// "https://firebasestorage.googleapis.com/v0/b/conic-688fe.appspot.com/o/accounts%2Fyoutube.png?alt=media&token=93ba0d76-437c-4a49-ba84-ee1206558407"
+// name
+// "Youtube"
+// position
+// 10
+// regex
+// "^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$"
+// title
+// "My Youtube Channel"
+// 10
+// description
+// "This is my personal Website"
+// field
+// "Website URL"
+// fieldHint
+// "itsatifsiddiqui.com"
+// image
+// "https://firebasestorage.googleapis.com/v0/b/conic-688fe.appspot.com/o/accounts%2Flink.png?alt=media&token=1a3a8b98-9c7b-44b6-b336-3174162b5771"
+// name
+// "Website"
+// position
+// 11
+// regex
+// "https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
+// title
+// "My Personal Website"

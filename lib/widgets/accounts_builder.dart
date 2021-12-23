@@ -40,7 +40,7 @@ class _LinkedAccountsBuilderState extends State<LinkedAccountsBuilder> {
           widget.accounts.where((element) => !element.hidden && element.focused).toList();
       if (focusedAccount.isNotEmpty) {
         final account = focusedAccount.first;
-        kOpenLink(account.fullLink!);
+        kOpenLink(account.fullLink!, account.name, true);
         Timer(500.milliseconds, () {
           Navigator.of(context).pop();
         });
@@ -169,16 +169,14 @@ class _LinkedAccountsBuilderState extends State<LinkedAccountsBuilder> {
             Navigator.pop(context);
             Clipboard.setData(ClipboardData(text: linkedAccount.fullLink));
             VxToast.show(context,
-                msg: 'Link Copied',
-                showTime: 1000,
-                bgColor: Theme.of(context).scaffoldBackgroundColor);
+                msg: 'Link Copied', showTime: 1000, textColor: context.backgroundColor);
           },
           trailingIcon: Icons.content_copy_outlined,
           child: const Text('Copy'),
         ),
         ContextActionWidget(
           onPressed: () {
-            kOpenLink(linkedAccount.fullLink!);
+            kOpenLink(linkedAccount.fullLink!, linkedAccount.name);
             Navigator.pop(context);
           },
           trailingIcon: Icons.open_in_new_outlined,
@@ -213,7 +211,7 @@ class _LinkedAccountsBuilderState extends State<LinkedAccountsBuilder> {
       ];
 
   void onAccountTap(LinkedAccount e, BuildContext context) {
-    kOpenLink(e.fullLink!);
+    kOpenLink(e.fullLink!, e.name);
     final longPressEnabled = widget.friend == null;
 
     if (longPressEnabled == false) {

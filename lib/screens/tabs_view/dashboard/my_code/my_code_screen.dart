@@ -74,8 +74,7 @@ class MyCodeScreen extends HookWidget {
           ),
           12.heightBox,
           link.text.bold.make().p16().mdClick(() {
-            VxToast.show(context,
-                msg: 'Profile link copied', bgColor: Theme.of(context).scaffoldBackgroundColor);
+            VxToast.show(context, msg: 'Profile link copied', textColor: context.backgroundColor);
           }).make(),
           24.heightBox,
           PrimaryButton(

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,26 @@ class AddNewAccountScreen extends HookWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: 'Add new account'.text.semiBold.color(context.adaptive).make(),
+        title: 'Add new account'.text.semiBold.color(context.adaptive).make().mdClick(() async {
+          final image =
+              "https://firebasestorage.googleapis.com/v0/b/conic-688fe.appspot.com/o/accounts%2Faddress.png?alt=media&token=24b0df3e-d624-4436-816f-c09ad67ffe64";
+          final account = {
+            'name': "Address",
+            'image': image,
+            'field': """Enter Address""",
+            'fieldHint': "Personal/Business Address",
+            'title': "Address",
+            'description': "",
+            'prefix': "",
+            'suffix': "",
+            'regex': "",
+            'position': 10,
+          };
+          await FirebaseFirestore.instance.collection('accounts').doc('all_accounts').update({
+            "all_accounts": FieldValue.arrayUnion([account])
+          });
+          print("ADDED");
+        }).make(),
         actions: [
           HookBuilder(
             builder: (context) {
