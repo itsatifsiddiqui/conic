@@ -39,7 +39,7 @@ class LinkedMedia {
     return <String, dynamic>{
       'url': url,
       'type': type,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
+      'timestamp': timestamp ?? DateTime.now().millisecondsSinceEpoch,
     };
   }
 
@@ -65,5 +65,3 @@ class LinkedMedia {
   bool get isVideo => type == 'video';
   bool get isPdf => type == 'pdf';
 }
-
-

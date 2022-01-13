@@ -43,21 +43,24 @@ Future<void> kOpenLink(String url, String title, [bool focused = false]) async {
     showPlatformDialogue(
       title: "$title ${title == "Address" ? "" : "Account"}",
       action1Text: "Done",
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SelectableText(url),
-          IconButton(
-            icon: Icon(Icons.copy),
-            onPressed: () {
-              Clipboard.setData(ClipboardData(text: url));
-              if (Get.overlayContext != null) {
-                VxToast.show(Get.overlayContext!,
-                    msg: "Copied To Clipboard", textColor: Get.context!.backgroundColor);
-              }
-            },
-          )
-        ],
+      content: Material(
+        color: Colors.transparent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SelectableText(url),
+            IconButton(
+              icon: Icon(Icons.copy),
+              onPressed: () {
+                Clipboard.setData(ClipboardData(text: url));
+                if (Get.overlayContext != null) {
+                  VxToast.show(Get.overlayContext!,
+                      msg: "Copied To Clipboard", textColor: Get.context!.backgroundColor);
+                }
+              },
+            )
+          ],
+        ),
       ),
     );
   }

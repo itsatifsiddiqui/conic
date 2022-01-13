@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:conic/widgets/info_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -16,6 +15,7 @@ import 'package:conic/res/res.dart';
 import 'package:conic/screens/tabs_view/my_accounts/image_viewer.dart';
 import 'package:conic/screens/tabs_view/my_accounts/pdf_viewer.dart';
 import 'package:conic/screens/tabs_view/my_accounts/video_viewer.dart';
+import 'package:conic/widgets/info_widget.dart';
 
 import 'no_medias_widget.dart';
 
@@ -46,13 +46,13 @@ class MyMediasBuilder extends HookWidget {
       crossAxisSpacing: 12,
       children: medias.map((media) {
         if (media.isImage) {
-          return ImagePreviewBuilder(url: media.url);
+          return ImagePreviewBuilder(media: media);
         }
         if (media.isVideo) {
-          return VideoPreviewBuilder(url: media.url);
+          return VideoPreviewBuilder(media: media);
         }
         if (media.isPdf) {
-          return PdfPreviewBuilder(url: media.url);
+          return PdfPreviewBuilder(media: media);
         }
         return Container();
       }).toList(),
@@ -63,22 +63,22 @@ class MyMediasBuilder extends HookWidget {
 class ImagePreviewBuilder extends StatelessWidget {
   const ImagePreviewBuilder({
     Key? key,
-    required this.url,
+    required this.media,
   }) : super(key: key);
-  final String url;
+  final LinkedMedia media;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to<void>(() => ImageViewer(url: url));
+        Get.to<void>(() => ImageViewer(media: media));
       },
       child: Stack(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(kBorderRadius),
             child: CachedNetworkImage(
-              imageUrl: url,
+              imageUrl: media.url,
               width: double.infinity,
               height: double.infinity,
               fit: BoxFit.cover,
@@ -111,17 +111,17 @@ final urlToFileProvider = FutureProvider.family<File, String>((ref, url) {
 });
 
 class PdfPreviewBuilder extends HookWidget {
-  const PdfPreviewBuilder({Key? key, required this.url}) : super(key: key);
+  const PdfPreviewBuilder({Key? key, required this.media}) : super(key: key);
 
-  final String url;
+  final LinkedMedia media;
 
   @override
   Widget build(BuildContext context) {
-    return useProvider(urlToFileProvider(url)).when(
+    return useProvider(urlToFileProvider(media.url)).when(
       data: (pdfFile) {
         return GestureDetector(
           onTap: () {
-            Get.to<void>(() => PdfFileViewer(url: url, pdfFile: pdfFile));
+            Get.to<void>(() => PdfFileViewer(url: media.url, pdfFile: pdfFile, media: media));
           },
           child: Stack(
             children: [
@@ -168,17 +168,17 @@ final videoThumbnailProvider = FutureProvider.family<Uint8List?, File>((ref, vid
 class VideoPreviewBuilder extends HookWidget {
   const VideoPreviewBuilder({
     Key? key,
-    required this.url,
+    required this.media,
   }) : super(key: key);
-  final String url;
+  final LinkedMedia media;
 
   @override
   Widget build(BuildContext context) {
-    return useProvider(urlToFileProvider(url)).when(
+    return useProvider(urlToFileProvider(media.url)).when(
       data: (videoFile) {
         return GestureDetector(
           onTap: () {
-            Get.to<void>(() => VideoViewer(url: url));
+            Get.to<void>(() => VideoViewer(media: media));
           },
           child: HookBuilder(builder: (context) {
             return useProvider(videoThumbnailProvider(videoFile)).when(
@@ -223,5 +223,3 @@ class VideoPreviewBuilder extends HookWidget {
     );
   }
 }
-
-

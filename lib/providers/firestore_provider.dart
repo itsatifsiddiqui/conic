@@ -258,6 +258,21 @@ class FirestoreProvider {
     );
   }
 
+  Future<void> deleteMedia(LinkedMedia media) async {
+    try {
+      final myId = _read(appUserProvider)!.userId!;
+      await _firestore.collection('users').doc(myId).update(
+        <String, dynamic>{
+          'linkedMedias': FieldValue.arrayRemove(
+            <Map<String, dynamic>>[media.toMap()],
+          ),
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void sendAccountChangeNotification(LinkedAccount? linkedAccount, {bool newAccount = true}) {
     if (!(linkedAccount?.notify ?? false)) return;
 
