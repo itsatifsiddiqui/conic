@@ -14,8 +14,8 @@ import '../add_account/add_new_account_screen.dart';
 import 'dashboard/dashboard_tab.dart';
 import 'dashboard/my_connections/firend_detail.dart';
 import 'my_accounts/my_accounts_tab.dart';
-import 'my_cards/my_cards_tab.dart';
-import 'notifications/notifications_tab.dart';
+// import 'my_cards/my_cards_tab.dart';
+// import 'notifications/notifications_tab.dart';
 
 final tabsIndexProvider = StateProvider<int>((ref) => 0);
 
@@ -30,7 +30,7 @@ class TabsView extends StatefulHookWidget {
 class _TabsViewState extends State<TabsView> {
   @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback(handleDynamicLink);
+    WidgetsBinding.instance.addPostFrameCallback(handleDynamicLink);
     context.read(firebaseMessagingProvider).initFCM();
     context.read(qrcodeWidgetProvider).setQrCodeWidget();
     super.initState();
@@ -61,9 +61,9 @@ class _TabsViewState extends State<TabsView> {
         index: index,
         children: const [
           MyAccountsTab(),
-          MyCardsTab(),
+          // MyCardsTab(),
           SizedBox(),
-          NotificationsTab(),
+          // NotificationsTab(),
           DashboardTab(),
         ],
       ),
@@ -92,7 +92,7 @@ class _BottomNavigationBar extends HookWidget {
     return BottomNavigationBar(
       currentIndex: index,
       onTap: (value) {
-        if (value != 2) {
+        if (value != 1) {
           context.read(tabsIndexProvider).state = value;
         }
       },
@@ -105,20 +105,20 @@ class _BottomNavigationBar extends HookWidget {
           tooltip: 'Accounts',
           label: '',
         ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.dns_outlined).pOnly(top: 8),
-          tooltip: 'Cards',
-          label: '',
-        ),
+        // BottomNavigationBarItem(
+        //   icon: const Icon(Icons.dns_outlined).pOnly(top: 8),
+        //   tooltip: 'Cards',
+        //   label: '',
+        // ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.masks, color: Colors.transparent).pOnly(top: 8),
           label: '',
         ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.notifications_outlined).pOnly(top: 8),
-          tooltip: 'Notifications',
-          label: '',
-        ),
+        // BottomNavigationBarItem(
+        //   icon: const Icon(Icons.notifications_outlined).pOnly(top: 8),
+        //   tooltip: 'Notifications',
+        //   label: '',
+        // ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.dashboard_outlined).pOnly(top: 8),
           tooltip: 'Settings',

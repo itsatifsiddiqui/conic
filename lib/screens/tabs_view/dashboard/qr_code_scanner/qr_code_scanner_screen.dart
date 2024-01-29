@@ -69,9 +69,8 @@ class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
                       alignment: Alignment.bottomCenter,
                       child: GestureDetector(
                         onTap: () async {
-                          final uri = Uri.parse(result!.code);
-                          final dynamicLink =
-                              await FirebaseDynamicLinks.instance.getDynamicLink(uri);
+                          final uri = Uri.parse(result!.code ?? '');
+                          final dynamicLink = await FirebaseDynamicLinks.instance.getDynamicLink(uri);
                           if (dynamicLink == null) {
                             result = null;
                             setState(() {});
@@ -82,8 +81,7 @@ class _QrCodeScannerScreenState extends State<QrCodeScannerScreen> {
                             final linkUri = dynamicLink.link;
                             final parameters = linkUri.queryParameters;
                             final userId = parameters['userid']!;
-                            final userData =
-                                await context.read(firestoreProvider).getUserDataById(userId);
+                            final userData = await context.read(firestoreProvider).getUserDataById(userId);
                             // ignore: unawaited_futures
                             await Get.to<void>(
                               () => FriendDetailScreen(friend: userData, fromFollowing: false),

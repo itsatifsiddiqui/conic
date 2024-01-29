@@ -36,8 +36,7 @@ class _LinkedAccountsBuilderState extends State<LinkedAccountsBuilder> {
   void initState() {
     final focusedModeOn = widget.friend?.focusedMode ?? false;
     if (widget.friend != null && focusedModeOn) {
-      final focusedAccount =
-          widget.accounts.where((element) => !element.hidden && element.focused).toList();
+      final focusedAccount = widget.accounts.where((element) => !element.hidden && element.focused).toList();
       if (focusedAccount.isNotEmpty) {
         final account = focusedAccount.first;
         kOpenLink(account.fullLink!, account.name, true);
@@ -53,16 +52,14 @@ class _LinkedAccountsBuilderState extends State<LinkedAccountsBuilder> {
   @override
   Widget build(BuildContext context) {
     final isListMode = useProvider(isListModeProvider).state;
-    final hiddenMode =
-        widget.friend?.hiddenMode ?? useProvider(appUserProvider)?.hiddenMode ?? false;
+    final hiddenMode = widget.friend?.hiddenMode ?? useProvider(appUserProvider)?.hiddenMode ?? false;
     // final accounts = useProvider(filteredAccountsStateProvider).state;
 
     final longPressEnabled = widget.friend == null;
 
     //FILTER ACCOUNTS ONLY FOR FRIENDS SCREEN
-    final filteredAccounts = widget.accounts
-        .where((e) => (e.hidden && hiddenMode && !longPressEnabled) == false)
-        .toList();
+    final filteredAccounts =
+        widget.accounts.where((e) => (e.hidden && hiddenMode && !longPressEnabled) == false).toList();
 
     if (filteredAccounts.isEmpty && !longPressEnabled) {
       return InfoWidget(text: "No Accounts").pOnly(top: 32);
@@ -97,13 +94,7 @@ class _LinkedAccountsBuilderState extends State<LinkedAccountsBuilder> {
                       ),
                     ),
                     12.widthBox,
-                    (e.title.isEmptyOrNull ? e.name : e.title)
-                        .text
-                        .lg
-                        .medium
-                        .color(context.adaptive87)
-                        .make()
-                        .expand()
+                    (e.title.isEmptyOrNull ? e.name : e.title).text.lg.medium.color(context.adaptive87).make().expand()
                   ],
                 ),
               ),
@@ -167,9 +158,8 @@ class _LinkedAccountsBuilderState extends State<LinkedAccountsBuilder> {
         ContextActionWidget(
           onPressed: () {
             Navigator.pop(context);
-            Clipboard.setData(ClipboardData(text: linkedAccount.fullLink));
-            VxToast.show(context,
-                msg: 'Link Copied', showTime: 1000, textColor: context.backgroundColor);
+            Clipboard.setData(ClipboardData(text: linkedAccount.fullLink!));
+            VxToast.show(context, msg: 'Link Copied', showTime: 1000, textColor: context.backgroundColor);
           },
           trailingIcon: Icons.content_copy_outlined,
           child: const Text('Copy'),

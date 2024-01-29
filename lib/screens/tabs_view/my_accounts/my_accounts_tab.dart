@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conic/screens/tabs_view/dashboard/my_profile/my_profile_screen.dart';
-import 'package:conic/widgets/medias_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,8 +29,11 @@ final queryProvider = StateProvider<String>((ref) => '');
 
 ///Listen to [queryProvider] and return filtered results
 final filteredAccountsStateProvider = StateProvider<List<LinkedAccount>>((ref) {
-  final query = ref.watch(queryProvider).state.trim().toLowerCase();
+  final query = ref.watch(queryProvider).state.toString().trim().toLowerCase();
   final allAccounts = ref.watch(appUserProvider)!.linkedAccounts ?? [];
+  print(ref.watch(appUserProvider)!.linkedAccounts.toString() + 'sadasdadfd');
+  print(query + 'sadasdadfd');
+
   if (query.isEmpty) return allAccounts;
   return allAccounts.where((element) => element.name.toLowerCase().contains(query)).toList();
 });
@@ -55,36 +56,36 @@ class MyAccountsTab extends HookWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _HideModeBuilder(),
+          // const _HideModeBuilder(),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const _Greetings(),
               12.heightBox,
-              CupertinoSearchTextField(
-                borderRadius: BorderRadius.circular(kBorderRadius),
-                placeholder: 'Search account',
-                prefixInsets: const EdgeInsets.all(8),
-                style: TextStyle(color: context.adaptive),
-                onChanged: (value) {
-                  context.read(queryProvider).state = value;
-                },
-              ),
+              // CupertinoSearchTextField(
+              //   borderRadius: BorderRadius.circular(kBorderRadius),
+              //   placeholder: 'Search account',
+              //   prefixInsets: const EdgeInsets.all(8),
+              //   style: TextStyle(color: context.adaptive),
+              //   onChanged: (value) {
+              //     context.read(queryProvider).state = value;
+              //   },
+              // ),
               20.heightBox,
               const _MyAccountsTextRow(),
               24.heightBox,
               _MyAccountsBuilder(),
-              24.heightBox,
-              const _MyMediasRow(),
-              8.heightBox,
-              HookBuilder(builder: (context) {
-                final medias = useProvider(appUserProvider.select((value) => value!.linkedMedias))!
-                    .sortedByNum((element) => element.timestamp!)
-                    .reversed
-                    .toList();
-                return MyMediasBuilder(medias: medias);
-              }),
-              32.heightBox,
+              // 24.heightBox,
+              // const _MyMediasRow(),
+              // 8.heightBox,
+              // HookBuilder(builder: (context) {
+              //   final medias = useProvider(appUserProvider.select((value) => value!.linkedMedias))!
+              //       .sortedByNum((element) => element.timestamp!)
+              //       .reversed
+              //       .toList();
+              //   return MyMediasBuilder(medias: medias);
+              // }),
+              // 32.heightBox,
             ],
           ).px16().scrollVertical().expand(),
         ],
@@ -157,11 +158,7 @@ class _Greetings extends HookWidget {
               },
             ),
             4.heightBox,
-            '${isFocusedMode ? "Disable" : "Enable"} Focused Mode'
-                .text
-                .xs
-                .color(context.adaptive87)
-                .make(),
+            '${isFocusedMode ? "Disable" : "Enable"} Focused Mode'.text.xs.color(context.adaptive87).make(),
           ],
         )
       ],
@@ -174,13 +171,11 @@ class _MyAccountsBuilder extends HookWidget {
   Widget build(BuildContext context) {
     final accounts = useProvider(filteredAccountsStateProvider).state;
     final isFocusedMode = useProvider(isFocusedModeProvider).state;
-
     if (accounts.isEmpty) {
       return const NoAccountsWidget();
     }
 
-    final filteredAccounts =
-        isFocusedMode ? accounts.where((element) => element.focused).toList() : accounts;
+    final filteredAccounts = isFocusedMode ? accounts.where((element) => element.focused).toList() : accounts;
 
     return LinkedAccountsBuilder(accounts: filteredAccounts, friend: null);
   }
@@ -196,9 +191,8 @@ class _MyAccountsBuilder extends HookWidget {
         ContextActionWidget(
           onPressed: () {
             Navigator.pop(context);
-            Clipboard.setData(ClipboardData(text: linkedAccount.fullLink));
-            VxToast.show(context,
-                msg: 'Link Copied', showTime: 1000, textColor: context.backgroundColor);
+            Clipboard.setData(ClipboardData(text: linkedAccount.fullLink!));
+            VxToast.show(context, msg: 'Link Copied', showTime: 1000, textColor: context.backgroundColor);
           },
           trailingIcon: Icons.content_copy_outlined,
           child: const Text('Copy'),

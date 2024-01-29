@@ -54,7 +54,7 @@ class DynamicLinkGenerator {
         packageName: 'com.fyp.conic',
         fallbackUrl: linkToOpen,
       ),
-      iosParameters: IosParameters(
+      iosParameters: IOSParameters(
         bundleId: 'com.fyp.conic',
         fallbackUrl: linkToOpen,
       ),
@@ -65,6 +65,6 @@ class DynamicLinkGenerator {
 
     // debugPrint('LONG LINk ${await parameters.buildUrl()}\n\n');
 
-    return (await parameters.buildShortLink()).shortUrl.toString();
+    return (await parameters.link).toString();
   }
 }

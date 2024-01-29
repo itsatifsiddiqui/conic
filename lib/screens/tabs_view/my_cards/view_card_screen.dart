@@ -29,6 +29,7 @@ class ViewCardScreen extends HookWidget {
     late ScreenshotController screenshotController;
     useEffect(() {
       screenshotController = ScreenshotController();
+      return null;
     });
     final size = MediaQuery.of(context).size;
     return Consumer(
@@ -67,7 +68,7 @@ class ViewCardScreen extends HookWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Screenshot<Object>(
+                    Screenshot(
                       key: const ValueKey('Image'),
                       controller: screenshotController,
                       child: Container(
@@ -151,8 +152,7 @@ class ViewCardScreen extends HookWidget {
                                     .then((Uint8List? image) async {
                                   if (image != null) {
                                     final directory = await getApplicationDocumentsDirectory();
-                                    final imagePath =
-                                        await File('${directory.path}/image.png').create();
+                                    final imagePath = await File('${directory.path}/image.png').create();
                                     await imagePath.writeAsBytes(image);
 
                                     /// Share Plugin
@@ -204,8 +204,7 @@ class ViewCardScreen extends HookWidget {
                                   final imageBytes = await screenshotController.capture();
                                   print(imageBytes == null);
                                   if (imageBytes == null) return;
-                                  final result =
-                                      await ImageGallerySaver.saveImage(imageBytes) as Object?;
+                                  final result = await ImageGallerySaver.saveImage(imageBytes) as Object?;
                                   if (result is Map && (result['isSuccess'] as bool)) {
                                     await showPlatformDialogue(
                                       title: 'Image Saved',

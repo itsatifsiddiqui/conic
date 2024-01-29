@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fyp.conic">
+    package="com.conicshare.conicshare">
 
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />  
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
-        android:label="Conic"
+        android:label="ConicShare"
         android:icon="@mipmap/launcher_icon"
         android:requestLegacyExternalStorage="true"
         >

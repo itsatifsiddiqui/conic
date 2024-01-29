@@ -34,7 +34,7 @@ class ImagePickerService {
     }
 
     if (shouldCrop) {
-      final croppedFile = await ImageCropper.cropImage(
+      final croppedFile = await ImageCropper().cropImage(
         sourcePath: imageFile!.path,
         aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
         aspectRatioPresets: [CropAspectRatioPreset.square],

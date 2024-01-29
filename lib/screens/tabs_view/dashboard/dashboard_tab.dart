@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../providers/app_user_provider.dart';
 import '../../../res/res.dart';
 import '../../nfc/activate_nfc_screen.dart';
-import '../find_nearby/find_nearby_screen.dart';
-import 'analytics/analytics_screen.dart';
+// import '../find_nearby/find_nearby_screen.dart';
+// import 'analytics/analytics_screen.dart';
 import 'my_code/my_code_screen.dart';
-import 'my_connections/firend_detail.dart';
-import 'my_connections/my_connections_screen.dart';
+// import 'my_connections/my_connections_screen.dart';
 import 'my_profile/my_profile_screen.dart';
 import 'qr_code_scanner/qr_code_scanner_screen.dart';
-import 'search/search_users_screen.dart';
+// import 'search/search_users_screen.dart';
 
 class DashboardTab extends StatelessWidget {
   const DashboardTab({Key? key}) : super(key: key);
@@ -38,16 +35,16 @@ class DashboardTab extends StatelessWidget {
           children: [
             Row(
               children: [
-                _ItemCard(
-                  onTap: () {
-                    HapticFeedback.lightImpact();
-                    Get.to<void>(() => const MyConnectionScreen());
-                  },
-                  icon: Icons.group_sharp,
-                  title: 'Connections',
-                  subtitle: 'Friends & Followers',
-                  gradient: AppColors.blueGradient,
-                ),
+                // _ItemCard(
+                //   onTap: () {
+                //     HapticFeedback.lightImpact();
+                //     Get.to<void>(() => const MyConnectionScreen());
+                //   },
+                //   icon: Icons.group_sharp,
+                //   title: 'Connections',
+                //   subtitle: 'Friends & Followers',
+                //   gradient: AppColors.blueGradient,
+                // ),
                 _ItemCard(
                   onTap: () {
                     HapticFeedback.lightImpact();
@@ -60,31 +57,31 @@ class DashboardTab extends StatelessWidget {
                 ),
               ],
             ),
-            6.heightBox,
-            Row(
-              children: [
-                _ItemCard(
-                  onTap: () {
-                    HapticFeedback.lightImpact();
-                    Get.to<void>(() => const FindNearbyScreen());
-                  },
-                  icon: Icons.map,
-                  title: 'Find Nearby',
-                  subtitle: 'Nearby Users',
-                  gradient: AppColors.redGradient,
-                ),
-                _ItemCard(
-                  onTap: () {
-                    HapticFeedback.lightImpact();
-                    Get.to<void>(() => const SearchUsersScreen());
-                  },
-                  icon: Icons.person_search_outlined,
-                  title: 'Search',
-                  subtitle: 'Find Users',
-                  gradient: AppColors.lightPurpleGradient,
-                ),
-              ],
-            ),
+            // 6.heightBox,
+            // Row(
+            //   children: [
+            //     _ItemCard(
+            //       onTap: () {
+            //         HapticFeedback.lightImpact();
+            //         Get.to<void>(() => const FindNearbyScreen());
+            //       },
+            //       icon: Icons.map,
+            //       title: 'Find Nearby',
+            //       subtitle: 'Nearby Users',
+            //       gradient: AppColors.redGradient,
+            //     ),
+            //     _ItemCard(
+            //       onTap: () {
+            //         HapticFeedback.lightImpact();
+            //         Get.to<void>(() => const SearchUsersScreen());
+            //       },
+            //       icon: Icons.person_search_outlined,
+            //       title: 'Search',
+            //       subtitle: 'Find Users',
+            //       gradient: AppColors.lightPurpleGradient,
+            //     ),
+            //   ],
+            // ),
             6.heightBox,
             Row(
               children: [
@@ -113,16 +110,16 @@ class DashboardTab extends StatelessWidget {
             6.heightBox,
             Row(
               children: [
-                _ItemCard(
-                  onTap: () {
-                    Get.to<void>(() => AnalyticsScreen());
-                    HapticFeedback.lightImpact();
-                  },
-                  icon: Icons.analytics_outlined,
-                  title: 'Analytics',
-                  subtitle: 'Accounts Stats',
-                  gradient: AppColors.blueGradient,
-                ),
+                // _ItemCard(
+                //   onTap: () {
+                //     // Get.to<void>(() => AnalyticsScreen());
+                //     HapticFeedback.lightImpact();
+                //   },
+                //   icon: Icons.analytics_outlined,
+                //   title: 'Analytics',
+                //   subtitle: 'Accounts Stats',
+                //   gradient: AppColors.blueGradient,
+                // ),
                 _ItemCard(
                   onTap: () {
                     HapticFeedback.lightImpact();

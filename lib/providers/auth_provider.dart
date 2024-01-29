@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:conic/screens/auth/email_verification_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_login_facebook/flutter_login_facebook.dart';
+// import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -119,8 +119,7 @@ class AuthProvider extends BaseProvider {
     setBusy();
 
     try {
-      final userCredential =
-          await _auth.signInWithEmailAndPassword(email: email, password: password);
+      final userCredential = await _auth.signInWithEmailAndPassword(email: email, password: password);
       _read(appUserProvider.notifier).overrideFromFirebaseUser(userCredential.user!);
       final deviceToken = (await _read(firebaseMessagingProvider).getToken()) ?? '';
       await _read(firestoreProvider).addDeviceToken(deviceToken);
@@ -161,45 +160,44 @@ class AuthProvider extends BaseProvider {
     }
   }
 
-  Future<void> loginWithFacebook() async {
-    setBusy();
-    try {
-      final result = await FacebookLogin().logIn();
-      switch (result.status) {
-        case FacebookLoginStatus.success:
-          {
-            if (result.accessToken?.token == null) {
-              setIdle();
-              return;
-            }
-            final credential = FacebookAuthProvider.credential(result.accessToken!.token);
-            final userCredential = await _auth.signInWithCredential(credential);
+  // Future<void> loginWithFacebook() async {
+  //   setBusy();
+  //   try {
+  //     final result = await FacebookLogin().logIn();
+  //     switch (result.status) {
+  //       case FacebookLoginStatus.success:
+  //         {
+  //           if (result.accessToken?.token == null) {
+  //             setIdle();
+  //             return;
+  //           }
+  //           final credential = FacebookAuthProvider.credential(result.accessToken!.token);
+  //           final userCredential = await _auth.signInWithCredential(credential);
 
-            var currentUser =
-                await _read(firestoreProvider).getCurrentUser(userCredential.user!.uid);
+  //           var currentUser = await _read(firestoreProvider).getCurrentUser(userCredential.user!.uid);
 
-            if (currentUser == null) {
-              _read(appUserProvider.notifier).overrideFromFirebaseUser(userCredential.user!);
-              currentUser = await _read(firestoreProvider).createUser();
-            }
-            final deviceToken = (await _read(firebaseMessagingProvider).getToken()) ?? '';
-            await _read(firestoreProvider).addDeviceToken(deviceToken);
-            setIdle();
-            await navigateBasedOnCondition();
-            break;
-          }
-        case FacebookLoginStatus.cancel:
-          setIdle();
-          break;
-        case FacebookLoginStatus.error:
-          setIdle();
-          break;
-      }
-    } catch (e) {
-      setIdle();
-      showExceptionDialog(e);
-    }
-  }
+  //           if (currentUser == null) {
+  //             _read(appUserProvider.notifier).overrideFromFirebaseUser(userCredential.user!);
+  //             currentUser = await _read(firestoreProvider).createUser();
+  //           }
+  //           final deviceToken = (await _read(firebaseMessagingProvider).getToken()) ?? '';
+  //           await _read(firestoreProvider).addDeviceToken(deviceToken);
+  //           setIdle();
+  //           await navigateBasedOnCondition();
+  //           break;
+  //         }
+  //       case FacebookLoginStatus.cancel:
+  //         setIdle();
+  //         break;
+  //       case FacebookLoginStatus.error:
+  //         setIdle();
+  //         break;
+  //     }
+  //   } catch (e) {
+  //     setIdle();
+  //     showExceptionDialog(e);
+  //   }
+  // }
 
   Future loginWithApple() async {
     setBusy();
@@ -252,8 +250,7 @@ class AuthProvider extends BaseProvider {
   ) async {
     setBusy();
     try {
-      final userCredential =
-          await _auth.createUserWithEmailAndPassword(email: appuser.email!, password: password);
+      final userCredential = await _auth.createUserWithEmailAndPassword(email: appuser.email!, password: password);
       await userCredential.user!.updateProfile(displayName: appuser.name);
 
       _read(appUserProvider.notifier).overrideFromFirebaseUser(userCredential.user!);
@@ -324,7 +321,7 @@ class AuthProvider extends BaseProvider {
     await _read(firestoreProvider).removeDeviceToken(deviceToken);
     await _auth.signOut();
     await GoogleSignIn().signOut();
-    await FacebookLogin().logOut();
+    // await FacebookLogin().logOut();
     await _read(qrcodeWidgetProvider).removeQrCodeWidget();
     await Future<void>.delayed(500.milliseconds);
     debugPrint('OVERRIDING USER TO NULL');

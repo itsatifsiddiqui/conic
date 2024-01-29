@@ -3,8 +3,7 @@ import 'dart:developer';
 import 'package:conic/providers/firestore_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:geolocator/geolocator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'auth_provider.dart';
@@ -35,15 +34,19 @@ class DynamicLinkProvider {
       _read(authProvider).navigateBasedOnCondition();
     }
 
-    FirebaseDynamicLinks.instance.onLink(
-      onSuccess: handleDeepLink,
-      onError: (error) {
-        log('DYNAMIC LINK ONLINK ERROR ${error.toString()}', name: 'DynamicLinkProvider');
-        linkStatus = LinkStatus.noLink;
-        _read(authProvider).onLinkStatusChanged.value = linkStatus;
-        return Future<bool>.value(false);
-      },
-    );
+    FirebaseDynamicLinks.instance.onLink.listen((pendingDynamicLinkData) {
+      handleDeepLink(pendingDynamicLinkData);
+    }, onError: (_) {
+      log('DYNAMIC LINK ONLINK ERROR ${_.toString()}', name: 'DynamicLinkProvider');
+      linkStatus = LinkStatus.noLink;
+      _read(authProvider).onLinkStatusChanged.value = linkStatus;
+      // return Future<bool>.value(false);
+    });
+    // onSuccess:
+    // onError: (error) {
+
+    // },
+    // );
   }
 
   Future<void> handleDeepLink(PendingDynamicLinkData? dynamicLink) async {
@@ -70,8 +73,8 @@ class DynamicLinkProvider {
         linkStatus = LinkStatus.loggedIn;
         _read(authProvider).onLinkStatusChanged.value = linkStatus;
         _read(firestoreProvider).updateNfcValue(userId);
-        var position = await GeolocatorPlatform.instance.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-        _read(firestoreProvider).addingLocation(userId, LatLng(position.latitude, position.longitude));
+        // var position = await GeolocatorPlatform.instance.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+        // _read(firestoreProvider).addingLocation(userId, LatLng(position.latitude, position.longitude));
         _read(firestoreProvider).updateStreak();
         log('LINKSTATUS CHAGED TO $linkStatus', name: 'DynamicLinkProvider');
       }

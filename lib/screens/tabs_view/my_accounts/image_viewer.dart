@@ -23,6 +23,7 @@ class ImageViewer extends HookWidget {
     final heroEnabled = useState(true);
     useEffect(() {
       Future<void>.delayed(250.milliseconds, () => heroEnabled.value = false);
+      return null;
     });
     return Scaffold(
       // backgroundColor: Colors.transparent,

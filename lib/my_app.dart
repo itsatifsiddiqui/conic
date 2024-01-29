@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 
-import 'res/res.dart';
+import 'res/app_colors.dart';
 import 'screens/splash/splash_screen.dart';
 
 class MyApp extends StatefulWidget {
@@ -20,19 +20,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
+    print('object');
     initDynamicLinks();
     super.initState();
   }
 
   Future<void> initDynamicLinks() async {
-    FirebaseDynamicLinks.instance.onLink(onSuccess: (dynamicLink) async {
-      final deepLink = dynamicLink?.link;
-      // ignore: unnecessary_string_interpolations
-      log('${deepLink?.path}', name: 'ONLINK');
-    }, onError: (e) async {
-      log(e.message ?? '', name: 'onLinkError');
-      log(e.code, name: 'onLinkError');
-    });
+    FirebaseDynamicLinks.instance.onLink;
 
     final pendingData = await FirebaseDynamicLinks.instance.getInitialLink();
     final deepLink = pendingData?.link;
@@ -44,14 +38,14 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(428, 926),
-      builder: () => GetMaterialApp(
+      builder: (context, child) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
+        themeMode: ThemeMode.light,
         darkTheme: ThemeData(
           canvasColor: const Color(0xff1F1F1F),
           scaffoldBackgroundColor: const Color(0xFF1F1F1F),
           primaryColor: AppColors.primaryColor,
-          accentColor: AppColors.primaryColor,
-          brightness: Brightness.dark,
+          brightness: Theme.of(context).brightness,
           dividerColor: Colors.white,
           fontFamily: 'montserrat',
           hoverColor: Colors.black,
@@ -77,11 +71,13 @@ class _MyAppState extends State<MyApp> {
               letterSpacing: 1,
             ),
           ),
+          colorScheme: ColorScheme.fromSwatch()
+              .copyWith(secondary: AppColors.primaryColor)
+              .copyWith(secondary: AppColors.primaryColor),
         ),
         theme: ThemeData(
           canvasColor: const Color(0xffF6F8FB),
           scaffoldBackgroundColor: const Color(0xFFF6F8FB),
-          accentColor: AppColors.primaryColor,
           primaryColor: AppColors.primaryColor,
           dividerColor: Colors.black,
           hoverColor: Colors.white,

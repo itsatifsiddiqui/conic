@@ -58,9 +58,7 @@ class _AndroidNfcDialogState extends State<_AndroidNfcDialog> {
           await NfcManager.instance.stopSession();
           setState(() => _alertMessage = result ?? '');
         } catch (e) {
-          await NfcManager.instance
-              .stopSession()
-              .catchError((dynamic e) {/* no op */});
+          await NfcManager.instance.stopSession().catchError((dynamic e) {/* no op */});
           setState(() => _errorMessage = '$e');
         }
       },
@@ -92,7 +90,7 @@ class _AndroidNfcDialogState extends State<_AndroidNfcDialog> {
       ),
       actions: [
         // ignore: deprecated_member_use
-        FlatButton(
+        TextButton(
           onPressed: () => Navigator.pop(context),
           child: Text(
             _errorMessage.isNotEmpty == true

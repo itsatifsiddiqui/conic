@@ -33,9 +33,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
         if (emailVerified) {
           await context.read(authProvider).navigateBasedOnCondition();
           VxToast.show(context,
-              msg: 'Thank you for verifying your email.',
-              showTime: 3000,
-              textColor: context.backgroundColor);
+              msg: 'Thank you for verifying your email.', showTime: 3000, textColor: context.backgroundColor);
         } else {
           VxToast.show(context,
               msg: 'Please verify your email address.\nIf already verified, click on inbox',
@@ -60,9 +58,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               if (emailVerified) {
                 await context.read(authProvider).navigateBasedOnCondition();
                 VxToast.show(context,
-                    msg: 'Thank you for verifying your email.',
-                    showTime: 3000,
-                    textColor: context.backgroundColor);
+                    msg: 'Thank you for verifying your email.', showTime: 3000, textColor: context.backgroundColor);
               } else {
                 VxToast.show(context,
                     msg: 'Please verify your email address.\nIf already verified, click on inbox',
@@ -75,8 +71,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 16.heightBox,
                 const AuthHeader(
                   title: 'Verifiy Email',
-                  subtitle:
-                      'Please check your inbox.\nWe\'ve sent you instructions to verify your email',
+                  subtitle: 'Please check your inbox.\nWe\'ve sent you instructions to verify your email',
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -127,12 +122,11 @@ class LifeCycleStateObserver extends StatefulWidget {
   _LifeCycleStateObserverState createState() => _LifeCycleStateObserverState();
 }
 
-class _LifeCycleStateObserverState extends State<LifeCycleStateObserver>
-    with WidgetsBindingObserver {
+class _LifeCycleStateObserverState extends State<LifeCycleStateObserver> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -166,7 +160,7 @@ class _LifeCycleStateObserverState extends State<LifeCycleStateObserver>
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 }

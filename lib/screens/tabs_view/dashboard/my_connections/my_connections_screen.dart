@@ -55,11 +55,10 @@ class MyConnectionScreen extends StatelessWidget {
   }
 }
 
-class _UsernameAppBar extends HookWidget with PreferredSizeWidget {
+class _UsernameAppBar extends HookWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
-    final userName =
-        useProvider(appUserProvider.select((value) => value!.username)) ?? 'My Connections';
+    final userName = useProvider(appUserProvider.select((value) => value!.username)) ?? 'My Connections';
 
     return AppBar(
       centerTitle: true,

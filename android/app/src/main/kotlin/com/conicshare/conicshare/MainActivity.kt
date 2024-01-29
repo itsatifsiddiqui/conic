@@ -1,4 +1,4 @@
-package com.fyp.conic
+package com.conicshare.conicshare
 
 import io.flutter.embedding.android.FlutterActivity
 

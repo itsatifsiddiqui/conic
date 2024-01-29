@@ -24,8 +24,7 @@ final locationCheckerProvider = FutureProvider.autoDispose((ref) {
   return kCheckAndAskForLocationPermission();
 });
 
-final nearbyUsersProvider =
-    StreamProvider.autoDispose.family<List<AppUser>, Position>((ref, position) {
+final nearbyUsersProvider = StreamProvider.autoDispose.family<List<AppUser>, Position>((ref, position) {
   final geo = GeoFlutterFire();
   final center = geo.point(
     latitude: position.latitude,
@@ -98,9 +97,8 @@ class FindNearbyScreen extends HookWidget {
                               children: [
                                 useProvider(nearbyUsersProvider(position)).when(
                                   data: (docs) {
-                                    final filteredDocs = docs
-                                        .where((element) => element.userId != currentUserId)
-                                        .toList();
+                                    final filteredDocs =
+                                        docs.where((element) => element.userId != currentUserId).toList();
 
                                     if (filteredDocs.isNotEmpty) {
                                       scheduleMicrotask(() => foundUsers.value = true);
@@ -207,7 +205,7 @@ class _LocationObserverState extends State<_LocationObserver> with WidgetsBindin
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -241,7 +239,7 @@ class _LocationObserverState extends State<_LocationObserver> with WidgetsBindin
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 }

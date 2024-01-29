@@ -39,19 +39,19 @@ class AuthFooter extends HookWidget {
               ),
             ),
             20.widthBox,
-            ClipRRect(
-              borderRadius: BorderRadius.circular(kBorderRadius),
-              child: GestureDetector(
-                onTap: () {
-                  context.read(authProvider).loginWithFacebook();
-                },
-                child: Image.asset(
-                  Images.facebook,
-                  width: 64,
-                  height: 64,
-                ),
-              ),
-            ),
+            // ClipRRect(
+            //   borderRadius: BorderRadius.circular(kBorderRadius),
+            //   child: GestureDetector(
+            //     onTap: () {
+            //       context.read(authProvider).loginWithFacebook();
+            //     },
+            //     child: Image.asset(
+            //       Images.facebook,
+            //       width: 64,
+            //       height: 64,
+            //     ),
+            //   ),
+            // ),
             if (useProvider(
                   authProvider.select((value) => value.isAppleSignInAvailable),
                 ) &&

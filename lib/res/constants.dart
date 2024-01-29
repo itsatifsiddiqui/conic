@@ -13,7 +13,6 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'platform_dialogue.dart';
-import 'res.dart';
 
 double kBorderRadius = 6;
 const dynamicLinkPrefix = 'https://conic.page.link';

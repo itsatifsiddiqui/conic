@@ -8,12 +8,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 export 'package:firebase_messaging/firebase_messaging.dart';
 
 final firebaseMessagingProvider = Provider<FirebaseMessagingProvider>((ref) {
-  return FirebaseMessagingProvider(ref.read);
+  return FirebaseMessagingProvider();
 });
 
 class FirebaseMessagingProvider {
-  FirebaseMessagingProvider(this.read);
-  final Reader read;
+  FirebaseMessagingProvider();
+  // final Reader read;
   final messaging = FirebaseMessaging.instance;
 
   static final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();

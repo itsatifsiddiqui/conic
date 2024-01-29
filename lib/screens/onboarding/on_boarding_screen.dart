@@ -129,12 +129,7 @@ class _Footer extends HookWidget {
             context.read(authProvider).saveKeyAndNavigate();
           },
           child: Container(
-            child: (index == 3 ? 'Get Started' : 'Skip')
-                .text
-                .xl
-                .medium
-                .color(AppColors.primaryColor)
-                .makeCentered(),
+            child: (index == 3 ? 'Get Started' : 'Skip').text.xl.medium.color(AppColors.primaryColor).makeCentered(),
           ),
         ).expand(),
       ],

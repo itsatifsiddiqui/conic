@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -17,12 +16,13 @@ class MyCodeScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final image = useProvider(appUserProvider.select((value) => value!.image));
+    // final image = useProvider(appUserProvider.select((value) => value!.image));
     final link = useProvider(appUserProvider.select((value) => value!.link))!;
 
     late ScreenshotController screenshotController;
     useEffect(() {
       screenshotController = ScreenshotController();
+      return null;
     });
 
     return Scaffold(
@@ -54,11 +54,12 @@ class MyCodeScreen extends HookWidget {
               children: [
                 'Tap to save'.text.bold.makeCentered().py12(),
                 12.heightBox,
-                Screenshot<Object>(
+                Screenshot(
                   key: UniqueKey(),
                   controller: screenshotController,
                   child: Container(
                     color: Theme.of(context).scaffoldBackgroundColor,
+                    // ignore: deprecated_member_use
                     child: PrettyQr(
                       data: link,
                       roundEdges: true,
@@ -71,9 +72,15 @@ class MyCodeScreen extends HookWidget {
             ),
           ),
           12.heightBox,
-          link.text.bold.make().p16().mdClick(() {
-            VxToast.show(context, msg: 'Profile link copied', textColor: context.backgroundColor);
-          }).make(),
+          link.text.bold.make().p16().mdClick(
+            () {
+              VxToast.show(
+                context,
+                msg: 'Profile link copied',
+                textColor: context.backgroundColor,
+              );
+            },
+          ).make(),
           24.heightBox,
           PrimaryButton(
             width: 0.5.sw,

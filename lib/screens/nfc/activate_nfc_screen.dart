@@ -10,10 +10,8 @@ import 'package:open_settings/open_settings.dart';
 import '../../providers/app_user_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../res/res.dart';
-import '../../widgets/adaptive_progress_indicator.dart';
 import '../../widgets/auth_header.dart';
 import '../../widgets/custom_widgets.dart';
-import '../../widgets/error_widet.dart';
 import '../../widgets/info_widget.dart';
 import '../tabs_view/tabs_view.dart';
 import 'tag_reader.dart';
@@ -148,7 +146,7 @@ class _NfcObserverState extends State<_NfcObserver> with WidgetsBindingObserver 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -167,7 +165,7 @@ class _NfcObserverState extends State<_NfcObserver> with WidgetsBindingObserver 
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 }

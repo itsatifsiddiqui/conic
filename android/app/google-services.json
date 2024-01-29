@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:651633604777:android:3f2138ee3e5bd3145a11b8",
         "android_client_info": {
-          "package_name": "com.fyp.conic"
+          "package_name": "com.conicshare.conicshare"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "651633604777-ekssn44lcqfbbcour3sl6krnv3l2roou.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.fyp.conic",
+            "package_name": "com.conicshare.conicshare",
             "certificate_hash": "3d0266ceda78b113c6cb4fde36f3b1b88358eb7b"
           }
         },
@@ -42,7 +42,7 @@
               "client_id": "651633604777-hff31tqngmdfb85ke9bhim4h1ancvfo3.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.fyp.conic",
+                "bundle_id": "com.conicshare.conicshare",
                 "app_store_id": "1527429208"
               }
             }

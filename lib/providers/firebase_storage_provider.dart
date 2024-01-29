@@ -20,10 +20,8 @@ class FirebaseStorageProvider extends BaseProvider {
   Future<String?> uploadProfile(File file) async {
     try {
       setBusy();
-      final storageReference = _firebaseStorage
-          .ref()
-          .child('profile_images')
-          .child('${DateTime.now().millisecondsSinceEpoch} ${file.path}');
+      final storageReference =
+          _firebaseStorage.ref().child('profile_images').child('${DateTime.now().millisecondsSinceEpoch} ${file.path}');
       UploadTask? uploadTask;
       uploadTask = storageReference.putFile(file);
       final completer = Completer<void>();
@@ -41,10 +39,8 @@ class FirebaseStorageProvider extends BaseProvider {
   Future<String?> uploadFile(File file, String path) async {
     try {
       setBusy();
-      final storageReference = _firebaseStorage
-          .ref()
-          .child(path)
-          .child('${DateTime.now().millisecondsSinceEpoch} ${file.path}');
+      final storageReference =
+          _firebaseStorage.ref().child(path).child('${DateTime.now().millisecondsSinceEpoch} ${file.path}');
       UploadTask? uploadTask;
       uploadTask = storageReference.putFile(file);
       final completer = Completer<void>();

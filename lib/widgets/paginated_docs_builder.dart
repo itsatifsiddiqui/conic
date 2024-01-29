@@ -33,8 +33,7 @@ class PaginatedDocsBuilder extends HookWidget {
                 // ignore: avoid_types_on_closure_parameters
                 onNotification: (ScrollNotification scrollInfo) {
                   final isLoading = context.read(paginatedDocsProvider(options)).isLoadingMore;
-                  final isAtEnd =
-                      scrollInfo.metrics.pixels >= (scrollInfo.metrics.maxScrollExtent / 100 * 75);
+                  final isAtEnd = scrollInfo.metrics.pixels >= (scrollInfo.metrics.maxScrollExtent / 100 * 75);
                   if (!isLoading && isAtEnd) {
                     context.read(paginatedDocsProvider(options)).getDocs(loadMore: true);
                   }

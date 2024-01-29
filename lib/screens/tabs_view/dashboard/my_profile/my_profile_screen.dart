@@ -45,11 +45,13 @@ class MyProfileScreen extends HookWidget {
         appBar: AppBar(
           title: 'My Profile'.text.semiBold.color(context.adaptive).make(),
           actions: [
-            'Save'.text.xl.semiBold.color(context.primaryColor).make().p16().mdClick(() {
-              context.read(appUserProvider.notifier).updateName(nameController.text.trim());
-              context.read(firestoreProvider).updateUser();
-              Get.back<void>();
-            }).make(),
+            'Save'.text.xl.semiBold.color(context.primaryColor).make().p16().mdClick(
+              () {
+                context.read(appUserProvider.notifier).updateName(nameController.text.trim());
+                context.read(firestoreProvider).updateUser();
+                Get.back<void>();
+              },
+            ).make(),
           ],
         ),
         body: SafeArea(
@@ -81,29 +83,29 @@ class MyProfileScreen extends HookWidget {
                     ),
                   ),
                   12.heightBox,
-                  HookBuilder(builder: (context) {
-                    final hidden = useProvider(appUserProvider)!.hiddenMode ?? false;
-                    return ListTile(
-                      title: 'Hide Mode'.text.make(),
-                      subtitle: (hidden
-                              ? 'Account marked as hidden are not visible to others now'
-                              : 'All accounts are visible to other users')
-                          .text
-                          .make()
-                          .pOnly(top: 4),
-                      onTap: () {
-                        context.read(appUserProvider.notifier).updateHiddentMode(!hidden);
-                        context.read(firestoreProvider).updateUser();
-                      },
-                      trailing: CupertinoSwitch(
-                        value: hidden,
-                        onChanged: (value) {
-                          context.read(appUserProvider.notifier).updateHiddentMode(!hidden);
-                          context.read(firestoreProvider).updateUser();
-                        },
-                      ),
-                    );
-                  })
+                  // HookBuilder(builder: (context) {
+                  //   final hidden = useProvider(appUserProvider)!.hiddenMode ?? false;
+                  //   return ListTile(
+                  //     title: 'Hide Mode'.text.make(),
+                  //     subtitle: (hidden
+                  //             ? 'Account marked as hidden are not visible to others now'
+                  //             : 'All accounts are visible to other users')
+                  //         .text
+                  //         .make()
+                  //         .pOnly(top: 4),
+                  //     onTap: () {
+                  //       context.read(appUserProvider.notifier).updateHiddentMode(!hidden);
+                  //       context.read(firestoreProvider).updateUser();
+                  //     },
+                  //     trailing: CupertinoSwitch(
+                  //       value: hidden,
+                  //       onChanged: (value) {
+                  //         context.read(appUserProvider.notifier).updateHiddentMode(!hidden);
+                  //         context.read(firestoreProvider).updateUser();
+                  //       },
+                  //     ),
+                  //   );
+                  // })
                 ],
               ).px16().scrollVertical().expand(),
               PrimaryButton(
@@ -147,8 +149,7 @@ class _ImageBuilder extends HookWidget {
           if (pickedFile == null) return;
           isUploading.value = true;
           final file = File(pickedFile.path);
-          final imageUrl =
-              await context.read(firebaseStorageProvider).uploadFile(file, 'profile_images');
+          final imageUrl = await context.read(firebaseStorageProvider).uploadFile(file, 'profile_images');
           context.read(appUserProvider.notifier).updateProfileImage(imageUrl);
           await context.read(firestoreProvider).updateUser();
         } catch (e) {

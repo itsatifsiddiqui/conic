@@ -21,28 +21,28 @@ environment:
   sdk: ">=2.13.0 <3.0.0"
 
 dependencies:
-  better_player: ^0.0.67
-  cached_network_image: ^3.0.0
-  cloud_firestore: ^2.1.0
-  contacts_service: ^0.6.1
-  cupertino_icons: ^1.0.2
+  better_player: ^0.0.83
+  cached_network_image: ^3.3.0
+  cloud_firestore: ^4.14.0
+  contacts_service: ^0.6.3
+  cupertino_icons: ^1.0.6
   file_picker: ^4.1.0
-  firebase_auth: ^1.1.4
-  firebase_core: ^1.1.1
-  firebase_dynamic_links: ^2.0.3
-  firebase_messaging: ^10.0.5
-  firebase_storage: ^8.0.6
+  firebase_auth: ^4.15.0
+  firebase_core: ^2.24.0
+  firebase_dynamic_links: ^5.4.6
+  firebase_messaging: ^14.7.6
+  firebase_storage: ^11.5.3
   flutter:
     sdk: flutter
   flutter_cache_manager: ^3.1.2
   flutter_hooks: ^0.16.0
   flutter_local_notifications: ^8.2.0
-  flutter_login_facebook: ^1.0.1
+  # flutter_login_facebook: ^1.0.1
   flutter_screenutil: ^5.0.0+2
   flutter_widgetkit: ^1.0.3
   geoflutterfire2: ^2.3.6
   geolocator: ^7.0.3
-  get: 4.1.4
+  get: ^4.6.6
   google_sign_in: ^5.0.3
   hooks_riverpod: ^0.14.0+3
   image_cropper: ^1.4.0
@@ -50,26 +50,25 @@ dependencies:
   image_picker: ^0.7.5+3
   intl: ^0.17.0
   loading_overlay: ^0.3.0
-  nfc_manager: ^3.0.0+2
+  nfc_manager: ^3.3.0
   open_settings:
     git:
       url: https://github.com/marcojoao/open_settings
-  path_provider:
-  pdf_render: ^1.0.12
-  permission_handler: ^8.0.0+2
-  google_maps_flutter:
-  pretty_qr_code: ^2.0.2
-  qr_code_scanner: ^0.5.2
+  path_provider: null
+  pdf_render: ^1.4.3
+  permission_handler: ^11.1.0
+  pretty_qr_code: ^3.0.0
+  qr_code_scanner: ^1.0.1
   ripple_animation:
     git:
       url: https://github.com/PoloLacoste/ripple_animation
-  screenshot: ^1.2.3
-  share_plus: ^2.1.4
-  shared_preferences: ^2.0.6
-  sign_in_with_apple: ^3.1.0
-  url_launcher: ^6.0.4
+  screenshot: ^2.1.0
+  share_plus: ^4.5.3
+  shared_preferences: ^2.2.2
+  sign_in_with_apple: ^5.0.0
+  url_launcher: ^6.2.1
   velocity_x: ^3.0.0
-  video_thumbnail: ^0.4.3
+  video_thumbnail: ^0.5.3
 
 flutter_icons:
   android: "launcher_icon"
@@ -87,6 +86,7 @@ flutter_native_splash:
 
 dev_dependencies:
   flutter_native_splash: null
+  change_app_package_name: ^1.1.0
   flutter_test:
     sdk: flutter
 flutter:
